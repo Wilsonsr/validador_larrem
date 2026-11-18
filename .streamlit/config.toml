@@ -1,0 +1,23 @@
+[server]
+maxUploadSize = 200
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#1F3864"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F3F6FA"
+textColor = "#1E2A3A"
+font = "sans-serif"
+baseRadius = "0.6rem"
+borderColor = "#D9E1EC"
+showWidgetBorder = true
+
+[theme.sidebar]
+backgroundColor = "#F3F6FA"
+
+[client]
+toolbarMode = "viewer"

@@ -1,0 +1,663 @@
+# GENERADO por herramientas/generar_obligatoriedad.py a partir de variables/*.yaml. No editar a mano.
+reglas:
+- id: M5_OBLIGATORIAS_CAPTURA
+  descripcion: Las variables de la etapa captura definidas en el diccionario están diligenciadas (170 variables)
+  tipo: requerido
+  etapa: captura
+  severidad: error
+  poblaciones:
+  - menores5
+  variables:
+  - ID_SIVIGILA
+  - No_Acta
+  - Subred
+  - Fecha_Encuesta
+  - Encuestador
+  - Supervisor
+  - Nombre_Menor
+  - Tipo_Documento
+  - Identificación
+  - Sexo
+  - Fecha_Nacimiento
+  - Edad_Meses
+  - Grupo_etnico
+  - PE_Desmovilizado
+  - PE_Desplazado
+  - PE_Discapacitado
+  - PE_Migrante
+  - PE_Ninguno
+  - Pais_Procedencia
+  - Correo_Electronico
+  - Nombre_Encuestado
+  - Tipo_Documento_Encuestado
+  - Identificación_Encuestado
+  - Parentesco_Encuestado
+  - Zona_Urbana
+  - Dirección
+  - Localidad
+  - N_UPZ
+  - Nombre_UPZ
+  - Estrato
+  - Telefono
+  - Celular
+  - P1_SGSS
+  - P2_EAPB
+  - P2_Otra_EAPB
+  - P3_Asiste_Colegio
+  - P4_Colegio
+  - P4_Dirección_Colegio
+  - P4_Localidad_Colegio
+  - P4_Num_UPZ_Colegio
+  - P4_UPZ_Colegio
+  - P5_Mocos_Nariz_Tapada_Ultimo_Año
+  - P6_Enero
+  - P6_Febrero
+  - P6_Marzo
+  - P6_Abril
+  - P6_Mayo
+  - P6_Junio
+  - P6_Julio
+  - P6_Agosto
+  - P6_Septiembre
+  - P6_Octubre
+  - P6_Noviembre
+  - P6_Diciembre
+  - P7_Sibilancia_Alguna_Vez
+  - P8_Sibilancia_Ultimo_Año
+  - P9_Ataques_Sibilancia
+  - P10_Desp_Silbidos_Mas_De_Una_Vez_Semana
+  - P11_Sibilancia_ImpideHabla
+  - P12_Sibilancia_Act_Fisica
+  - P13_Ausentismo_Escolar
+  - P14_Familiar_Falto_Por_Consulta
+  - P15_Tos_Ultimo_Año_Dif_Gripa
+  - P16_Tos_Ejercicio_Leve
+  - P17_Tos_Risa_Llanto
+  - P18_Despierta_Tos
+  - P19_Menor_Consulta_Medica
+  - P20_Edad_Madre
+  - P20_Edad_Embarazo
+  - P21_Edad_Gestacional
+  - P22_Embarazo_En_Bogotá
+  - P22_Localidad
+  - P22_2_Donde
+  - P23_Controles_Prenatales
+  - P24_Trastorno_Hipertensivo_Embarazo
+  - P24_Anemia
+  - P24_Diabetes_Gestacional
+  - P24_IVU
+  - P24_Desnutrición
+  - P24_Ninguno
+  - P24_Otro_Antecedente
+  - P24_Cual_Otro_Antecedente
+  - P25_Bajo_Peso_Al_Nacer
+  - P26_Lactancia_Materna
+  - P26_Tiempo_Lactancia
+  - P26_Justificacion
+  - P27_1_Desnutrición2
+  - P27_2_Obesidad
+  - P28_DX_Enf_Bronquios
+  - P29_DX_Bronquitis
+  - P30_DX_Neumonia
+  - P31_DX_TB_Pulmonar
+  - P32_DX_Asma
+  - P33_DX_Otra_Enfermedad
+  - P33_Cual_Enfermedad
+  - P34_Cirugia_Torax
+  - P34_Cual_Cirugia
+  - P35_Consumo_Tabaco_Hogar
+  - P35_Cual_Consumo
+  - P36_Tabaquismo_Pasivo
+  - P37_Madre_Fumo_En_Embarazo
+  - P37_Cual_Fumar
+  - P38_Madre_Contacto_Fumadores
+  - P38_Cual_Contacto
+  - P39_Madre_Fumo_Dos_Años_Niño
+  - P40_Niño_Contacto_Fumadores_Dos_Años
+  - P41_Madre_Consumió_Alcohol
+  - P42_Contacto_Toxicos_Trabajo
+  - P43_Cambia_Ropa
+  - P44_DX_Padres_Enf_Respiratoria
+  - P45_Ingresos_Hogar
+  - P46_Nivel_Educativo_Cuidador
+  - P47_Ocupacion_Cuidador
+  - P48_Persona_Contacto_Niños_Pacientes
+  - P49_Tipo_Vivienda
+  - P50_Ubicacion_Vivienda
+  - P51_Meses_Viviendo_Barrio
+  - P52_Habitaciones_Dormitorio
+  - P53_Cuantas_Personas_Habitan
+  - P54_Cuantos_Menores_Habitan
+  - P55_Duermen_Con_Niño
+  - P56_Duermen_Misma_Cama
+  - P56_Cuantas_Personas
+  - P57_Permanencia_Ventanas
+  - P58_Donde_Cocina
+  - P59_Ventilacion_Cocina
+  - P60_Energia_Cocina
+  - P61_Baños_Aislados
+  - P62_Material_Paredes
+  - P63_Material_Pisos
+  - P64_Secado_Ropa
+  - P65_Hongos_Humedad
+  - P66_Humedad_Habitacion
+  - P67_Tiene_Mascotas
+  - P68_Tiene_Gatos
+  - P68_Cuantos_Gatos
+  - P68_Tiene_Perros
+  - P68_Cuantos_Perros
+  - P68_Tiene_Aves
+  - P68_Cuantas_Aves
+  - P68_Tiene_Otros
+  - P68_Cuantos_Otros
+  - P68_Cuales_Otros
+  - P69_Donde_Duermen_Mascotas
+  - P70_Niño_Convive_Mascotas
+  - P71_Hay_Roedores
+  - P72_Hay_Cucarachas
+  - P73_Funciona_Negocio
+  - P73_Cual_Negocio
+  - P74_Trafico_Cerca
+  - P75_Construcciones_Cerca
+  - P76_Agricultura_Ganaderia
+  - P76_Explotación_Minas
+  - P76_Venta_Material_Construcción
+  - P76_Reparacion_Vehiculos
+  - P76_Restaurantes_Chimenea
+  - P76_Parqueadero_Buses
+  - P76_Bares_Cantinas
+  - P76_Industria_Manufacturera
+  - P76_Incineradores
+  - P76_Quemas_Cielo_Abierto
+  - P76_Zona_Reciclaje
+  - P76_Obras_Construcción
+  - P76_Establecimientos_Culto
+  - P76_Ornamentación
+  - P76_Canales_Agua
+  - P76_Lavandería
+  - P76_Ninguno
+  - Canalización
+  - Digitador
+  fuentes:
+  - doc: D1
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Campo obligatorio vacío: completar desde el formato físico o el aplicativo de captura.'
+- id: M5_OBLIGATORIAS_RECODIFICACION
+  descripcion: Las variables de la etapa recodificacion definidas en el diccionario están diligenciadas (1 variable)
+  tipo: requerido
+  etapa: recodificacion
+  severidad: error
+  poblaciones:
+  - menores5
+  variables:
+  - Niño_Con_Afectación
+  fuentes:
+  - doc: D1
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Variable derivada vacía: aplicar la recodificación definida en el diccionario.'
+- id: M5_OBLIGATORIAS_ENRIQUECIMIENTO
+  descripcion: Las variables de la etapa enriquecimiento definidas en el diccionario están diligenciadas (6 variables)
+  tipo: requerido
+  etapa: enriquecimiento
+  severidad: alerta
+  poblaciones:
+  - menores5
+  variables:
+  - RIESGO ACRE
+  - Min_PM25
+  - Max_PM25
+  - X
+  - Y
+  - id_geo4
+  parametros:
+    columna_vacia_no_evaluable: true
+  fuentes:
+  - doc: D1
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Variable geográfica vacía: completar con el proceso de georreferenciación (requiere la capa de referencia).'
+- id: E_OBLIGATORIAS_CAPTURA
+  descripcion: Las variables de la etapa captura definidas en el diccionario están diligenciadas (190 variables)
+  tipo: requerido
+  etapa: captura
+  severidad: error
+  poblaciones:
+  - 5a14
+  variables:
+  - ID_SIVIGILA
+  - No_Acta
+  - Subred
+  - Fecha_Encuesta
+  - Encuestador
+  - Supervisor
+  - Nombre_Menor
+  - Tipo_Documento
+  - Identificación
+  - Sexo
+  - Fecha_Nacimiento
+  - Edad
+  - Grupo_etnico
+  - PE_Desmovilizado
+  - PE_Desplazado
+  - PE_Discapacitado
+  - PE_Migrante
+  - PE_Ninguno
+  - Pais_Procedencia
+  - Correo_Electronico
+  - Nombre_Encuestado
+  - Tipo_Documento_Encuestado
+  - Identificacion_Encuestado
+  - Parentesco_Encuestado
+  - Correo_Electronico1
+  - Zona_Urbana
+  - Dirección
+  - Localidad
+  - N_UPZ
+  - Nombre_UPZ
+  - Estrato
+  - Telefono
+  - Celular
+  - P1_SGSS
+  - P2_EAPB
+  - P2_Otra_EAPB
+  - P3_Asiste_Colegio
+  - P4_Colegio
+  - P4_Dirección_Colegio
+  - P4_Localidad_Colegio
+  - P4_Num_UPZ_Colegio
+  - P4_UPZ_Colegio
+  - P5_Tos_Seca
+  - P6_Tos_Ejercicio_Leve
+  - P7_Tos_Reir_Llorar
+  - P8_Depierta_Tos
+  - P9_Sintomas_Sin_Gripa
+  - P10_Sintomas_Ultimo_Año
+  - P11_Mocos_Nariz_Tapada_Ultimo_Año
+  - P12_Enero
+  - P12_Febrero
+  - P12_Marzo
+  - P12_Abril
+  - P12_Mayo
+  - P12_Junio
+  - P12_Julio
+  - P12_Agosto
+  - P12_Septiembre
+  - P12_Octubre
+  - P12_Noviembre
+  - P12_Diciembre
+  - P13_Tos_Flemas_Con_Resfrio
+  - P13_Cuantos_Dias
+  - P14_TosFlemas_Sin_Resfrio
+  - P14_Cuantos_Dias
+  - P15_Tos_Flemas_Dias
+  - P16_Sibilancia_Alguna_Vez
+  - P17_Sibilancia_Ultimo_Año
+  - P18_Sibilancia_Gripa_Ult_Año
+  - P19_Ataques_Sibilancia
+  - P20_Desp_Silbidos_Mas_De_Una_Vez_Semana
+  - P21_Sibilancia_Impide_Habla
+  - P22_Sibilancia_Act_Fisica
+  - P23_Ausentismo_Escolar
+  - P24_Niño_Consulta_Medica
+  - P25_Familiar_Falto_Por_Consulta
+  - P26_Bajo_Peso_Al_Nacer
+  - P27_Lactancia_Materna
+  - P27_Tiempo_Lactancia
+  - Justificacion_Lactancia
+  - P28_1_Desnutricion
+  - P28_2_Obesidad
+  - P29_DX_Enf_Bronquios
+  - P30_DX_Bronquitis
+  - P31_DX_Neumonia
+  - P32_DX_TB_Pulmonar
+  - P33_DX_Asma
+  - P34_Clima
+  - P34_Flores
+  - P34_Emociones
+  - P34_Humo
+  - P34_Animales
+  - P34_Ropa_Lana
+  - P34_Presencia_Gripa
+  - P34_Comida
+  - P34_Jabon
+  - P34_Otro
+  - P34_Cual_Otro
+  - P34_Ninguno
+  - P35_Medicamentos_Ult_Año
+  - P36_Usa_Inhalador
+  - P37_Plan_Escrito
+  - P38_DX_Rinitis
+  - P39_Retirar_Animales
+  - P39_Retirar_Peluches
+  - P39_Disminuir_Consumo_Tabaco
+  - P39_Cambio_Vivienda
+  - P39_Limpieza_Desinfección
+  - P39_Cambio_Almohadas
+  - P39_Cambio_Sabanas
+  - P39_Cambios_Estructurales
+  - P39_Ningún_Cambio
+  - P40_CongesTÍOn_Nasal_Actividades
+  - P41_Cirugia_Torax
+  - P41_Cual_Cirugia
+  - P42_Consumo_Tabaco_Hogar
+  - P42_Cual_Consumo
+  - P43_Tabaquismo_Pasivo
+  - P44_Madre_Fumo_En_Embarazo
+  - P44_Cual_Fumar
+  - P45_Madre_Contacto_Fumadores
+  - P45_Cual_Contacto
+  - P46_Madre_Fumo_Dos_Años_Niño
+  - P47_Contacto_Toxicos_Trabajo
+  - P48_Cambia_Ropa
+  - P49_DX_Padres_Enf_Respiratoria
+  - P50_Ingresos_Hogar
+  - P51_Nivel_Educativo_Cuidador
+  - P52_Ocupacion_Cuidador
+  - P53_Persona_Contacto_Niños_Pacientes
+  - P54_Tipo_Vivienda
+  - P55_Ubicacion_Vivienda
+  - P56_Tiempo_Vive_Vivienda
+  - P56_Periodo_Vive_Vivienda
+  - P57_Habitaciones_Dormitorio
+  - P58_Cuantas_Personas_Habitan
+  - P59_Cuantos_Menores_Habitan
+  - P60_Duermen_Con_Niño
+  - P61_Duermen_Misma_Cama
+  - P61_Cuantas_Personas
+  - P62_Tipo_Almohada
+  - P63_Tiempo_Uso_Colchon
+  - P63_Periodo_Uso_Colchon
+  - P64_Permanencia_Ventanas
+  - P65_Donde_Cocina
+  - P66_Ventilación_Cocina
+  - P67_Energía_Cocina
+  - P68_Baños_Aislados
+  - P69_Material_Paredes
+  - P70_Material_Pisos
+  - P71_Secado_Ropa
+  - P72_Hongos_Humedad
+  - P73_Humedad_Habitacion
+  - P74_Tiene_Mascotas
+  - P75_Tiene_Perros
+  - P75_Cuantos_Perros
+  - P75_Tiene_Gatos
+  - P75_Cuantos_Gatos
+  - P75_Tiene_Aves
+  - P75_Cuantas_Aves
+  - P75_Tiene_Otros
+  - P75_Cuantos_Otros
+  - P75_Cuales_Otros
+  - P76_Donde_Duermen_Mascotas
+  - P77_Niño_Convive_Mascotas
+  - P78_Hay_Roedores
+  - P79_Hay_Cucarachas
+  - P80_Funciona_Negocio
+  - P80_Cual_Negocio
+  - P81_Trafico_Cerca
+  - P82_Construcciones_Cerca
+  - P83_Agricultura_Ganaderia
+  - P83_Explotacion_Minas
+  - P83_Venta_Material_Construccion
+  - P83_Reparacion_Vehiculos
+  - P83_Restaurantes_Chimenea
+  - P83_Parqueadero_Buses
+  - P83_Bares_Cantinas
+  - P83_Industria_Manufacturera
+  - P83_Incineradores
+  - P83_Quemas_Cielo_Abierto
+  - P83_Zona_Reciclaje
+  - P83_Obras_Construccion
+  - P83_Establecimientos_Culto
+  - P83_Ornamentación
+  - P83_Canales_Agua
+  - P83_Lavandería
+  - P83_Ninguno
+  - Canalización
+  - Digitador
+  fuentes:
+  - doc: D2
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Campo obligatorio vacío: completar desde el formato físico o el aplicativo de captura.'
+- id: E_OBLIGATORIAS_RECODIFICACION
+  descripcion: Las variables de la etapa recodificacion definidas en el diccionario están diligenciadas (1 variable)
+  tipo: requerido
+  etapa: recodificacion
+  severidad: error
+  poblaciones:
+  - 5a14
+  variables:
+  - Niño_Con_Afectación
+  fuentes:
+  - doc: D2
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Variable derivada vacía: aplicar la recodificación definida en el diccionario.'
+- id: E_OBLIGATORIAS_ENRIQUECIMIENTO
+  descripcion: Las variables de la etapa enriquecimiento definidas en el diccionario están diligenciadas (6 variables)
+  tipo: requerido
+  etapa: enriquecimiento
+  severidad: alerta
+  poblaciones:
+  - 5a14
+  variables:
+  - RIESGO ACRE
+  - Min_PM25
+  - Max_PM25
+  - x
+  - y
+  - id_geo
+  parametros:
+    columna_vacia_no_evaluable: true
+  fuentes:
+  - doc: D2
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Variable geográfica vacía: completar con el proceso de georreferenciación (requiere la capa de referencia).'
+- id: A_OBLIGATORIAS_CAPTURA
+  descripcion: Las variables de la etapa captura definidas en el diccionario están diligenciadas (138 variables)
+  tipo: requerido
+  etapa: captura
+  severidad: error
+  poblaciones:
+  - mayores60
+  variables:
+  - ID_SIVIGILA
+  - No_Acta
+  - Subred
+  - Fecha_Encuesta
+  - Encuestador
+  - Supervisor
+  - Nombre_adulto
+  - Tipo_documento
+  - Identificación
+  - Sexo
+  - Fecha_Nacimiento
+  - Edad
+  - Grupo_etnico
+  - PE_Desmovilizado
+  - PE_Desplazado
+  - PE_Discapacitado
+  - PE_Migrante
+  - PE_Ninguno
+  - Pais_Procedencia
+  - Correo_Electronico
+  - Nivel_Educativo
+  - Zona_Urbana
+  - Dirección
+  - Localidad
+  - N_UPZ
+  - Nombre_UPZ
+  - Estrato
+  - Telefono
+  - Celular
+  - P1_SGSS
+  - P2_EPS
+  - P2_Otra_EPS
+  - P3_Sibilancia_Alguna_Vez
+  - P3_Sibilancia_Ultimo_Mes
+  - P4_Despiesta_Tos
+  - P4_Tos_Noche
+  - P4_Tos_Mañana
+  - P4_Sin_Tos
+  - P5_Expectoracion_Ultimo_Año
+  - P5_Expectoracion_Levantarse
+  - P5_Expectoracion_DiaNoche
+  - P5_Expectoracion_Purulenta
+  - P5_Expectoracion_Sangre
+  - P6_Falta_Aire_Ejercicio
+  - P6_Falta_Aire_Caminar_Pendiente
+  - P6_Falta_Aire_Caminar_PropioPaso
+  - P6_Falta_Aire_Reposo
+  - P6_Ninguno
+  - P7_Dolor_Toracico_Ejercicio
+  - P7_Dolor_Toracico_Reposo
+  - P7_Ninguno
+  - P8_Asistió_Consulta_Medica
+  - P9_DX_Asma
+  - P9_DX_EPOC
+  - P9_DX_TB_Pulmonar
+  - P9_DX_Neumonia
+  - P9_DX_CA_Pulmonar
+  - P9_DX_Ninguno
+  - P10_Usa_Oxigeno
+  - P10_Frecuencia_Oxigeno
+  - P10_Tiempo
+  - P10_Periodo
+  - P11_DX_HTA
+  - P11_DX_Arritmia
+  - P11_DX_Trombosis
+  - P11_DX_Angina_Pecho
+  - P11_DX_IAM
+  - P11_DX_ACV
+  - P11_DX_Ninguno
+  - P12_Cirugia_Torax
+  - P12_Cual_Cirugia
+  - P13_Pasa_Tiempo_Aire_Libre
+  - P13_Horas_Tiempo_Aire_Libre
+  - P14_Horario
+  - P15_Actividad_Fisica
+  - P16_Tipo_Espacio
+  - P17_Frecuencia
+  - P18_Fuma
+  - P19_Fumó_En_Algun_Momento
+  - P20_Frecuencia
+  - P21_Cuantos_Cigarrillos
+  - P22_Edad_Inicio_Fumar
+  - P23_Tiempo_Fumar
+  - P23_Periodo_Fumar
+  - P24_Contacto_Fumadores_Pasado
+  - P24_Tiempo_Contacto
+  - P25_Contacto_Fumadores_Presente
+  - P25_1_Dispositivos_SEAN_SSSN
+  - P26_Ocupacion_Principal
+  - P27_Exposicion_Toxicos
+  - P27_Polvo
+  - P27_Gases
+  - P27_Humo
+  - P27_Vapores_Tóxicos
+  - P28_Espacio_Exposicion
+  - P29_Tiempo_Exposicion
+  - P29_Periodo_Exposicion
+  - P30_Ubicacion_Cocina
+  - P31_Cocicó_En_Su_Vida
+  - P32_Combustible_Leña
+  - P32_Años_Leña
+  - P32_Combustible_Carbón
+  - P32_Años_Carbón
+  - P32_Combustible_Excrementos
+  - P32_Años_Excrementos
+  - P32_Combustible_Envoltura
+  - P32_Años_Envoltura
+  - P32_Combustible_Cocinol
+  - P32_Años_Cocinol
+  - P32_Combustible_Alcohol
+  - P32_Años_Alcohol
+  - P33_Tipo_Vivienda
+  - P34_Zona_Vivienda
+  - P35_Material_Paredes
+  - P36_Material_Pisos
+  - P37_Funciono_Fabrica_Negocio
+  - P37_Cual_Negocio
+  - P38_Trafico_Cerca
+  - P39_Construcciones_Cerca
+  - P40_Agricultura_Ganaderia
+  - P40_Explotacion_Minas
+  - P40_Venta_Material_Construccion
+  - P40_Reparacion_Vehiculos
+  - P40_Restaurantes_Chimenea
+  - P40_Parqueadero_Buses
+  - P40_Bares_Cantinas
+  - P40_Industria_Manufacturera
+  - P40_Incineradores
+  - P40_Quemas_Cielo_Abierto
+  - P40_Zona_Reciclaje
+  - P40_Obras_Construccion
+  - P40_Establecimientos_Culto
+  - P40_Ornamentación
+  - P40_Canales_Agua
+  - P40_Lavandería
+  - P40_Ninguno
+  - Canalización
+  - Digitador
+  fuentes:
+  - doc: D3
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Campo obligatorio vacío: completar desde el formato físico o el aplicativo de captura.'
+- id: A_OBLIGATORIAS_RECODIFICACION
+  descripcion: Las variables de la etapa recodificacion definidas en el diccionario están diligenciadas (2 variables)
+  tipo: requerido
+  etapa: recodificacion
+  severidad: error
+  poblaciones:
+  - mayores60
+  variables:
+  - TABAQUISMO PESADO
+  - Adulto_Con_Riesgo_Posible
+  fuentes:
+  - doc: D3
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Variable derivada vacía: aplicar la recodificación definida en el diccionario.'
+- id: A_OBLIGATORIAS_ENRIQUECIMIENTO
+  descripcion: Las variables de la etapa enriquecimiento definidas en el diccionario están diligenciadas (6 variables)
+  tipo: requerido
+  etapa: enriquecimiento
+  severidad: alerta
+  poblaciones:
+  - mayores60
+  variables:
+  - valor_acre
+  - Min_PM25
+  - Max_PM25
+  - x
+  - y
+  - id_geo
+  parametros:
+    columna_vacia_no_evaluable: true
+  fuentes:
+  - doc: D3
+    ubicacion: columna de obligatoriedad / descripción de cada variable
+  - doc: G1
+    ubicacion: p.3
+    nota: los valores 0, 999 o espacios en blanco indican que la información no fue ingresada o digitada en su totalidad
+  accion: 'Variable geográfica vacía: completar con el proceso de georreferenciación (requiere la capa de referencia).'

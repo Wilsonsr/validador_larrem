@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tutorial – Validador LARREM Aire</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: #1E2A44; font-size: 10pt; line-height: 1.45; }
+  h1 { font-size: 22pt; margin: 0 0 4pt; color: #14213D; }
+  h2 { font-size: 14pt; color: #14213D; border-bottom: 2px solid #E07A2E; padding-bottom: 3pt; margin-top: 18pt; page-break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 12pt 0 4pt; color: #1F3864; page-break-after: avoid; }
+  .sub { color: #5A6478; font-size: 11pt; margin-bottom: 14pt; }
+  .caja { border-left: 4px solid #2F6DB5; background: #EEF3FA; padding: 8pt 12pt; margin: 10pt 0; page-break-inside: avoid; }
+  .alerta { border-left-color: #C00000; background: #FBEDEC; }
+  ol li, ul li { margin-bottom: 4pt; }
+  code, .k { font-family: Consolas, "Courier New", monospace; background: #F1EFE9; padding: 1pt 4pt; border-radius: 3px; font-size: 9.5pt; }
+  table { border-collapse: collapse; width: 100%; margin: 8pt 0; page-break-inside: avoid; }
+  th, td { border: 1px solid #C9CED8; padding: 5pt 7pt; text-align: left; vertical-align: top; }
+  th { background: #D9E1F2; }
+  .rojo { background: #FFC7CE; color: #9C0006; font-weight: 600; }
+  .amarillo { background: #FFEB9C; color: #7A4F00; font-weight: 600; }
+  .oscuro { background: #C00000; color: #FFFFFF; font-weight: 600; }
+  .img { width: 100%; border: 1px solid #C9CED8; border-radius: 6px; margin: 6pt 0 2pt; page-break-inside: avoid; }
+  .pie-img { color: #5A6478; font-size: 8.5pt; margin-bottom: 8pt; }
+  .pie { color: #5A6478; font-size: 9pt; margin-top: 20pt; }
+</style>
+</head>
+<body>
+
+<h1>Validador de bases LARREM – Aire</h1>
+<div class="sub">Tutorial de instalación y uso · versión 2026.11.2 · 18 de noviembre de 2026</div>
+
+<div class="caja">El validador revisa las bases de las encuestas de aire (menores de 5 años, 5 a 14 años y 60 años y más) y entrega un reporte en Excel y una copia de cada base con los errores marcados. <b>Nunca modifica los archivos originales.</b> Funciona en su propio equipo: las bases no salen del computador.</div>
+
+<h2>1. Dónde descargarlo</h2>
+<ol>
+<li>Entre a <b>github.com/wilsonsr/validador_larrem/releases</b>. No necesita cuenta de GitHub.</li>
+<li>En la versión más reciente (arriba, con la etiqueta <i>Latest</i>), en <b>Assets</b>, pulse <b>validador_larrem_2026.11.2.zip</b>.</li>
+<li>El zip trae todo: el validador, este tutorial y tres <b>bases de demostración sintéticas</b> para practicar.</li>
+</ol>
+
+<h2>2. Qué contiene el paquete</h2>
+<table>
+<tr><th style="width:38%">Archivo o carpeta</th><th>Para qué sirve</th></tr>
+<tr><td><span class="k">TUTORIAL_VALIDADOR_LARREM.pdf</span></td><td>Este documento</td></tr>
+<tr><td><span class="k">iniciar_validador.bat</span></td><td>Abre el validador (doble clic)</td></tr>
+<tr><td><span class="k">datos_demostracion\</span></td><td>Tres bases sintéticas, una por población: ningún registro corresponde a una persona</td></tr>
+<tr><td><span class="k">configuracion\aire\</span></td><td>Las reglas, el catálogo de variables y las decisiones pendientes</td></tr>
+<tr><td><span class="k">docs\</span></td><td>Guía de uso, actualizaciones, mantenimiento de reglas, decisiones y publicación en la nube</td></tr>
+<tr><td><span class="k">src\</span>, <span class="k">app.py</span>, <span class="k">herramientas\</span>, <span class="k">tests\</span></td><td>El programa. No es necesario abrirlos</td></tr>
+</table>
+
+<h2>3. Requisitos</h2>
+<ul>
+<li>Windows 10 u 11.</li>
+<li><b>Python 3.10 o superior</b> (se probó con Python 3.13). Si no lo tiene, vea el paso 4.2.</li>
+<li>Internet <b>solo la primera vez</b>, para descargar los componentes (ocupan unos 500 MB en disco).</li>
+<li>Un navegador (Chrome, Edge o Firefox).</li>
+</ul>
+
+<h2>4. Instalación (solo la primera vez)</h2>
+
+<h3>4.1 Descomprimir el paquete</h3>
+<ol>
+<li>Mueva el archivo descargado (<span class="k">validador_larrem_2026.11.2.zip</span>) a una carpeta suya, por ejemplo <span class="k">Documentos</span>. Evite OneDrive y rutas muy largas.</li>
+<li>Clic derecho sobre el archivo → <b>Extraer todo…</b> → <b>Extraer</b>.</li>
+<li>Abra la carpeta <span class="k">validador_larrem</span> que se creó.</li>
+</ol>
+<div class="caja">No ejecute el validador desde dentro del .zip sin extraerlo: no funcionará.</div>
+
+<h3>4.2 Instalar Python (si no lo tiene)</h3>
+<ol>
+<li>Para saber si ya lo tiene: tecla Windows, escriba <span class="k">cmd</span>, Enter, y en la ventana negra escriba <span class="k">py --version</span> o <span class="k">python --version</span>. Si aparece <i>Python 3.10</i> o superior, siga al paso 4.3.</li>
+<li>Si no: entre a <b>python.org/downloads/windows</b> y descargue el instalador de <b>Python 3.13</b> (64 bits), la versión con la que se probó el validador.</li>
+<li>Al instalar, <b>marque la casilla “Add python.exe to PATH”</b> antes de pulsar <i>Install Now</i>.</li>
+<li>Si no tiene permisos de administrador, elija <i>Customize installation</i> y deje desmarcado <i>for all users</i>: la instalación queda solo para su usuario.</li>
+</ol>
+<div class="caja">Si su equipo tiene Anaconda, el validador también puede usar ese Python siempre que <span class="k">python --version</span> responda en la ventana <span class="k">cmd</span>. Si no responde, instale Python desde python.org como se indica arriba.</div>
+
+<h3>4.3 Primer arranque</h3>
+<ol>
+<li>Doble clic en <span class="k">iniciar_validador.bat</span>.</li>
+<li>Si Windows muestra “Windows protegió su PC”, pulse <b>Más información</b> → <b>Ejecutar de todas formas</b>.</li>
+<li>Se abre una ventana negra que dice <i>Creando el entorno de Python</i> e <i>Instalando dependencias</i>. Espere: tarda entre 2 y 10 minutos según la conexión.</li>
+<li>Al terminar, se abre el navegador con el validador. <b>No cierre la ventana negra</b> mientras lo usa.</li>
+</ol>
+<p>Las siguientes veces, el doble clic abre el validador en segundos y no necesita internet.</p>
+
+<h2>5. Uso paso a paso</h2>
+<h3>5.1 Cargar las bases</h3>
+<p>Arrastre los archivos .xlsx al recuadro <b>1. Cargar las bases</b>, o pulse <i>Browse files</i> para elegirlos. Para la primera prueba use las tres bases de la carpeta <span class="k">datos_demostracion</span>. Puede cargar una, dos o las tres poblaciones a la vez.</p>
+<img class="img" src="img/02_poblacion.png">
+<div class="pie-img">Pantalla inicial con las tres bases de demostración cargadas. A la izquierda, la versión, el número de reglas y la leyenda de colores.</div>
+
+<h3>5.2 Confirmar la población</h3>
+<p>El validador reconoce la población por las columnas y el prefijo del acta (AR02 menores de 5, AR03 de 5 a 14, AR04 de 60 y más). Si la confianza es <b>alta</b> o <b>media</b> ya viene seleccionada. Si es <b>baja</b>, elíjala en la lista.</p>
+
+<h3>5.3 Definir los parámetros</h3>
+<table>
+<tr><th style="width:30%">Parámetro</th><th>Qué poner</th></tr>
+<tr><td>Periodo esperado</td><td>Fechas de inicio y fin del corte. Las encuestas fuera del periodo salen como error.</td></tr>
+<tr><td>Etapa de la base</td><td><b>Recodificación</b> (recomendado): revisa las respuestas y las variables CODIF. <b>Captura</b>: solo las respuestas. <b>Enriquecimiento</b>: además coordenadas, ACRE y PM2,5.</td></tr>
+<tr><td>Subredes y localidades</td><td>Déjelas en “Todas”, o elija las que le corresponden para detectar registros de otra zona.</td></tr>
+<tr><td>Reporte anterior</td><td>Opcional: el reporte del corte anterior para ver qué hallazgos son nuevos, siguen o se resolvieron.</td></tr>
+</table>
+
+<h3>5.4 Validar y descargar</h3>
+<p>Pulse <b>▶ Validar</b>. En segundos aparecen las tarjetas de resumen (registros, bloqueantes, errores, alertas y revisión humana) y los botones:</p>
+<img class="img" src="img/03_resultados.png">
+<ul>
+<li><b>Descargar reporte Excel</b>: el resumen y el detalle de todos los hallazgos.</li>
+<li><b>Menores de 5 – marcada</b>, <b>5 a 14 años – marcada</b>, <b>60 años y más – marcada</b>: una copia de cada base con los hallazgos marcados, para corregir.</li>
+<li><b>Guardar en el historial</b>: guarda la ejecución en <span class="k">resultados\ejecuciones\</span> para compararla después.</li>
+</ul>
+
+<h3>5.5 Panorama y pestañas</h3>
+<p>Debajo de los botones, la pestaña <b>Panorama</b> muestra los hallazgos por población y las reglas con más hallazgos; al pasar el cursor por una barra se ve la descripción de la regla. Las demás pestañas permiten filtrar los hallazgos, ver el resultado por regla, los no evaluables, la estructura de cada archivo y la comparación con el corte anterior.</p>
+<img class="img" src="img/04_panorama.png">
+
+<h2>6. Cómo leer los resultados</h2>
+<h3>6.1 Severidades</h3>
+<table>
+<tr><th style="width:22%">Severidad</th><th>Significado</th></tr>
+<tr><td class="oscuro">Bloqueante</td><td>Impide usar la base: ID o acta repetidos, edad fuera de la población.</td></tr>
+<tr><td class="rojo">Error</td><td>Contradice una regla documentada. Se corrige en el origen.</td></tr>
+<tr><td class="amarillo">Alerta</td><td>Probable error. Verificar antes de corregir.</td></tr>
+<tr><td style="background:#DDEBF7;color:#1F4E79;font-weight:600">Revisión humana</td><td>La guía pide revisar el caso (por ejemplo, NS/NR o canalización). <b>No es un error.</b></td></tr>
+</table>
+<p>Un resultado <b>no evaluable</b> significa que el control no se pudo hacer (falta una columna, falta un dato o hay una decisión pendiente). Nunca cuenta como cumplido.</p>
+
+<h3>6.2 La base marcada</h3>
+<ul>
+<li>Cada registro está en la <b>misma fila</b> que en el original y que en el reporte.</li>
+<li>Pase el cursor sobre una celda coloreada: el comentario dice la regla, lo esperado, el detalle y la acción.</li>
+<li>Las cuatro columnas <b>Validación: …</b> al final resumen cada fila. Filtre <i>Validación: hallazgos</i> mayor que 0 para ver solo los registros por corregir.</li>
+<li>La revisión humana se colorea en azul: no es un error, pide verificar el caso (casi siempre en Observaciones). No suma en <i>Validación: hallazgos</i>.</li>
+</ul>
+
+<h3>6.3 El reporte Excel</h3>
+<table>
+<tr><th style="width:24%">Hoja</th><th>Contenido</th></tr>
+<tr><td>A_Resumen</td><td>Archivos, totales por severidad y registros afectados</td></tr>
+<tr><td>B_Hallazgos</td><td>Un hallazgo por fila. Columnas amarillas para el seguimiento del equipo</td></tr>
+<tr><td>C_No_evaluables</td><td>Controles que no se pudieron hacer y por qué</td></tr>
+<tr><td>D_Estructura</td><td>Columnas nuevas, faltantes, vacías o renombradas</td></tr>
+<tr><td>E a I</td><td>Resultado por regla, catálogo de reglas, cobertura, decisiones y comparación</td></tr>
+</table>
+
+<h2>7. Validar el siguiente corte</h2>
+<ol>
+<li>Cargue las bases nuevas y ajuste el periodo.</li>
+<li>Suba el reporte del corte anterior en <i>Reporte de una ejecución anterior</i>, idealmente con los estados que diligenció el equipo, o elija una ejecución guardada en el historial.</li>
+<li>En la pestaña <b>Comparación</b> verá los hallazgos nuevos, persistentes y resueltos.</li>
+</ol>
+
+<h2>8. Problemas frecuentes</h2>
+<table>
+<tr><th style="width:36%">Qué pasa</th><th>Qué hacer</th></tr>
+<tr><td>“No se encontró Python en este equipo”</td><td>Instale Python (paso 4.2) marcando “Add python.exe to PATH” y vuelva a ejecutar.</td></tr>
+<tr><td>“No se pudieron instalar las dependencias”</td><td>Revise la conexión. Si la red usa proxy, pregunte a sistemas o al responsable del validador el dato del proxy. Luego borre la carpeta <span class="k">.venv</span> y vuelva a ejecutar.</td></tr>
+<tr><td>La ventana negra se cierra sola</td><td>Abra <span class="k">cmd</span>, arrastre <span class="k">iniciar_validador.bat</span> a la ventana y pulse Enter para leer el mensaje.</td></tr>
+<tr><td>El navegador no se abre</td><td>Abra el navegador y escriba <span class="k">localhost:8501</span>.</td></tr>
+<tr><td>Se abrió el validador dos veces</td><td>Si ya había uno abierto, el nuevo usa otra dirección (por ejemplo <span class="k">localhost:8502</span>). Cierre la ventana negra que sobra.</td></tr>
+<tr><td>Un archivo dice “población no confirmada”</td><td>Elija la población en la lista del paso 2.</td></tr>
+<tr><td>El antivirus bloquea el .bat</td><td>Avise al responsable del validador; puede ser necesario que sistemas autorice la carpeta.</td></tr>
+</table>
+
+<h2>9. Cerrar y actualizar</h2>
+<ul>
+<li><b>Cerrar:</b> cierre la pestaña del navegador y la ventana negra.</li>
+<li><b>Saber qué versión tiene:</b> aparece en la barra lateral y en la hoja A_Resumen del reporte.</li>
+<li><b>Actualizar a una versión nueva:</b>
+<ol>
+<li>Cierre el validador.</li>
+<li>Si quiere conservar su historial, copie la carpeta <span class="k">resultados\ejecuciones</span> a otro lugar.</li>
+<li>Descargue la versión nueva desde <b>Releases</b> (sección 1) y extráigala en una carpeta nueva.</li>
+<li>Si lo guardó, copie el historial en la carpeta nueva.</li>
+<li>Abra <span class="k">iniciar_validador.bat</span>. Si la versión nueva usa otras librerías, las instala sola (requiere internet unos minutos).</li>
+</ol></li>
+<li><b>Qué cambió:</b> lo dice la página de la versión en <i>Releases</i> y el archivo <span class="k">CHANGELOG.md</span>.</li>
+</ul>
+
+<h3>9.1 Pedir un cambio o reportar un problema</h3>
+<ul>
+<li>Con cuenta de GitHub: pestaña <b>Issues</b> → <b>New issue</b>.</li>
+<li>Sin cuenta: escriba al responsable del validador.</li>
+<li>Indique la población, el nombre de la regla, la <b>fila de Excel</b> del caso y qué esperaba. <b>No escriba nombres, documentos ni direcciones</b>: la fila y el ID SIVIGILA bastan.</li>
+<li>Cada solicitud recibe un número (SOL-027, SOL-028…) y queda en <span class="k">docs\registro_solicitudes.csv</span> con la decisión tomada. El proceso completo está en <span class="k">docs\actualizaciones.md</span>.</li>
+</ul>
+
+<h2>10. Cuidado con los datos</h2>
+<div class="caja alerta">
+<ul style="margin:0">
+<li>Las bases reales, la base marcada y los reportes contienen datos personales y de salud. Guárdelos en carpetas con acceso restringido y no los envíe por correo ni chat sin autorización.</li>
+<li>El reporte oculta por defecto nombres, identificación, dirección, teléfono y correo; la base marcada <b>no</b> los oculta.</li>
+<li>Las bases de demostración son sintéticas: las respuestas se sortearon y los nombres, documentos, direcciones y colegios son inventados. Tienen errores sembrados a propósito y no sirven para análisis.</li>
+<li>El repositorio de GitHub es público: contiene solo el programa, las reglas y la documentación. Nunca adjunte bases ni reportes en una <i>Issue</i>.</li>
+<li>No suba bases reales a una versión publicada en internet sin autorización de la SDS.</li>
+</ul>
+</div>
+
+<p class="pie">Las reglas son una propuesta en revisión por el equipo técnico de bases de aire. Las decisiones pendientes están en la hoja H_Decisiones del reporte y en <span class="k">docs\decisiones_pendientes.md</span>.</p>
+</body>
+</html>

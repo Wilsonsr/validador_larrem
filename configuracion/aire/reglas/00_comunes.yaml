@@ -1,0 +1,334 @@
+# Reglas comunes a las tres poblaciones de AIRE.
+# Fuentes: G1 = Guía de bases (pp.), I1 = Instructivo (pp.), D1/D2/D3 = diccionarios (fila), O1 = observaciones (hoja, fila).
+# Estados: implementada | provisional | revision_humana | pendiente_contradiccion | pendiente_incompleta | requiere_insumo
+poblaciones: [menores5, "5a14", mayores60]
+reglas:
+
+  # ------------------------------------------------------------------ Identificación de la encuesta
+  - id: COM_ID_UNICO
+    descripcion: "ID_SIVIGILA no se repite dentro del archivo (unidad: encuesta)"
+    tipo: unicidad
+    variables: [ID_SIVIGILA]
+    severidad: bloqueante
+    fuentes:
+      - {doc: G1, ubicacion: "p.4, p.29, p.60", nota: "Código determinado por SDS"}
+      - {doc: I1, ubicacion: "p.143", nota: "ID único en toda la base del módulo"}
+    accion: "Verificar en SIVIGILA cuál de las filas corresponde a la encuesta y eliminar la copia en origen."
+
+  - id: COM_ID_UNICO_LOTE
+    descripcion: "ID_SIVIGILA no se repite entre los archivos cargados en la misma ejecución"
+    tipo: unicidad
+    variables: [ID_SIVIGILA]
+    parametros: {alcance: lote, entre_poblaciones: true, explicacion: "el ID de encuesta aparece en bases de distintas poblaciones"}
+    severidad: bloqueante
+    fuentes:
+      - {doc: I1, ubicacion: "p.143", nota: "ID Acta único en toda la base del módulo de la línea"}
+    accion: "Verificar cuál encuesta conserva el ID y corregir en SIVIGILA."
+
+  - id: COM_ACTA_UNICA
+    descripcion: "No_Acta no se repite dentro del archivo"
+    tipo: unicidad
+    variables: [No_Acta]
+    severidad: bloqueante
+    fuentes:
+      - {doc: I1, ubicacion: "p.10, p.57, p.109, p.143", nota: "cada consecutivo debe ser único"}
+    accion: "Revisar la numeración asignada por la subred."
+
+  - id: COM_ACTA_UNICA_LOTE
+    descripcion: "No_Acta no se repite entre los archivos cargados"
+    tipo: unicidad
+    variables: [No_Acta]
+    parametros: {alcance: lote, entre_poblaciones: true, explicacion: "el número de acta aparece en bases de distintas poblaciones"}
+    severidad: bloqueante
+    fuentes:
+      - {doc: I1, ubicacion: "p.143"}
+    accion: "Revisar la numeración asignada por la subred."
+
+  - id: COM_ACTA_SUBRED
+    descripcion: "La sigla de subred del acta (posición 5) corresponde a la subred registrada (N, S, E, C)"
+    tipo: funcion
+    variables: [No_Acta, Subred]
+    parametros:
+      nombre: acta_subred
+      args: {acta: No_Acta, subred: Subred}
+      opciones:
+        posicion: 4
+        siglas: {"Subred Norte": N, "Subred Sur": S, "Subred Centro Oriente": E, "Subred Sur Occidente": C}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "pp.143-144", nota: "Anexo 1: sigla de la subred Norte N, Sur S, Centro Oriente E, Sur Occidente C"}
+      - {doc: G1, ubicacion: "p.4", nota: "Subred concordante con la Subred Integrada de Servicios de Salud"}
+    accion: "Verificar la subred que realizó la encuesta y la numeración del acta."
+
+  - id: COM_FECHA_ENCUESTA_VALIDA
+    descripcion: "La fecha de encuesta es una fecha interpretable"
+    tipo: fecha_valida
+    variables: [Fecha_Encuesta]
+    parametros: {min: "2019-01-01"}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.10, p.58, p.109", nota: "formato dd/mm/aaaa"}
+      - {doc: G1, ubicacion: "p.4"}
+    accion: "Corregir la fecha según el formato físico."
+
+  - id: COM_FECHA_NACIMIENTO_VALIDA
+    descripcion: "La fecha de nacimiento es una fecha interpretable"
+    tipo: fecha_valida
+    variables: [Fecha_Nacimiento]
+    parametros: {min: "1900-01-01"}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.13, p.60, p.111", nota: "formato dd/mm/aaaa"}
+      - {doc: G1, ubicacion: "p.5, p.30, p.62", nota: "sin espacios en blanco ni 999"}
+    accion: "Verificar la fecha de nacimiento contra el documento de identidad."
+
+  - id: COM_FECHAS_ORDEN
+    descripcion: "La fecha de nacimiento no es posterior a la fecha de encuesta"
+    tipo: funcion
+    variables: [Fecha_Nacimiento, Fecha_Encuesta]
+    parametros: {nombre: orden_fechas, args: {anterior: Fecha_Nacimiento, posterior: Fecha_Encuesta}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.13, p.60, p.111", nota: "la edad se calcula con la fecha de nacimiento y la fecha de la encuesta"}
+    accion: "Verificar ambas fechas contra el soporte."
+
+  - id: COM_PERIODO
+    descripcion: "La fecha de encuesta está dentro del periodo esperado de la entrega"
+    tipo: periodo
+    variables: [Fecha_Encuesta]
+    severidad: error
+    especiales: "El periodo lo indica el usuario en cada ejecución; si no se indica, el control queda no evaluable."
+    fuentes:
+      - {doc: G1, ubicacion: "p.4, p.29, p.61", nota: "filtrar la fecha de encuesta con el mes que se valida"}
+    accion: "Confirmar si el registro pertenece a otro corte o si la fecha está mal digitada."
+
+  - id: COM_AMBITO_SUBRED
+    descripcion: "La subred del registro está dentro del ámbito territorial indicado para la revisión"
+    tipo: ambito
+    variables: [Subred]
+    parametros: {ambito: subred}
+    severidad: alerta
+    especiales: "Si el usuario no selecciona subredes, el control no aplica."
+    fuentes:
+      - {doc: DX, ubicacion: "sección 2", nota: "las bases tienen distinto alcance territorial; la diferencia no es por sí sola un incumplimiento"}
+    accion: "Confirmar el alcance de la entrega; no eliminar registros por este motivo."
+
+  - id: COM_SUBRED_DOMINIO
+    descripcion: "Subred dentro del catálogo de subredes integradas"
+    tipo: dominio
+    variables: [Subred]
+    parametros: {valores: ["Subred Norte", "Subred Sur", "Subred Centro Oriente", "Subred Sur Occidente"]}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.1, p.144"}
+    accion: "Corregir el nombre de la subred."
+
+  - id: COM_ID_TEXTO
+    descripcion: "Las identificaciones se almacenan como texto (preserva ceros a la izquierda y siglas)"
+    tipo: almacenado_como_texto
+    variables: [Identificación]
+    severidad: alerta
+    fuentes:
+      - {doc: DX, ubicacion: "sección 2 y 4", nota: "almacenar identificación como texto"}
+      - {doc: I1, ubicacion: "p.12", nota: "los documentos de extranjería se registran con siglas"}
+    accion: "Verificar que el número no haya perdido dígitos y formatear la columna como texto."
+
+  # ------------------------------------------------------------------ Población especial y procedencia
+  - id: COM_PE_DOMINIO
+    descripcion: "Población especial: valores 1 (Sí) o 2 (No)"
+    tipo: dominio
+    variables: [PE_Desmovilizado, PE_Desplazado, PE_Discapacitado, PE_Migrante, PE_Ninguno]
+    parametros: {valores: [1, 2]}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.5, p.30, p.63", nota: "valor numérico 1 (SI) o 2 (NO)"}
+      - {doc: D1, ubicacion: "filas 23-32"}
+    accion: "Corregir según el formato físico."
+
+  - id: COM_PE_NINGUNO
+    descripcion: "PE_Ninguno = 1 solo si ninguna población especial está marcada; si alguna es 1, PE_Ninguno = 2"
+    tipo: exclusion_ninguno
+    parametros: {opciones: [PE_Desmovilizado, PE_Desplazado, PE_Discapacitado, PE_Migrante], ninguno: PE_Ninguno}
+    variables: [PE_Ninguno]
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 21; 5 A 14 fila 20; MAYOR 60 fila 19", nota: "si se marca alguna de las opciones anteriores, el valor debe ser 2"}
+    accion: "Verificar en el formato si se marcó población especial."
+
+  - id: COM_PE_REGIMEN
+    descripcion: "Quien pertenece a una población especial debe estar en régimen subsidiado"
+    tipo: condicional
+    variables: [P1_SGSS]
+    aplica_si:
+      alguna:
+        - {var: PE_Desmovilizado, en: [1]}
+        - {var: PE_Desplazado, en: [1]}
+        - {var: PE_Discapacitado, en: [1]}
+        - {var: PE_Migrante, en: [1]}
+    parametros:
+      entonces: {var: P1_SGSS, en: ["Subsidiado (EPSS)", "Subsidiado"]}
+      explicacion: "población especial registrada sin régimen subsidiado; verificar observaciones y la definición del instructivo"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 filas 17-20; 5 A 14 filas 16-19; MAYOR 60 filas 15-18"}
+      - {doc: G1, ubicacion: "p.5, p.30, p.63"}
+      - {doc: I1, ubicacion: "p.14, p.61, p.112", nota: "Decreto 780 de 2016"}
+    accion: "Revisar observaciones; si no está afiliado, la persona no hace parte de la población especial."
+
+  - id: COM_PAIS_REQUERIDO_DOC_EXT
+    descripcion: "Si el documento es de extranjería (DE, PPT, PEP o cédula de extranjería), el país de procedencia no es Colombia"
+    tipo: condicional
+    poblaciones: [menores5, "5a14"]
+    variables: [Pais_Procedencia]
+    aplica_si: {var: Tipo_Documento, en: ["Documento de Extranjería", "PEP", "PPT", "Permiso por Proteccion Temporal", "Permiso por Protección Temporal", "Cedula Extranjería", "Cédula de Extranjería"]}
+    parametros:
+      entonces: {var: Pais_Procedencia, no_en: [COLOMBIA]}
+      explicacion: "documento de extranjería con país de procedencia Colombia"
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.5, p.30, p.62", nota: "tipos distintos a NUIP/CC (PEP, PPT) corresponden a país diferente a Colombia"}
+      - {doc: I1, ubicacion: "p.12, p.14", nota: "extranjeros deben tener documentos legalizados"}
+    accion: "Verificar documento y país contra el soporte."
+
+  # ------------------------------------------------------------------ Contacto
+  - id: COM_CORREO_FORMATO
+    descripcion: "Correo electrónico con sintaxis válida o marcadores 8888 (no tiene) / 7777 (no presenta)"
+    tipo: patron
+    variables: [Correo_Electronico]
+    parametros:
+      patron: "[^\\s@]+@[^\\s@]+\\.[^\\s@]+"
+      permitidos: [8888, 7777]
+      no_evaluables: {"9999": "el diccionario admite 9999=Sin dato, pero la guía y las observaciones no lo permiten (decisión pendiente DP-13)"}
+      descripcion_esperado: "correo con @ y dominio, 8888 o 7777"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 23; 5 A 14 filas 22 y 27; MAYOR 60 fila 21", nota: "no se pueden poner otros valores"}
+      - {doc: G1, ubicacion: "p.6, p.32, p.63", nota: "no se pueden presentar valores perdidos como 999"}
+      - {doc: I1, ubicacion: "p.14-15, p.62, p.113"}
+    accion: "Verificar el correo en el formato físico; no verifica la existencia del correo."
+
+
+  - id: COM_CORREO_DIGITACION
+    descripcion: "Correo sin errores frecuentes de digitación (gmail, hotmail, outlook; terminación .com)"
+    tipo: condicional
+    variables: [Correo_Electronico]
+    aplica_si: {var: Correo_Electronico, patron: ".*@.*"}
+    parametros: {entonces_cada: {negar: {patron: "(?i).*@(gmai|gmial|gmil|gmal|gamil|gnail|gmaill|gemail|gmail[a-z]+|hotmai|hotmial|hotmal|hotmil|homail|hotamil|hotmaill|htmail|outlok|outloo|oulook|outlock|outllok|otlook|yaho|yahho|yhaoo)\\.[a-z.]+|.*@(gmail|hotmail|outlook|yahoo)|.*@gmail\\.(co|es|con|cm|om|comm|coom)|.*\\.(con|cm|comm|coom|c0m|cmo|ocm)|.*@.*\\.\\..*|.*\\s.*"}}, esperado: "dominio bien escrito (gmail.com, hotmail.com, outlook.com…) y sin espacios", explicacion: "el dominio o la terminación del correo parece mal digitado"}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: correo electrónico (SOL-012)"}
+    accion: "Verificar el correo con el formato físico (dominio y terminación)."
+  - id: COM_TELEFONO_FORMATO
+    descripcion: "Teléfono fijo de 10 dígitos que inicia con 601, o 8888 (no tiene)"
+    tipo: patron
+    variables: [Telefono]
+    parametros:
+      patron: "601\\d{7}"
+      permitidos: [8888]
+      no_evaluables: {"9999": "el diccionario admite 9999=Sin dato; O1 indica 8888 sin más opciones (decisión pendiente DP-13)"}
+      descripcion_esperado: "601 + 7 dígitos, o 8888"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 47; 5 A 14 fila 47; MAYOR 60 fila 40"}
+      - {doc: I1, ubicacion: "p.17, p.64, p.115", nota: "diez dígitos; indicativo de Bogotá; NO TIENE = 8888"}
+    accion: "Verificar el número en el formato físico."
+
+  - id: COM_CELULAR_FORMATO
+    descripcion: "Celular de 10 dígitos o 8888 (no tiene)"
+    tipo: patron
+    variables: [Celular]
+    parametros:
+      patron: "\\d{10}"
+      permitidos: [8888]
+      no_evaluables: {"9999": "el diccionario admite 9999=Sin dato; O1 indica 8888 sin más opciones (decisión pendiente DP-13)"}
+      descripcion_esperado: "10 dígitos o 8888"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 48; 5 A 14 fila 48; MAYOR 60 fila 41"}
+      - {doc: I1, ubicacion: "p.17, p.64, p.114"}
+    accion: "Verificar el número en el formato físico."
+
+  - id: COM_CONTACTO_MINIMO
+    descripcion: "Debe existir al menos un número de contacto (fijo con 601 o celular de 10 dígitos)"
+    tipo: condicional
+    variables: [Telefono, Celular]
+    parametros:
+      entonces:
+        alguna:
+          - {var: Telefono, patron: "601\\d{7}"}
+          - {var: Celular, patron: "\\d{10}"}
+      explicacion: "no hay teléfono fijo ni celular válido; el instructivo exige al menos uno para continuar la encuesta"
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 filas 47-48; 5 A 14 filas 47-48; MAYOR 60 filas 40-41"}
+      - {doc: I1, ubicacion: "p.9, p.17, p.64, p.114"}
+      - {doc: G1, ubicacion: "p.8, p.36, p.66"}
+    accion: "Recuperar un número de contacto o justificar en observaciones."
+
+  # ------------------------------------------------------------------ Afiliación
+  - id: COM_SGSS_DOMINIO
+    descripcion: "Régimen de afiliación dentro de las opciones del formato"
+    tipo: dominio
+    variables: [P1_SGSS]
+    parametros: {valores: ["Contributivo (EPS)", "Subsidiado (EPSS)", "Régimen excepcional", "Ninguno", "Contributivo", "Subsidiado"]}
+    severidad: error
+    fuentes:
+      - {doc: D1, ubicacion: "fila 59"}
+      - {doc: G1, ubicacion: "p.9, p.36, p.67"}
+    accion: "Corregir según el formato físico."
+
+  - id: COM_SGSS_NINGUNO_REVISION
+    descripcion: "Sin afiliación: debe constar en observaciones la orientación o canalización"
+    tipo: revision
+    variables: [P1_SGSS, Observaciones, Canalización]
+    aplica_si: {var: P1_SGSS, en: [Ninguno]}
+    estado: revision_humana
+    severidad: revision
+    parametros: {solicitud: "Verificar que observaciones registre la información de afiliación o la canalización realizada."}
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 37; 5 A 14 fila 37; MAYOR 60 fila 32"}
+      - {doc: G1, ubicacion: "p.9, p.36, p.67"}
+      - {doc: I1, ubicacion: "p.18, p.66, p.116"}
+
+  - id: COM_OBSERVACIONES_REQUERIDO
+    descripcion: "El campo de observaciones no está vacío"
+    tipo: requerido
+    variables: [Observaciones]
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.27, p.59-60, p.81", nota: "si el espacio está en blanco refiere ausencia de información o error de digitación"}
+    accion: "Completar desde el formato físico."
+
+  - id: COM_IDENTIFICACION_UNICA
+    descripcion: "La identificación de la persona no se repite dentro del archivo (unidad: persona)"
+    tipo: unicidad
+    variables: [Identificación]
+    severidad: alerta
+    especiales: "Se compara solo dentro del archivo cargado. La repetición anual exige el histórico del año (insumo pendiente)."
+    fuentes:
+      - {doc: I1, ubicacion: "p.4", nota: "solo se puede caracterizar un individuo de cada grupo de edad por unidad habitacional"}
+      - {doc: DX, ubicacion: "sección 3", nota: "no considerar toda identificación repetida como registro a eliminar"}
+    accion: "Verificar si son dos encuestas a la misma persona; no eliminar sin revisar el soporte."
+
+  - id: COM_IDENTIFICACION_ENTRE_POBLACIONES
+    descripcion: "Una misma identificación aparece en bases de distintas poblaciones (posible cambio de grupo de edad)"
+    tipo: unicidad
+    variables: [Identificación]
+    parametros: {alcance: lote, entre_poblaciones: true, explicacion: "la identificación aparece en más de una población; puede ser un cambio de grupo de edad"}
+    estado: revision_humana
+    severidad: revision
+    fuentes:
+      - {doc: DX, ubicacion: "sección 3", nota: "B1 fila 239 y B2 fila 296: compatible con cambio de grupo de edad"}
+    accion: "El responsable debe definir si se admite una nueva encuesta en el año al cambiar de población (decisión pendiente)."
+
+  - id: COM_BARRIO_REQUERIDO
+    descripcion: "Barrio de residencia diligenciado; puede ir vacío si Otro_Barrio tiene dato"
+    tipo: requerido
+    variables: [Barrio]
+    parametros: {alternativa: {Barrio: Otro_Barrio}}
+    severidad: error
+    especiales: "Si la base no trae la columna Otro_Barrio (o un nombre equivalente), el barrio vacío se marca como error."
+    fuentes:
+      - {doc: G1, ubicacion: "variable Barrio", nota: "puede presentar espacio en blanco si la variable otro_barrio cuenta con valor alfabético"}
+      - {doc: RV, ubicacion: "Menores de 5: Barrio vacío con Otro Barrio (SOL-001)"}
+    accion: "Completar el barrio o el otro barrio desde el formato físico."

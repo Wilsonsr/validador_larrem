@@ -1,0 +1,166 @@
+# Reglas identificadas en los documentos que NO se ejecutan todavía.
+# Cada una explica por qué (motivo_estado) y, si aplica, qué insumo falta (insumo_requerido).
+# Aparecen en el reporte (hojas Catálogo de reglas, Cobertura y Decisiones) para que no se pierdan.
+# Cuando el equipo resuelva la decisión, cambie el estado a implementada/provisional y complete parámetros.
+poblaciones: [menores5, 5a14, mayores60]
+
+reglas:
+  - id: PEND_ESTRATO_LOCALIDAD
+    descripcion: "Los estratos 4, 5 y 6 solo se presentan en las localidades que lo permiten"
+    tipo: condicional
+    variables: [Estrato, Localidad]
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "O1 limita los estratos superiores a 3 a seis localidades (Fontibón, Teusaquillo, Barrios Unidos, Puente Aranda, Suba, Engativá), sin catálogo territorial que lo sustente. La lista no incluye localidades como Usaquén o Chapinero. No se rechaza un registro por esa lista aislada (DP-11)."
+    insumo_requerido: "Catálogo oficial de estratificación por localidad/UPZ o manzana (SDP), con su vigencia."
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 34; 5 A 14 fila 34; MAYOR 60 fila 29"}
+      - {doc: DX, ubicacion: "sección 4, Estrato y localidad"}
+
+  - id: PEND_ID_LONGITUD
+    descripcion: "La identificación tiene la longitud válida según el tipo de documento"
+    tipo: patron
+    variables: [Identificación]
+    severidad: error
+    estado: pendiente_contradiccion
+    motivo_estado: "O1 pide un mínimo de diez dígitos para algunos documentos; G1 da como ejemplo un máximo de diez dígitos para NUIP. En el corte hay NUIP de 10 y de 11 caracteres. Se valida solo que el NUIP sea numérico y que la identificación se almacene como texto (DP-05)."
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 10; 5 A 14 fila 10"}
+      - {doc: G1, ubicacion: "p.5", nota: "NUIP tiene un máximo de 10 dígitos"}
+      - {doc: I1, ubicacion: "p.12", nota: "documentos extranjeros con sigla"}
+
+  - id: PEND_PAIS_DOCUMENTO_COLOMBIANO
+    descripcion: "Una persona con documento colombiano y país de procedencia distinto de Colombia tiene la aclaración correspondiente"
+    tipo: condicional
+    variables: [Pais_Procedencia, Tipo_Documento]
+    poblaciones: [menores5, 5a14]
+    severidad: revision
+    estado: pendiente_contradiccion
+    motivo_estado: "G1 pp.5-6 formula una relación restrictiva entre país y documento; I1 p.12 admite país distinto de Colombia con documento colombiano y aclaración. Se ejecuta solo la parte en la que coinciden: documento extranjero con país Colombia se marca como alerta (DP-09). No se infiere nacionalidad ni situación migratoria."
+    fuentes:
+      - {doc: G1, ubicacion: "pp.5-6", nota: "tipos de documento diferentes a NUIP (PEP y PPT) corresponden a país diferente a Colombia"}
+      - {doc: I1, ubicacion: "p.12"}
+      - {doc: DX, ubicacion: "sección 4, Procedencia y documento"}
+
+  - id: PEND_PAIS_DOCUMENTO_COLOMBIANO_A
+    descripcion: "Una persona con cédula colombiana y país de procedencia distinto de Colombia tiene la aclaración correspondiente"
+    tipo: condicional
+    variables: [Pais_Procedencia, Tipo_documento]
+    poblaciones: [mayores60]
+    severidad: revision
+    estado: pendiente_contradiccion
+    motivo_estado: "Igual que PEND_PAIS_DOCUMENTO_COLOMBIANO, para mayores de 60 (G1 p.62; I1 p.12). DP-09."
+    fuentes:
+      - {doc: G1, ubicacion: "p.62"}
+      - {doc: I1, ubicacion: "p.12"}
+
+  - id: PEND_REPETICION_ANUAL
+    descripcion: "Una persona u hogar no se encuesta más de una vez en el año, ni en dos poblaciones distintas por cambio de edad"
+    tipo: unicidad
+    variables: [Identificación, Dirección]
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "La guía pide revisar la repetición en todos los meses del año. El validador compara solo dentro de los archivos cargados en la misma ejecución (reglas COM_IDENTIFICACION_UNICA, *_DIRECCION_REPETIDA y COM_IDENTIFICACION_ENTRE_POBLACIONES). El criterio para cortes anteriores y para cambio de población está pendiente (DP-14)."
+    insumo_requerido: "Bases consolidadas del año (cortes anteriores) en la misma estructura."
+    fuentes:
+      - {doc: G1, ubicacion: "p.7"}
+      - {doc: I1, ubicacion: "p.16"}
+      - {doc: DX, ubicacion: "sección 5, cruces externos e históricos"}
+
+  - id: PEND_GEOGRAFIA_EXPOSICION_M5
+    descripcion: "Coordenadas dentro de Bogotá y valores de ACRE y PM2,5 coherentes con la capa de referencia"
+    tipo: rango
+    variables: [X, Y, RIESGO ACRE, Min_PM25, Max_PM25]
+    poblaciones: [menores5]
+    etapa: enriquecimiento
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "Los campos geográficos y de exposición están vacíos en este corte. Sin capa de referencia no hay límites para validar (DP-15). La completitud de estos campos sí se verifica en la etapa de enriquecimiento."
+    insumo_requerido: "Capa de referencia ACRE / PM2,5 y límites del Distrito, con la fecha del proceso de georreferenciación."
+    fuentes:
+      - {doc: DX, ubicacion: "sección 3, Campos geográficos y de exposición pendientes"}
+
+  - id: PEND_GEOGRAFIA_EXPOSICION_E
+    descripcion: "Coordenadas dentro de Bogotá y valores de ACRE y PM2,5 coherentes con la capa de referencia"
+    tipo: rango
+    variables: [x, y, RIESGO ACRE, Min_PM25, Max_PM25]
+    poblaciones: [5a14]
+    etapa: enriquecimiento
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "Los campos geográficos y de exposición están vacíos en este corte. Sin capa de referencia no hay límites para validar (DP-15). La completitud de estos campos sí se verifica en la etapa de enriquecimiento."
+    insumo_requerido: "Capa de referencia ACRE / PM2,5 y límites del Distrito, con la fecha del proceso de georreferenciación."
+    fuentes:
+      - {doc: DX, ubicacion: "sección 3, Campos geográficos y de exposición pendientes"}
+
+  - id: PEND_GEOGRAFIA_EXPOSICION_A
+    descripcion: "Coordenadas dentro de Bogotá y valores de ACRE y PM2,5 coherentes con la capa de referencia"
+    tipo: rango
+    variables: [x, y, valor_acre, Min_PM25, Max_PM25]
+    poblaciones: [mayores60]
+    etapa: enriquecimiento
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "Los campos geográficos y de exposición están vacíos en este corte. Sin capa de referencia no hay límites para validar (DP-15). La completitud de estos campos sí se verifica en la etapa de enriquecimiento."
+    insumo_requerido: "Capa de referencia ACRE / PM2,5 y límites del Distrito, con la fecha del proceso de georreferenciación."
+    fuentes:
+      - {doc: DX, ubicacion: "sección 3, Campos geográficos y de exposición pendientes"}
+
+  - id: PEND_EAPB_CATALOGO
+    descripcion: "La EAPB registrada existe en el catálogo vigente y corresponde al régimen informado"
+    tipo: dominio
+    variables: [P2_EAPB, P2_Otra_EAPB]
+    poblaciones: [menores5, 5a14]
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "Solo se valida la lista de EAPB del régimen excepcional que dan las observaciones. No hay catálogo de EAPB del contributivo y el subsidiado."
+    insumo_requerido: "Catálogo de EAPB habilitadas en Bogotá, con código, nombre normalizado y régimen."
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 filas 37-39"}
+      - {doc: G1, ubicacion: "p.9"}
+
+  - id: PEND_PERSONAL_CAMPO
+    descripcion: "Encuestador y supervisor pertenecen al personal asignado a la subred"
+    tipo: dominio
+    variables: [Encuestador, Supervisor]
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "No hay un listado de personal para cruzar. Las columnas contienen nombres de personas y no se reproducen en los resúmenes."
+    insumo_requerido: "Listado de personal de campo por subred y periodo (puede ser con códigos en lugar de nombres)."
+    fuentes:
+      - {doc: DX, ubicacion: "sección 5, cruces externos e históricos"}
+
+  - id: PEND_COLEGIOS_CATALOGO
+    descripcion: "Colegio, dirección y barrio del colegio coinciden con el directorio oficial de sedes"
+    tipo: consistencia_grupo
+    variables: [P4_Colegio, P4_Dirección_Colegio, P4_Barrio_Colegio]
+    poblaciones: [menores5, 5a14]
+    severidad: alerta
+    estado: requiere_insumo
+    motivo_estado: "Dentro del archivo se verifica que un colegio tenga una sola dirección. La validación contra el directorio oficial requiere el insumo."
+    insumo_requerido: "Directorio de colegios y jardines (SED/SDIS) con sede, dirección y barrio."
+    fuentes:
+      - {doc: O1, ubicacion: "MENOR 5 fila 42"}
+
+  - id: PEND_METAS_SUBRED
+    descripcion: "El número de encuestas por subred, localidad y mes corresponde a la meta programada"
+    tipo: funcion
+    variables: [Subred, Localidad, Fecha_Encuesta]
+    severidad: revision
+    estado: requiere_insumo
+    motivo_estado: "La guía pide tener presente el número de encuestas mensuales por localidad, pero no hay tabla de metas."
+    insumo_requerido: "Metas de encuestas por subred, localidad y mes para el periodo."
+    fuentes:
+      - {doc: G1, ubicacion: "p.3"}
+
+  - id: PEND_SEXO_NOMBRE
+    descripcion: "El sexo y el nombre registrados coinciden con el soporte documental"
+    tipo: revision
+    variables: [Sexo]
+    severidad: revision
+    estado: requiere_insumo
+    motivo_estado: "Las observaciones piden concordancia entre sexo y nombre. El validador no infiere el sexo a partir del nombre: se valida el dominio (Hombre, Mujer, Intersexual) y la recodificación. La concordancia se revisa contra el soporte."
+    insumo_requerido: "Soporte documental de la encuesta (registro civil o documento de identidad)."
+    fuentes:
+      - {doc: I1, ubicacion: "pp.11-13"}
+      - {doc: DX, ubicacion: "sección 4, Sexo y nombre"}

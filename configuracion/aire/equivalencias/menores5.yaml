@@ -1,0 +1,9 @@
+# Nombres alternativos aceptados para columnas de menores de 5 años.
+# Formato: nombre_en_el_catálogo: [nombre alternativo, ...]. Se comparan sin tildes, mayúsculas ni espacios.
+# Cuando una base nueva use uno de estos nombres, el reporte de estructura lo informa como renombrado.
+# Origen: nombres con que el diccionario D1 o las otras poblaciones registran la misma variable.
+PE_Discapacitado: [PE_Discapacidad]                     # D1
+P27_1_Desnutrición2: [P27_1_Desnutrición]               # D1
+P51_Meses_Viviendo_Barrio: [P51_Meses_Viviendo_Vivienda] # D1
+id_geo4: [id_geo]                                       # D1 y bases 5 a 14 / mayores
+Otro_Barrio: [Otro Barrio, Otro_Barrio_Residencia, Otro Barrio Residencia, Otro_barrio]   # SOL-001

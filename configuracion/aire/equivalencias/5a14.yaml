@@ -1,0 +1,4 @@
+# Nombres alternativos aceptados para columnas de 5 a 14 años (ver menores5.yaml para el formato).
+PE_Discapacitado: [PE_Discapacidad]   # D2
+id_geo: [id_geo4]                     # base de menores de 5
+Otro_Barrio: [Otro Barrio, Otro_Barrio_Residencia, Otro Barrio Residencia, Otro_barrio]   # SOL-001

@@ -1,0 +1,994 @@
+# Catálogo de variables mayores60. Generado con herramientas/generar_catalogo_variables.py y revisado a mano.
+# D = diccionario, O1 = Variables Aire para Automatizar.xlsx. Una fila del diccionario puede definir un grupo.
+variables:
+- nombre: ID_SIVIGILA
+  etiqueta: Codigo determinado por SDS
+  tipo: identificador
+  requerido: captura
+  fuente_diccionario: D3 fila 2
+  fuente_observacion: O1 MAYOR 60 fila 2
+- nombre: No_Acta
+  etiqueta: Codigo determinado por SSIS
+  tipo: identificador
+  requerido: captura
+  fuente_diccionario: D3 fila 3
+  fuente_observacion: O1 MAYOR 60 fila 3
+- nombre: Subred
+  etiqueta: Nombre de la SISS
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 4
+  fuente_observacion: O1 MAYOR 60 fila 4
+- nombre: Fecha_Encuesta
+  etiqueta: Fecha de la encuesta, en formato dia/mes /año
+  tipo: fecha
+  requerido: captura
+  fuente_diccionario: D3 fila 5
+  fuente_observacion: O1 MAYOR 60 fila 5
+- nombre: Encuestador
+  etiqueta: Persona que realiza la encuesta
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 6
+  fuente_observacion: O1 MAYOR 60 fila 6
+- nombre: Supervisor
+  etiqueta: Persona encargada de la revisión de la encuesta
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 7
+  fuente_observacion: O1 MAYOR 60 fila 7
+- nombre: Nombre_adulto
+  etiqueta: Nombre del encuestado
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 8
+  fuente_observacion: O1 MAYOR 60 fila 8
+- nombre: Tipo_documento
+  etiqueta: Tipo de identificación
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 9
+  fuente_observacion: O1 MAYOR 60 fila 9
+- nombre: Identificación
+  etiqueta: Numero de identificación
+  tipo: identificador
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 14
+  fuente_observacion: O1 MAYOR 60 fila 10
+- nombre: Sexo
+  etiqueta: Sexo del adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 15
+  fuente_observacion: O1 MAYOR 60 fila 11
+- nombre: Fecha_Nacimiento
+  etiqueta: Fecha de nacimiento del encuestado
+  tipo: fecha
+  requerido: captura
+  fuente_diccionario: D3 fila 17
+  fuente_observacion: O1 MAYOR 60 fila 12
+- nombre: Edad
+  etiqueta: Edad del encuestado
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 18
+  fuente_observacion: O1 MAYOR 60 fila 13
+- nombre: Grupo_etnico
+  etiqueta: Grupo étnico dela adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 19
+  fuente_observacion: O1 MAYOR 60 fila 14
+- nombre: PE_Desmovilizado
+  etiqueta: Población especial desmovilizado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 20
+  fuente_observacion: O1 MAYOR 60 fila 15
+- nombre: PE_Desplazado
+  etiqueta: Población especial desplazado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 22
+  fuente_observacion: O1 MAYOR 60 fila 16
+- nombre: PE_Discapacitado
+  etiqueta: Población especial discapacidad
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 24
+  fuente_observacion: O1 MAYOR 60 fila 17
+  equivalencias:
+  - PE_Discapacidad
+- nombre: PE_Migrante
+  etiqueta: Población especial migrante
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 26
+  fuente_observacion: O1 MAYOR 60 fila 18
+- nombre: PE_Ninguno
+  etiqueta: Ninguna Población especial
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 28
+  fuente_observacion: O1 MAYOR 60 fila 19
+- nombre: Pais_Procedencia
+  etiqueta: País donde nació el adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 30
+  fuente_observacion: O1 MAYOR 60 fila 20
+- nombre: Correo_Electronico
+  etiqueta: correo electrónico suministrado por el encuestado
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 31
+  fuente_observacion: O1 MAYOR 60 fila 21
+- nombre: Nivel_Educativo
+  etiqueta: Nivel educativo del adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 35
+  fuente_observacion: O1 MAYOR 60 fila 22
+- nombre: Zona_Urbana
+  etiqueta: Zona de ubicación de la unidad habitacional
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 45
+  fuente_observacion: O1 MAYOR 60 fila 23
+- nombre: Dirección
+  etiqueta: Nomenclatura de la unidad habitacional
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 47
+  fuente_observacion: O1 MAYOR 60 fila 24
+- nombre: Localidad
+  etiqueta: Localidad de residencia del adulto
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 48
+  fuente_observacion: O1 MAYOR 60 fila 25
+- nombre: N_UPZ
+  etiqueta: Número UPZ de residencia del adulto
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 49
+  fuente_observacion: O1 MAYOR 60 fila 26
+- nombre: Nombre_UPZ
+  etiqueta: Nombre UPZ de residencia del adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 50
+  fuente_observacion: O1 MAYOR 60 fila 27
+- nombre: Barrio
+  etiqueta: Barrio de residencia del adulto mayor
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D3 fila 51
+  fuente_observacion: O1 MAYOR 60 fila 28
+- nombre: Otro_Barrio
+  etiqueta: Otro barrio de residencia (cuando el barrio no está en el listado)
+  tipo: texto_libre
+  requerido: 'no'
+  opcional: true
+  nota: Si tiene dato, Barrio puede ir vacío (G1; solicitud SOL-001 del 14/11/2026). La columna puede no venir en la base.
+- nombre: Estrato
+  etiqueta: Estrato de residencia del adulto mayor
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 52
+  fuente_observacion: O1 MAYOR 60 fila 29
+- nombre: Telefono
+  etiqueta: Número de registro telefónico
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 53
+  fuente_observacion: O1 MAYOR 60 fila 30
+- nombre: Celular
+  etiqueta: Número de celular
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 56
+  fuente_observacion: O1 MAYOR 60 fila 31
+- nombre: P1_SGSS
+  etiqueta: Afiliación  al SGSS del adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 58
+  fuente_observacion: O1 MAYOR 60 fila 32
+- nombre: P2_EPS
+  etiqueta: EAPB del adulto mayor
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 59
+  fuente_observacion: O1 MAYOR 60 fila 33
+- nombre: P2_Otra_EPS
+  etiqueta: Otra EAPB del adulto mayor
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D3 fila 61
+  fuente_observacion: O1 MAYOR 60 fila 34
+- nombre: P3_Sibilancia_Alguna_Vez
+  etiqueta: Sibilancias alguna vez
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 63
+  fuente_observacion: O1 MAYOR 60 fila 35
+- nombre: P3_Sibilancia_Ultimo_Mes
+  etiqueta: Sibilancias en el último mes
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 65
+  fuente_observacion: O1 MAYOR 60 fila 36
+- nombre: P4_Despiesta_Tos
+  etiqueta: Tos
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 68
+  fuente_observacion: O1 MAYOR 60 fila 37
+- nombre: P4_Tos_Noche
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 70
+  fuente_observacion: O1 MAYOR 60 fila 38
+- nombre: P4_Tos_Mañana
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 72
+  fuente_observacion: O1 MAYOR 60 fila 39
+- nombre: P4_Sin_Tos
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 74
+  fuente_observacion: O1 MAYOR 60 fila 40
+- nombre: TOS AGRUPADA COFID.
+  etiqueta: Presencia de tos agrupada
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 76
+  fuente_observacion: O1 MAYOR 60 fila 41
+- nombre: P5_Expectoracion_Ultimo_Año
+  etiqueta: Expectoración
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 78
+  fuente_observacion: O1 MAYOR 60 fila 42
+- nombre: P5_Expectoracion_Levantarse
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 81
+  fuente_observacion: O1 MAYOR 60 fila 43
+- nombre: P5_Expectoracion_DiaNoche
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 84
+  fuente_observacion: O1 MAYOR 60 fila 44
+- nombre: P5_Expectoracion_Purulenta
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 87
+  fuente_observacion: O1 MAYOR 60 fila 45
+- nombre: P5_Expectoracion_Sangre
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 90
+  fuente_observacion: O1 MAYOR 60 fila 46
+- nombre: P6_Falta_Aire_Ejercicio
+  etiqueta: Dificultad respiratoria
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 93
+  fuente_observacion: O1 MAYOR 60 fila 47
+- nombre: P6_Falta_Aire_Caminar_Pendiente
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 95
+  fuente_observacion: O1 MAYOR 60 fila 48
+- nombre: P6_Falta_Aire_Caminar_PropioPaso
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 97
+  fuente_observacion: O1 MAYOR 60 fila 49
+- nombre: P6_Falta_Aire_Reposo
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 99
+  fuente_observacion: O1 MAYOR 60 fila 50
+- nombre: P6_Ninguno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 101
+  fuente_observacion: O1 MAYOR 60 fila 51
+- nombre: DIFICULTAD RESP. AGRUPADA COFID.
+  etiqueta: Presencia de dificultad respiratoria  agrupada
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 103
+  fuente_observacion: O1 MAYOR 60 fila 52
+- nombre: P7_Dolor_Toracico_Ejercicio
+  etiqueta: Dolor torácico
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 105
+  fuente_observacion: O1 MAYOR 60 fila 53
+- nombre: P7_Dolor_Toracico_Reposo
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 107
+  fuente_observacion: O1 MAYOR 60 fila 54
+- nombre: P7_Ninguno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 109
+  fuente_observacion: O1 MAYOR 60 fila 55
+- nombre: DOLOR TORACICO AGRUPADA COFID.
+  etiqueta: Presencia de dolor torácico agrupado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 111
+  fuente_observacion: O1 MAYOR 60 fila 56
+- nombre: P8_Asistió_Consulta_Medica
+  etiqueta: Consulta médica por síntomas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 113
+  fuente_observacion: O1 MAYOR 60 fila 57
+- nombre: P9_DX_Asma
+  etiqueta: Antecedentes de enfermedad respiratoria
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 116
+  fuente_observacion: O1 MAYOR 60 fila 58
+- nombre: P9_DX_EPOC
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 118
+  fuente_observacion: O1 MAYOR 60 fila 59
+- nombre: P9_DX_TB_Pulmonar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 120
+  fuente_observacion: O1 MAYOR 60 fila 60
+- nombre: P9_DX_Neumonia
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 122
+  fuente_observacion: O1 MAYOR 60 fila 61
+- nombre: P9_DX_CA_Pulmonar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 124
+  fuente_observacion: O1 MAYOR 60 fila 62
+- nombre: P9_DX_Ninguno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 126
+  fuente_observacion: O1 MAYOR 60 fila 63
+- nombre: ALGUN ANTEC RESPIRAT. CODIF.
+  etiqueta: Presencia de algún(os) antecedentes de enfermedad respiratoria
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 128
+  fuente_observacion: O1 MAYOR 60 fila 64
+- nombre: P10_Usa_Oxigeno
+  etiqueta: Uso de oxígeno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 130
+  fuente_observacion: O1 MAYOR 60 fila 65
+- nombre: P10_Frecuencia_Oxigeno
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 132
+  fuente_observacion: O1 MAYOR 60 fila 66
+- nombre: P10_Tiempo
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 134
+  fuente_observacion: O1 MAYOR 60 fila 67
+- nombre: P10_Periodo
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 136
+  fuente_observacion: O1 MAYOR 60 fila 68
+- nombre: P11_DX_HTA
+  etiqueta: Antecedentes de enfermedad cardiovascular
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 138
+  fuente_observacion: O1 MAYOR 60 fila 69
+- nombre: P11_DX_Arritmia
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 140
+  fuente_observacion: O1 MAYOR 60 fila 70
+- nombre: P11_DX_Trombosis
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 142
+  fuente_observacion: O1 MAYOR 60 fila 71
+- nombre: P11_DX_Angina_Pecho
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 144
+  fuente_observacion: O1 MAYOR 60 fila 72
+- nombre: P11_DX_IAM
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 146
+  fuente_observacion: O1 MAYOR 60 fila 73
+- nombre: P11_DX_ACV
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 148
+  fuente_observacion: O1 MAYOR 60 fila 74
+- nombre: P11_DX_Ninguno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 150
+  fuente_observacion: O1 MAYOR 60 fila 75
+- nombre: ALGUN ANTEC CARDIOVASC. CODIF.
+  etiqueta: Presencia de algún(os) antecedentes de enfermedad cardiovascular
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 152
+  fuente_observacion: O1 MAYOR 60 fila 76
+- nombre: P12_Cirugia_Torax
+  etiqueta: Cirugía Torax
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 154
+  fuente_observacion: O1 MAYOR 60 fila 77
+- nombre: P12_Cual_Cirugia
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D3 fila 157
+  fuente_observacion: O1 MAYOR 60 fila 78
+- nombre: P13_Pasa_Tiempo_Aire_Libre
+  etiqueta: Tiempo al aire libre
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 159
+  fuente_observacion: O1 MAYOR 60 fila 79
+- nombre: P13_Horas_Tiempo_Aire_Libre
+  etiqueta: Horas en promedio
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 162
+  fuente_observacion: O1 MAYOR 60 fila 80
+- nombre: P14_Horario
+  etiqueta: Horario de tiempo al aire libre
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 164
+  fuente_observacion: O1 MAYOR 60 fila 81
+- nombre: P15_Actividad_Fisica
+  etiqueta: Actividad física
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 170
+  fuente_observacion: O1 MAYOR 60 fila 82
+- nombre: NO ACTIVIDAD FISICA CODIF
+  etiqueta: No realizar actividad física
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 173
+  fuente_observacion: O1 MAYOR 60 fila 83
+- nombre: P16_Tipo_Espacio
+  etiqueta: Tipo de espacio
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 176
+  fuente_observacion: O1 MAYOR 60 fila 84
+- nombre: P17_Frecuencia
+  etiqueta: Frecuencia de actividad física
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 179
+  fuente_observacion: O1 MAYOR 60 fila 85
+- nombre: P18_Fuma
+  etiqueta: Exposición a tabaco
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 184
+  fuente_observacion: O1 MAYOR 60 fila 86
+- nombre: P19_Fumó_En_Algun_Momento
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 185
+  fuente_observacion: O1 MAYOR 60 fila 87
+- nombre: P20_Frecuencia
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 187
+  fuente_observacion: O1 MAYOR 60 fila 88
+- nombre: P21_Cuantos_Cigarrillos
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 190
+  fuente_observacion: O1 MAYOR 60 fila 89
+- nombre: NIVEL CONSUMO TABACO TOTAL
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 192
+  fuente_observacion: O1 MAYOR 60 fila 90
+- nombre: P22_Edad_Inicio_Fumar
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 197
+  fuente_observacion: O1 MAYOR 60 fila 91
+- nombre: P23_Tiempo_Fumar
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 199
+  fuente_observacion: O1 MAYOR 60 fila 92
+- nombre: P23_Periodo_Fumar
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 201
+  fuente_observacion: O1 MAYOR 60 fila 93
+- nombre: TABAQUISMO PESADO
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 203
+  fuente_observacion: O1 MAYOR 60 fila 94
+- nombre: P24_Contacto_Fumadores_Pasado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 206
+  fuente_observacion: O1 MAYOR 60 fila 95
+- nombre: P24_Tiempo_Contacto
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 207
+  fuente_observacion: O1 MAYOR 60 fila 96
+- nombre: P25_Contacto_Fumadores_Presente
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 209
+  fuente_observacion: O1 MAYOR 60 fila 97
+- nombre: P25_1_Dispositivos_SEAN_SSSN
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 210
+  fuente_observacion: O1 MAYOR 60 fila 98
+- nombre: P26_Ocupacion_Principal
+  etiqueta: Ocupación principal
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 211
+  fuente_observacion: O1 MAYOR 60 fila 99
+- nombre: P27_Exposicion_Toxicos
+  etiqueta: Exposición a tóxicos en el periodo laborado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 226
+  fuente_observacion: O1 MAYOR 60 fila 100
+- nombre: P27_Cual_Otra
+  etiqueta: a cual tipo de tóxico estuvo expuesto durante el tiempo laborado
+  tipo: historica
+  requerido: 'no'
+  historica: true
+  fuente_diccionario: D3 fila 229
+  fuente_observacion: O1 MAYOR 60 fila 101
+- nombre: P27_Polvo
+  etiqueta: Exposición a polvo en el periodo laborado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 232
+  fuente_observacion: O1 MAYOR 60 fila 102
+- nombre: P27_Gases
+  etiqueta: Exposición a gases en el periodo laborado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 236
+  fuente_observacion: O1 MAYOR 60 fila 103
+- nombre: P27_Humo
+  etiqueta: Exposición a humo en el periodo laborado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 240
+  fuente_observacion: O1 MAYOR 60 fila 104
+- nombre: P27_Vapores_Tóxicos
+  etiqueta: Exposición a vapores en el periodo laborado
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 244
+  fuente_observacion: O1 MAYOR 60 fila 105
+- nombre: P28_Espacio_Exposicion
+  etiqueta: Espacio de la exposición
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 248
+  fuente_observacion: O1 MAYOR 60 fila 106
+- nombre: ESPACIO EXPOSI. CODIF.
+  etiqueta: Espacio de la exposición codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 251
+  fuente_observacion: O1 MAYOR 60 fila 107
+- nombre: P29_Tiempo_Exposicion
+  etiqueta: Tiempo de la exposición
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 254
+  fuente_observacion: O1 MAYOR 60 fila 108
+- nombre: P29_Periodo_Exposicion
+  etiqueta: Periodo de exposición
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 256
+  fuente_observacion: O1 MAYOR 60 fila 109
+- nombre: P30_Ubicacion_Cocina
+  etiqueta: Ubicación de la cocina
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 259
+  fuente_observacion: O1 MAYOR 60 fila 110
+- nombre: UBICACIÓN COCINA CODIF.
+  etiqueta: Ubicación de la cocina dicotómico
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 264
+  fuente_observacion: O1 MAYOR 60 fila 111
+- nombre: P31_Cocicó_En_Su_Vida
+  etiqueta: Cocinó en su vida
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 266
+  fuente_observacion: O1 MAYOR 60 fila 112
+  equivalencias:
+  - P31_Cocinó_En_Su_Vida
+- nombre: P32_Combustible
+  etiqueta: Principal combustible utilizado para cocinar
+  tipo: historica
+  requerido: 'no'
+  historica: true
+  fuente_diccionario: D3 fila 268
+  fuente_observacion: O1 MAYOR 60 fila 113
+- nombre: P32_Años
+  etiqueta: Años de uso del principal combustible para cocinar
+  tipo: historica
+  requerido: 'no'
+  historica: true
+  fuente_diccionario: D3 fila 271
+  fuente_observacion: O1 MAYOR 60 fila 114
+- nombre: P32_Combustible_Leña
+  etiqueta: Combustible utilizado para cocinar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 274
+  fuente_observacion: O1 MAYOR 60 fila 115
+- nombre: P32_Años_Leña
+  etiqueta: Años de uso del combustible
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 280
+  fuente_observacion: O1 MAYOR 60 fila 116
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P32_Combustible_Carbón
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 275
+  fuente_observacion: O1 MAYOR 60 fila 117
+- nombre: P32_Años_Carbón
+  etiqueta: Años de uso del combustible
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 280
+  fuente_observacion: O1 MAYOR 60 fila 118
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P32_Combustible_Excrementos
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 276
+  fuente_observacion: O1 MAYOR 60 fila 119
+- nombre: P32_Años_Excrementos
+  etiqueta: Años de uso del combustible
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 280
+  fuente_observacion: O1 MAYOR 60 fila 120
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P32_Combustible_Envoltura
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 277
+  fuente_observacion: O1 MAYOR 60 fila 121
+- nombre: P32_Años_Envoltura
+  etiqueta: Años de uso del combustible
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 280
+  fuente_observacion: O1 MAYOR 60 fila 122
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P32_Combustible_Cocinol
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 278
+  fuente_observacion: O1 MAYOR 60 fila 123
+- nombre: P32_Años_Cocinol
+  etiqueta: Años de uso del combustible
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 280
+  fuente_observacion: O1 MAYOR 60 fila 124
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P32_Combustible_Alcohol
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 279
+  fuente_observacion: O1 MAYOR 60 fila 125
+- nombre: P32_Años_Alcohol
+  etiqueta: Años de uso del combustible
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D3 fila 280
+  fuente_observacion: O1 MAYOR 60 fila 126
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P33_Tipo_Vivienda
+  etiqueta: Tipo de vivienda
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 282
+  fuente_observacion: O1 MAYOR 60 fila 127
+- nombre: TIPO VIVIENDA CODIF.
+  etiqueta: Tipo de vivienda codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 290
+  fuente_observacion: O1 MAYOR 60 fila 128
+- nombre: P34_Zona_Vivienda
+  etiqueta: Zona de ubicación de la vivienda
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 292
+  fuente_observacion: O1 MAYOR 60 fila 129
+- nombre: ZONA URBANA CODIF.
+  etiqueta: Zona de ubicación de la vivienda codificada
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 294
+  fuente_observacion: O1 MAYOR 60 fila 130
+- nombre: P35_Material_Paredes
+  etiqueta: Material paredes
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 296
+  fuente_observacion: O1 MAYOR 60 fila 131
+- nombre: PAREDES CODIF.
+  etiqueta: Material paredes codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 299
+  fuente_observacion: O1 MAYOR 60 fila 132
+- nombre: P36_Material_Pisos
+  etiqueta: Material pisos
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 301
+  fuente_observacion: O1 MAYOR 60 fila 133
+- nombre: PISOS CODIF.
+  etiqueta: Material pisos codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 304
+  fuente_observacion: O1 MAYOR 60 fila 134
+- nombre: P37_Funciono_Fabrica_Negocio
+  etiqueta: Fabrica o negocio en la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 306
+  fuente_observacion: O1 MAYOR 60 fila 135
+- nombre: P37_Cual_Negocio
+  etiqueta: Tipo de negocio
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D3 fila 308
+  fuente_observacion: O1 MAYOR 60 fila 136
+- nombre: P38_Trafico_Cerca
+  etiqueta: Tipo tráfcio cerca de la vivienda
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D3 fila 310
+  fuente_observacion: O1 MAYOR 60 fila 137
+- nombre: TRAFICO CODIF.
+  etiqueta: Tipo tráfico cerca de la vivienda codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 313
+  fuente_observacion: O1 MAYOR 60 fila 138
+- nombre: P39_Construcciones_Cerca
+  etiqueta: Construcciones o vías no pavimentadas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 315
+  fuente_observacion: O1 MAYOR 60 fila 139
+- nombre: P40_Agricultura_Ganaderia
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 140
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Explotacion_Minas
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 141
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Venta_Material_Construccion
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 142
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Reparacion_Vehiculos
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 143
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Restaurantes_Chimenea
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 144
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Parqueadero_Buses
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 145
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Bares_Cantinas
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 146
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Industria_Manufacturera
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 324
+  fuente_observacion: O1 MAYOR 60 fila 147
+- nombre: P40_Incineradores
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 325
+  fuente_observacion: O1 MAYOR 60 fila 148
+- nombre: P40_Quemas_Cielo_Abierto
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 149
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Zona_Reciclaje
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 150
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Obras_Construccion
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 151
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Establecimientos_Culto
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 152
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Ornamentación
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 330
+  fuente_observacion: O1 MAYOR 60 fila 153
+- nombre: P40_Canales_Agua
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 317
+  fuente_observacion: O1 MAYOR 60 fila 154
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P40_Lavandería
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 332
+  fuente_observacion: O1 MAYOR 60 fila 155
+- nombre: P40_Ninguno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 333
+  fuente_observacion: O1 MAYOR 60 fila 156
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: FUENTES FIJAS
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 334
+  fuente_observacion: O1 MAYOR 60 fila 157
+- nombre: Adulto_Con_Riesgo_Posible
+  etiqueta: Adulto con posible riesgo asociado a contaminación del aire
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D3 fila 336
+  fuente_observacion: O1 MAYOR 60 fila 158
+- nombre: Canalización
+  etiqueta: Personas que deben ser direccionadas a instituciones que por competencias deben dar respuestas sociales o de prestación de servicios
+    de salud
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D3 fila 338
+  fuente_observacion: O1 MAYOR 60 fila 159
+- nombre: Observaciones
+  etiqueta: Observaciones y recomendaciones
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 341
+  fuente_observacion: O1 MAYOR 60 fila 160
+- nombre: Digitador
+  etiqueta: Nombre del digitador que ingresa los datos al sivigila
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D3 fila 342
+  fuente_observacion: O1 MAYOR 60 fila 161
+- nombre: valor_acre
+  etiqueta: Tipo de riesgo
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D3 fila 344
+  fuente_observacion: O1 MAYOR 60 fila 162
+  equivalencias:
+  - RIESGO ACRE
+- nombre: Min_PM25
+  etiqueta: Valor promedio del material particulado PM2,5
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D3 fila 351
+  fuente_observacion: O1 MAYOR 60 fila 163
+- nombre: Max_PM25
+  etiqueta: Valor promedio del material particulado PM10
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D3 fila 353
+  fuente_observacion: O1 MAYOR 60 fila 164
+- nombre: x
+  etiqueta: coordenada x
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D3 fila 355
+  fuente_observacion: O1 MAYOR 60 fila 165
+- nombre: y
+  etiqueta: coordenada y
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D3 fila 358
+  fuente_observacion: O1 MAYOR 60 fila 166
+- nombre: id_geo
+  etiqueta: identificación geográfica
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D3 fila 361
+  fuente_observacion: O1 MAYOR 60 fila 167

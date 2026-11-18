@@ -1,0 +1,93 @@
+# Temática AIRE – LARREM. Configuración versionada del validador.
+# Cambie version_configuracion y fecha_configuracion cada vez que modifique reglas o variables.
+codigo: aire
+nombre: "Vigilancia en salud ambiental – Temática AIRE (LARREM)"
+version_configuracion: "2026.11.2"
+fecha_configuracion: 2026-11-18
+
+documentos:
+  - codigo: G1
+    archivo: "22. Guia_Bases_Aire.pdf"
+    descripcion: "Guía para la revisión y validación de bases de datos, temática aire-salud (portada enero 2025; control de cambios v4 del 10/07/2026)"
+    version: "4 (10/07/2026)"
+  - codigo: I1
+    archivo: "14. Ins_Aire.pdf"
+    descripcion: "Instructivo de diligenciamiento de formatos de vigilancia por contaminación del aire, año 2026 (portada v10.0; control de cambios incluye v10.1 de julio 2026)"
+    version: "10.0 / 10.1"
+  - codigo: D1
+    archivo: "1. DICCIONARIO_LARREM_AIRE_MENORES5_Ok_.xlsx"
+    descripcion: "Diccionario de variables, menores de 5 años (hoja DICCIONARIO DE VARIABLES)"
+  - codigo: D2
+    archivo: "2. DICCIONARIO_LARREM_AIRE_5-14ANOS_Ok_.xlsx"
+    descripcion: "Diccionario de variables, 5 a 14 años (hoja DICCIONARIO DE VARIABLES)"
+  - codigo: D3
+    archivo: "3. DICCIONARIO_LARREM_AIRE_MAYOR60-.xlsx"
+    descripcion: "Diccionario de variables, personas de 60 años y más (hoja DICCIONARIO VARIABLES)"
+  - codigo: O1
+    archivo: "Variables Aire para Automatizar.xlsx"
+    descripcion: "Observaciones del equipo para sistematizar, hojas MENOR 5, 5 A 14 y MAYOR 60"
+  - codigo: PT
+    archivo: "Procedimiento del equipo para el cálculo de tabaquismo pesado (comunicado el 20/10/2026)"
+    descripcion: "Pasos para convertir frecuencia semanal a diaria y meses a años, y calcular el índice de tabaco"
+  - codigo: RV
+    archivo: "docs/solicitudes/2026-11-14_revision_validador.txt"
+    descripcion: "Revisión del validador por el equipo técnico (recibida el 14/11/2026). Cada punto está en docs/registro_solicitudes.csv"
+  - codigo: DX
+    archivo: "diagnostico_aire/Diagnostico_inicial_AIRE.md"
+    descripcion: "Diagnóstico inicial (9 de octubre de 2026): hallazgos y decisiones documentales previas"
+
+# Siglas de subred en el número de acta (I1, Anexo 1, p.144)
+subredes:
+  "Subred Norte": N
+  "Subred Sur": S
+  "Subred Centro Oriente": E
+  "Subred Sur Occidente": C
+
+# Localidades oficiales (I1, Anexo 2, p.145). Las bases usan nombres abreviados en algunos casos.
+localidades:
+  - Usaquén
+  - Chapinero
+  - Santa Fe
+  - San Cristóbal
+  - Usme
+  - Tunjuelito
+  - Bosa
+  - Kennedy
+  - Fontibón
+  - Engativá
+  - Suba
+  - Barrios Unidos
+  - Teusaquillo
+  - Los Mártires
+  - Antonio Nariño
+  - Puente Aranda
+  - La Candelaria
+  - Rafael Uribe Uribe
+  - Ciudad Bolívar
+  - Sumapaz
+
+poblaciones:
+  - codigo: menores5
+    nombre: "Menores de 5 años"
+    formato: "VEA-2 / Encuesta AR02"
+    archivo_variables: menores5.yaml
+    firma:
+      columnas_distintivas: [Edad_Meses, Edad_Meses_COD, P20_Edad_Madre, P24_IVU, P76_Ninguno, P26_Justificacion]
+      prefijo_acta: AR02
+      patron_nombre_archivo: "MENORES?_?5|MENOR5"
+  - codigo: "5a14"
+    nombre: "Personas de 5 a 14 años"
+    formato: "VEA-8 / Encuesta AR03"
+    archivo_variables: 5a14.yaml
+    firma:
+      columnas_distintivas: [P34_Clima, P62_Tipo_Almohada, P83_Ninguno, Correo_Electronico1, P5_Tos_Seca, ALMOHADA COD]
+      prefijo_acta: AR03
+      patron_nombre_archivo: "5[-_ ]?14"
+  - codigo: mayores60
+    nombre: "Personas de 60 años y más"
+    formato: "VEA-3 / Encuesta AR04"
+    archivo_variables: mayores60.yaml
+    firma:
+      columnas_distintivas: [Nombre_adulto, P4_Sin_Tos, P11_DX_HTA, P18_Fuma, TABAQUISMO PESADO, Adulto_Con_Riesgo_Posible]
+      prefijo_acta: AR04
+      patron_nombre_archivo: "MAYOR(ES)?_?60"

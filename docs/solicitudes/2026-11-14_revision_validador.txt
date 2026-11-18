@@ -1,0 +1,48 @@
+[Copia del documento enviado por el equipo técnico el 14/11/2026. Se retiraron los nombres de personas; el contenido no se modificó. Cada punto quedó registrado en docs/registro_solicitudes.csv.]
+
+Revisión Validador Nuevo
+Menores de 5 años
+Se realiza filtro en la Columna de Validación Severidad Máxima
+-En la Columna Barrio (AE), se observan varios espacios vacíos en total 81 que son señalados como error en la validación. Se debe ajustar el diccionario para añadir que existe la variable “Otro Barrio” que cuando se llena queda vacía la de “Barrio” para que no se marque este error. M5_OBLIGATORIAS_CAPTURA en reglas.
+-P22 Localidad, hace referencia a la localidad donde permaneció la mayor parte del embarazo, no a la localidad del colegio como se menciona en el cuadro de texto, no corresponde a un error ya que en dicha localidad paso el embarazo. En la regla esta saliendo M5_COLEGIO_LOCALIDAD_DOMINIO, pero no es Colegio, es del embarazo.
+-Las preguntas p21 y p25 que menciona en el instructivo que se deben relacionar, no es obligatorio que la edad gestacional se relacione con el bajo peso al nacer, ya que puede variar y encontrarse un menor con semanas completas y bajo peso o peso normal, o un menor que nace con menos de 37 semanas y tener peso normal, Se debe ajustar el diccionario para quitar la relación de estas preguntas teniendo en cuenta que no se está sacando el indicador de porcentaje de bajo peso al nacer a término en menores de 5 años. Se menciona como revisión humana, pero no se estaba realizando.
+- Se debe relacionar la variable p49 tipo de vivienda con la dirección ya que casa propiedad horizontal, apartamento propiedad horizontal, apartamento independiente o inquilinato deben contar con complemento.  Si es casa independiente, edificio en construcción, edificación no destinada para vivir o habitación, no requiere de un complemento, para que el validador saque una alerta. Se deberá ajustar el diccionario haciendo esas claridades.
+- La p13 de Ausentismo escolar se debe incluir en el rango desde la p5 a la p18, excepto las p6, p9 y p 14, pero se debe ajustar el instructivo (revisar con las responsables del instructivo) y se ajustaría el diccionario. Quedaría pendiente por definir.
+
+Niños de 5 a 14 años
+-La p65 que indaga por ¿Dónde está situada la cocina? Se relaciona con la pregunta p54 que corresponde al tipo de vivienda. Ya que si responden en sala comedor y resulta que es casa independiente debería contar con cocina, allí debería emitir una alerta, y para el análisis donde se recodifica en nueva variable tener en cuenta las opciones de riesgo.
+-En edad debería dar un alerta o error cuando el menor ya tiene 8 años o más y no cuenta con tarjeta de identidad en Tipo de Documento, para luego revisar manualmente la observación.
+-Se debe relacionar la variable p54 tipo de vivienda con la dirección, de la misma manera que se mencionó en menores de 5 años. 
+En número de identificación señala error cuando el número es menor de 11 dígitos, pero se acepta para tipos de documento de extranjería.
+Cuando en p28 de desnutrición u obesidad alguna sea positiva que saque una alerta de color para revisar la observación.
+Sale un error en p38 dice si en las reglas, pero no se identifica error.
+P42 se requiere una alerta en esta pregunta, ya que se debe revisar en observaciones que hayan dejada recomendación sobre el consumo de cigarrillo.
+P38 da un Error E_P38_SI pero al revisar no se observa error. Lo que pasa es que cuando P33 y p38 son No salta a 41, si alguna es positiva se contesta la p39 y p40. La regla debería sacar el error en la P40, si la colorea, pero sale E_P38_SI.
+Población de Adulto Mayor
+Respuesta 99 NS/NR no se identifico como error, ni alerta en octubre p24. P25.1.
+La p 5 en las opciones de expectoración, P6 dificultad respiratoria en reposo, p7 dolor torácico u opresión en el pecho en reposo se debe revisar en la observación que gestión realizaron cuando la pregunta p8 sea no (2), en caso de que la p8 “asistió a consulta médica en el último mes por los diagnósticos anteriores sea Si (1) no es obligatorio que deje gestión en observación. Seria que el validador de la alerta y ya se hace la revisión humana.
+Ajustes al Validador
+El validador podría discriminar cual es la dirección correcta si la mayoría que está bien se repite en el caso de los colegios y aquellos diferentes la minoría sería el errado.
+La aplicación podría señalar como error cuando muestra palabras diferentes a MADRE o PADRE en la opción parentesco, para que no quede en revisión humana. Cuando sea diferente a estos parentescos ahí si corresponde a revisión humana.
+Cuando se presenta 99 en una variable, puede ser por NS/NR, o también porque dejaron el espacio sin contestar en la digitación, es importante que el validador genere una alerta en estos casos para revisar y dejar en la observación. 
+Cuando en tipo de documento del menor se detecte Documento de extranjería, en el número de identificación debe aparecer PPT unido al número y en país de procedencia señalar Venezuela. Además, si señala 1 en Migrante se valida en P1_SGSS que diga Subsidiado, si no es un error.
+En correo electrónico se valida la digitación correcta de Gmail, Hotmail, Outlook y la terminación, si hay algún error se señala.
+Para que de un error en la relación entre la dirección y el tipo de vivienda p49 en menores de 5 y p54 en niños de 5 a 14, cuando falta el complemento para el caso de los Apartamentos independientes, o apartamento propiedad horizontal o casa propiedad horizontal, como ya se mencionó.
+También si es un inquilinato en el tipo de vivienda debe contar con complemento UN (UNIDAD) al final de la dirección y solo se aceptan hasta 2 encuestas en esa unidad.
+En el caso de casa independiente no es necesario un complemento. 
+Apartamento Independiente se filtra y se revisa que al final de la dirección este PI (piso) o AP (Apartamento), si no esta es un error en la dirección o en el tipo de vivienda.
+Cuando en la p13 Ausentismo escolar encuentro 99 pero en p3 si asiste al colegio entonces en ausentismo debe ser 1 o 2, SI o NO.
+P35 Consumo de tabaco en hogar en menores de 5 años, se puede generar un error cuando salga 99 ya que indica que no contestaron la pregunta, o si realmente es 99(NS/NR) debe confirmar en observaciones.
+La p58 en menores de 5 años ¿dónde cocina? Se debe relacionar con el tipo de vivienda: Si la repuesta es en sala comedor, correspondería a un apartamento o habitación, pero a casa independiente, generalmente la cocina es aparte, se puede generar una alerta en la aplicación.
+La p68 de baños aislados en 5 a 14 y p61 en menores de 5 años es 2 (NO), se compara con el tipo de vivienda, para confirmar si realmente no está aislado (con puerta), podría sacar una alerta para revisar.
+Cuando el colegio se menciona por primer vez marca error en la dirección, UPZ y barrio y no se encuentra con otro para comparar.
+Relacionar el estrato con la localidad, ya que el estrato 5 y 6 solo se observa en algunas subredes como norte y sur occidente, pero no es el sur y centro oriente, se puede generar un código para esta verificación o un alerta..
+
+
+
+
+
+
+
+
+

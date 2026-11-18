@@ -1,0 +1,1370 @@
+# Catálogo de variables 5a14. Generado con herramientas/generar_catalogo_variables.py y revisado a mano.
+# D = diccionario, O1 = Variables Aire para Automatizar.xlsx. Una fila del diccionario puede definir un grupo.
+variables:
+- nombre: ID_SIVIGILA
+  etiqueta: Codigo determinado por SDS
+  tipo: identificador
+  requerido: captura
+  fuente_diccionario: D2 fila 2
+  fuente_observacion: O1 5 A 14 fila 2
+- nombre: No_Acta
+  etiqueta: Codigo determinado por SISS
+  tipo: identificador
+  requerido: captura
+  fuente_diccionario: D2 fila 3
+  fuente_observacion: O1 5 A 14 fila 3
+- nombre: Subred
+  etiqueta: Nombre de la SISS
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 4
+  fuente_observacion: O1 5 A 14 fila 4
+- nombre: Fecha_Encuesta
+  etiqueta: Fecha de la encuesta, en formato dia/mes /año
+  tipo: fecha
+  requerido: captura
+  fuente_diccionario: D2 fila 5
+  fuente_observacion: O1 5 A 14 fila 5
+- nombre: Encuestador
+  etiqueta: Persona que realiza la encuesta
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 6
+  fuente_observacion: O1 5 A 14 fila 6
+- nombre: Supervisor
+  etiqueta: Persona encargada de la revisión de la encuesta
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 7
+  fuente_observacion: O1 5 A 14 fila 7
+- nombre: Nombre_Menor
+  etiqueta: Nombre del encuestado
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 8
+  fuente_observacion: O1 5 A 14 fila 8
+- nombre: Tipo_Documento
+  etiqueta: Tipo de identificación
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 9
+  fuente_observacion: O1 5 A 14 fila 9
+- nombre: Identificación
+  etiqueta: Numero de identificación
+  tipo: identificador
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 17
+  fuente_observacion: O1 5 A 14 fila 10
+- nombre: Sexo
+  etiqueta: Sexo del niño de 5 a 14 años
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 18
+  fuente_observacion: O1 5 A 14 fila 11
+- nombre: Sexo- Cod
+  etiqueta: Sexo del menor de 5 a 14 años codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 20
+  fuente_observacion: O1 5 A 14 fila 12
+- nombre: Fecha_Nacimiento
+  etiqueta: Fecha de nacimiento del encuestado formato
+  tipo: fecha
+  requerido: captura
+  fuente_diccionario: D2 fila 22
+  fuente_observacion: O1 5 A 14 fila 13
+- nombre: Edad
+  etiqueta: Edad del encuestado
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 23
+  fuente_observacion: O1 5 A 14 fila 14
+- nombre: Grupo_etnico
+  etiqueta: Grupo étnico del niño
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 24
+  fuente_observacion: O1 5 A 14 fila 15
+- nombre: PE_Desmovilizado
+  etiqueta: Población especial desmovilizado del menor de 5 años
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 25
+  fuente_observacion: O1 5 A 14 fila 16
+- nombre: PE_Desplazado
+  etiqueta: Población especial desplazado del menor de 5 años
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 27
+  fuente_observacion: O1 5 A 14 fila 17
+- nombre: PE_Discapacitado
+  etiqueta: Población especial discapacidad  del menor de 5 años
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 29
+  fuente_observacion: O1 5 A 14 fila 18
+  equivalencias:
+  - PE_Discapacidad
+- nombre: PE_Migrante
+  etiqueta: Población especial migrante del menor de 5 años
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 31
+  fuente_observacion: O1 5 A 14 fila 19
+- nombre: PE_Ninguno
+  etiqueta: Ninguna Población especial del menor de 5 años
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 33
+  fuente_observacion: O1 5 A 14 fila 20
+- nombre: Pais_Procedencia
+  etiqueta: País donde nació el niño
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 35
+  fuente_observacion: O1 5 A 14 fila 21
+- nombre: Correo_Electronico
+  etiqueta: correo electrónico suministrado por el encuestado
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 36
+  fuente_observacion: O1 5 A 14 fila 22
+- nombre: Nombre_Encuestado
+  etiqueta: Nombre del padre, madre y/o cuidador del niño
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 40
+  fuente_observacion: O1 5 A 14 fila 23
+- nombre: Tipo_Documento_Encuestado
+  etiqueta: Tipo identificación
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 41
+  fuente_observacion: O1 5 A 14 fila 24
+- nombre: Identificacion_Encuestado
+  etiqueta: Numero de identificación
+  tipo: identificador
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 45
+  fuente_observacion: O1 5 A 14 fila 25
+- nombre: Parentesco_Encuestado
+  etiqueta: Parentesco
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 46
+  fuente_observacion: O1 5 A 14 fila 26
+- nombre: Correo_Electronico1
+  etiqueta: correo electrónico suministrado por el encuestado
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 47
+  fuente_observacion: O1 5 A 14 fila 27
+- nombre: Zona_Urbana
+  etiqueta: Zona de ubicación de la unidad habitacional
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 51
+  fuente_observacion: O1 5 A 14 fila 28
+- nombre: Dirección
+  etiqueta: Nomenclatura de la unidad habitacional
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 53
+  fuente_observacion: O1 5 A 14 fila 29
+- nombre: Localidad
+  etiqueta: Localidad de residencia del niño
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 54
+  fuente_observacion: O1 5 A 14 fila 30
+- nombre: N_UPZ
+  etiqueta: Número UPZ de residencia del niño
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 55
+  fuente_observacion: O1 5 A 14 fila 31
+- nombre: Nombre_UPZ
+  etiqueta: Nombre UPZ de residencia del niño
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 56
+  fuente_observacion: O1 5 A 14 fila 32
+- nombre: Barrio
+  etiqueta: Barrio de residencia del niño
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 57
+  fuente_observacion: O1 5 A 14 fila 33
+- nombre: Otro_Barrio
+  etiqueta: Otro barrio de residencia (cuando el barrio no está en el listado)
+  tipo: texto_libre
+  requerido: 'no'
+  opcional: true
+  nota: Si tiene dato, Barrio puede ir vacío (G1; solicitud SOL-001 del 14/11/2026). La columna puede no venir en la base.
+- nombre: Estrato
+  etiqueta: Estrato de residencia del niño
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 58
+  fuente_observacion: O1 5 A 14 fila 34
+- nombre: Telefono
+  etiqueta: Número de registro telefónico
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 59
+  fuente_observacion: O1 5 A 14 fila 35
+- nombre: Celular
+  etiqueta: Número de celular
+  tipo: contacto
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 62
+  fuente_observacion: O1 5 A 14 fila 36
+- nombre: P1_SGSS
+  etiqueta: Afiliación  al SGSS del niño
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 65
+  fuente_observacion: O1 5 A 14 fila 37
+- nombre: P2_EAPB
+  etiqueta: EAPB del niño
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 66
+  fuente_observacion: O1 5 A 14 fila 38
+- nombre: P2_Otra_EAPB
+  etiqueta: Otra EAPB del niño
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 68
+  fuente_observacion: O1 5 A 14 fila 39
+- nombre: P3_Asiste_Colegio
+  etiqueta: Asiste a colegio, institución educativa
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 71
+  fuente_observacion: O1 5 A 14 fila 40
+- nombre: P4_Colegio
+  etiqueta: Nombre oficial del Colegio, institución educativa, Jardín infantil
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 73
+  fuente_observacion: O1 5 A 14 fila 41
+- nombre: P4_Dirección_Colegio
+  etiqueta: Nomenclatura de la institución educativa
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 75
+  fuente_observacion: O1 5 A 14 fila 42
+- nombre: P4_Localidad_Colegio
+  etiqueta: Localidad de la institución educativa
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 77
+  fuente_observacion: O1 5 A 14 fila 43
+- nombre: P4_Num_UPZ_Colegio
+  etiqueta: NúmeroUPZ de la institución educativa
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 79
+  fuente_observacion: O1 5 A 14 fila 44
+- nombre: P4_UPZ_Colegio
+  etiqueta: Nombre UPZ de de la institución educativa
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 81
+  fuente_observacion: O1 5 A 14 fila 45
+- nombre: P4_Barrio_Colegio
+  etiqueta: Barrio del Colegio
+  tipo: texto_libre
+  requerido: condicional
+  fuente_diccionario: D2 fila 83
+  fuente_observacion: O1 5 A 14 fila 46
+- nombre: P5_Tos_Seca
+  etiqueta: Tos seca SIN gripa último año
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 85
+  fuente_observacion: O1 5 A 14 fila 47
+- nombre: P6_Tos_Ejercicio_Leve
+  etiqueta: Tos ejercicio leve
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 88
+  fuente_observacion: O1 5 A 14 fila 48
+- nombre: P7_Tos_Reir_Llorar
+  etiqueta: Tos al reir o llorar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 91
+  fuente_observacion: O1 5 A 14 fila 49
+- nombre: P8_Depierta_Tos
+  etiqueta: Despertar por tos último mes
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 94
+  fuente_observacion: O1 5 A 14 fila 50
+- nombre: P9_Sintomas_Sin_Gripa
+  etiqueta: Estornudos, mocos o naríz tapada SIN GRIPA
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 97
+  fuente_observacion: O1 5 A 14 fila 51
+- nombre: P10_Sintomas_Ultimo_Año
+  etiqueta: Estornudos, mocos SIN GRIPA último año
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 100
+  fuente_observacion: O1 5 A 14 fila 52
+- nombre: P11_Mocos_Nariz_Tapada_Ultimo_Año
+  etiqueta: Lagrimeo y rasquiña de ojos último año
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 103
+  fuente_observacion: O1 5 A 14 fila 53
+- nombre: P12_Enero
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 54
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Febrero
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 55
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Marzo
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 56
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Abril
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 57
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Mayo
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 58
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Junio
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 59
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Julio
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 60
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Agosto
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 61
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Septiembre
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 62
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Octubre
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 63
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Noviembre
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 64
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P12_Diciembre
+  etiqueta: Mes síntomas último año ( (P12_Enero a P12_Diciembre)
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 106
+  fuente_observacion: O1 5 A 14 fila 65
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P13_Tos_Flemas_Con_Resfrio
+  etiqueta: Tos flemas CON GRIPA
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 108
+  fuente_observacion: O1 5 A 14 fila 66
+- nombre: P13_Cuantos_Dias
+  etiqueta: Días de tos flema CON GRIPA
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 111
+  fuente_observacion: O1 5 A 14 fila 67
+- nombre: P14_TosFlemas_Sin_Resfrio
+  etiqueta: Tos flemas SIN GRIPA
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 113
+  fuente_observacion: O1 5 A 14 fila 68
+- nombre: P14_Cuantos_Dias
+  etiqueta: Días de tos flema SIN GRIPA
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 116
+  fuente_observacion: O1 5 A 14 fila 69
+- nombre: P15_Tos_Flemas_Dias
+  etiqueta: Tos con flema varios días a la semana
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 118
+  fuente_observacion: O1 5 A 14 fila 70
+- nombre: P16_Sibilancia_Alguna_Vez
+  etiqueta: Sibilancias alguna vez
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 122
+  fuente_observacion: O1 5 A 14 fila 71
+- nombre: P17_Sibilancia_Ultimo_Año
+  etiqueta: Sibilancias último año
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 125
+  fuente_observacion: O1 5 A 14 fila 72
+- nombre: P18_Sibilancia_Gripa_Ult_Año
+  etiqueta: Sibilancias CON GRIPA último año
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 129
+  fuente_observacion: O1 5 A 14 fila 73
+- nombre: P19_Ataques_Sibilancia
+  etiqueta: Ataques de sibilancias último año
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 132
+  fuente_observacion: O1 5 A 14 fila 74
+- nombre: P20_Desp_Silbidos_Mas_De_Una_Vez_Semana
+  etiqueta: Despertar por sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 134
+  fuente_observacion: O1 5 A 14 fila 75
+- nombre: P21_Sibilancia_Impide_Habla
+  etiqueta: Sibilancias al hablar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 137
+  fuente_observacion: O1 5 A 14 fila 76
+- nombre: P22_Sibilancia_Act_Fisica
+  etiqueta: Sibilancias actividad física
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 141
+  fuente_observacion: O1 5 A 14 fila 77
+- nombre: P23_Ausentismo_Escolar
+  etiqueta: Ausentismo escolar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 145
+  fuente_observacion: O1 5 A 14 fila 78
+- nombre: P24_Niño_Consulta_Medica
+  etiqueta: Consulta médica por síntomas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 149
+  fuente_observacion: O1 5 A 14 fila 79
+- nombre: P25_Familiar_Falto_Por_Consulta
+  etiqueta: Ausentismo laboral del cuidador
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 152
+  fuente_observacion: O1 5 A 14 fila 80
+- nombre: P26_Bajo_Peso_Al_Nacer
+  etiqueta: Bajo peso al nacer
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 155
+  fuente_observacion: O1 5 A 14 fila 81
+- nombre: P27_Lactancia_Materna
+  etiqueta: Recibió lactancia materna exclusiva
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 158
+  fuente_observacion: O1 5 A 14 fila 82
+- nombre: NO LACTANCIA CODIFICADA
+  etiqueta: No recibió lactancia materna exclusiva
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 161
+  fuente_observacion: O1 5 A 14 fila 83
+- nombre: P27_Tiempo_Lactancia
+  etiqueta: Tiempo de lactancia
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 164
+  fuente_observacion: O1 5 A 14 fila 84
+- nombre: Justificacion_Lactancia
+  etiqueta: Justificación por la cual el menor no recibió lactancia materna exclusiva
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 166
+  fuente_observacion: O1 5 A 14 fila 85
+- nombre: P28_1_Desnutricion
+  etiqueta: Diagnóstico de desnutrición alguna vez
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 170
+  fuente_observacion: O1 5 A 14 fila 86
+- nombre: P28_2_Obesidad
+  etiqueta: Diagnóstico de obesidad alguna vez
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 173
+  fuente_observacion: O1 5 A 14 fila 87
+- nombre: P28_DX_Malnutricion
+  etiqueta: Diagnóstico de malnutrición
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 176
+  fuente_observacion: O1 5 A 14 fila 88
+- nombre: P29_DX_Enf_Bronquios
+  etiqueta: Enfermedad pulmonar
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 179
+  fuente_observacion: O1 5 A 14 fila 89
+- nombre: P30_DX_Bronquitis
+  etiqueta: Bronquitis/ Bronquiolitis
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 182
+  fuente_observacion: O1 5 A 14 fila 90
+- nombre: P31_DX_Neumonia
+  etiqueta: Neumonía/ Bronconeumonía
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 186
+  fuente_observacion: O1 5 A 14 fila 91
+- nombre: P32_DX_TB_Pulmonar
+  etiqueta: Tuberculosis
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 190
+  fuente_observacion: O1 5 A 14 fila 92
+- nombre: P33_DX_Asma
+  etiqueta: Asma
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 194
+  fuente_observacion: O1 5 A 14 fila 93
+- nombre: P34_Clima
+  etiqueta: Situaciones sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 198
+  fuente_observacion: O1 5 A 14 fila 94
+- nombre: P34_Flores
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 199
+  fuente_observacion: O1 5 A 14 fila 95
+- nombre: P34_Emociones
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 200
+  fuente_observacion: O1 5 A 14 fila 96
+- nombre: P34_Humo
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 201
+  fuente_observacion: O1 5 A 14 fila 97
+- nombre: P34_Animales
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 202
+  fuente_observacion: O1 5 A 14 fila 98
+- nombre: P34_Ropa_Lana
+  etiqueta: Situaciones sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 198
+  fuente_observacion: O1 5 A 14 fila 99
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P34_Presencia_Gripa
+  etiqueta: Situaciones sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 198
+  fuente_observacion: O1 5 A 14 fila 100
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P34_Comida
+  etiqueta: Situaciones sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 198
+  fuente_observacion: O1 5 A 14 fila 101
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P34_Jabon
+  etiqueta: Situaciones sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 198
+  fuente_observacion: O1 5 A 14 fila 102
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P34_Otro
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 207
+  fuente_observacion: O1 5 A 14 fila 103
+- nombre: P34_Cual_Otro
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 208
+  fuente_observacion: O1 5 A 14 fila 104
+- nombre: P34_Ninguno
+  etiqueta: Situaciones sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 198
+  fuente_observacion: O1 5 A 14 fila 105
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P35_Medicamentos_Ult_Año
+  etiqueta: Medicamentos para sibilancias
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 210
+  fuente_observacion: O1 5 A 14 fila 106
+- nombre: P36_Usa_Inhalador
+  etiqueta: Uso inhalador
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 214
+  fuente_observacion: O1 5 A 14 fila 107
+- nombre: P37_Plan_Escrito
+  etiqueta: Plan escrito
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 218
+  fuente_observacion: O1 5 A 14 fila 108
+- nombre: P38_DX_Rinitis
+  etiqueta: Diagnóstico de rinitis
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 222
+  fuente_observacion: O1 5 A 14 fila 109
+- nombre: P39_Retirar_Animales
+  etiqueta: Cambios en casa por rinitis, asma o las dos.
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 225
+  fuente_observacion: O1 5 A 14 fila 110
+- nombre: P39_Retirar_Peluches
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 226
+  fuente_observacion: O1 5 A 14 fila 111
+- nombre: P39_Disminuir_Consumo_Tabaco
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 227
+  fuente_observacion: O1 5 A 14 fila 112
+- nombre: P39_Cambio_Vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 228
+  fuente_observacion: O1 5 A 14 fila 113
+- nombre: P39_Limpieza_Desinfección
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 229
+  fuente_observacion: O1 5 A 14 fila 114
+- nombre: P39_Cambio_Almohadas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 230
+  fuente_observacion: O1 5 A 14 fila 115
+- nombre: P39_Cambio_Sabanas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 231
+  fuente_observacion: O1 5 A 14 fila 116
+- nombre: P39_Cambios_Estructurales
+  etiqueta: Cambios en casa por rinitis, asma o las dos.
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 225
+  fuente_observacion: O1 5 A 14 fila 117
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P39_Ningún_Cambio
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 233
+  fuente_observacion: O1 5 A 14 fila 118
+- nombre: P40_CongesTÍOn_Nasal_Actividades
+  etiqueta: Congestión nasal impide actividades
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 234
+  fuente_observacion: O1 5 A 14 fila 119
+- nombre: P41_Cirugia_Torax
+  etiqueta: Cirugía de tórax
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 238
+  fuente_observacion: O1 5 A 14 fila 120
+- nombre: P41_Cual_Cirugia
+  etiqueta: Cual cirugía
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 241
+  fuente_observacion: O1 5 A 14 fila 121
+- nombre: P42_Consumo_Tabaco_Hogar
+  etiqueta: Consumo tabaco en hogares
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 243
+  fuente_observacion: O1 5 A 14 fila 122
+- nombre: P42_Cual_Consumo
+  etiqueta: Cual dispositivo o producto utiliza
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 246
+  fuente_observacion: O1 5 A 14 fila 123
+- nombre: P43_Tabaquismo_Pasivo
+  etiqueta: Tabaquismo pasivo
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 250
+  fuente_observacion: O1 5 A 14 fila 124
+- nombre: P44_Madre_Fumo_En_Embarazo
+  etiqueta: Madre fumaba durante la gestación
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 254
+  fuente_observacion: O1 5 A 14 fila 125
+- nombre: P44_Cual_Fumar
+  etiqueta: Cual dispositivo o producto utiliza
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 257
+  fuente_observacion: O1 5 A 14 fila 126
+- nombre: P45_Madre_Contacto_Fumadores
+  etiqueta: Madre estuvo en contacto con fumadores
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 261
+  fuente_observacion: O1 5 A 14 fila 127
+- nombre: P45_Cual_Contacto
+  etiqueta: Cual dispositivo o producto utiliza
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 264
+  fuente_observacion: O1 5 A 14 fila 128
+- nombre: P46_Madre_Fumo_Dos_Años_Niño
+  etiqueta: Madre fumó durante los dos primeros años del niño
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 268
+  fuente_observacion: O1 5 A 14 fila 129
+- nombre: P47_Contacto_Toxicos_Trabajo
+  etiqueta: Contacto con sustancias tóxicas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 271
+  fuente_observacion: O1 5 A 14 fila 130
+- nombre: P48_Cambia_Ropa
+  etiqueta: Cambia su ropa y/o zapatos
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 274
+  fuente_observacion: O1 5 A 14 fila 131
+- nombre: NO CAMBIA ROPA CODIF.
+  etiqueta: No cambia su ropa y/o zapatos
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 278
+  fuente_observacion: O1 5 A 14 fila 132
+- nombre: P49_DX_Padres_Enf_Respiratoria
+  etiqueta: Enfermedad pulmonar de los padres
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 282
+  fuente_observacion: O1 5 A 14 fila 133
+- nombre: P50_Ingresos_Hogar
+  etiqueta: Ingresos del hogar
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 285
+  fuente_observacion: O1 5 A 14 fila 134
+- nombre: INGRESOS CODIF.
+  etiqueta: Ingresos del hogar dicotómico
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 288
+  fuente_observacion: O1 5 A 14 fila 135
+- nombre: P51_Nivel_Educativo_Cuidador
+  etiqueta: Nivel educativo de la madre o cuidador
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 290
+  fuente_observacion: O1 5 A 14 fila 136
+- nombre: P52_Ocupacion_Cuidador
+  etiqueta: Ocupaciónde la madre o cuidador
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 300
+  fuente_observacion: O1 5 A 14 fila 137
+- nombre: P53_Persona_Contacto_Niños_Pacientes
+  etiqueta: Personas que convivien con el niño tienen contacto con otros niños y/o pacientes en su trabajo
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 309
+  fuente_observacion: O1 5 A 14 fila 138
+- nombre: P54_Tipo_Vivienda
+  etiqueta: Tipo de unidad donde reside el encuestado
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 312
+  fuente_observacion: O1 5 A 14 fila 139
+- nombre: TIPO VIVIENDA CODIF.
+  etiqueta: Tipo de unidad donde reside el encuestado dicotómico
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 320
+  fuente_observacion: O1 5 A 14 fila 140
+- nombre: P55_Ubicacion_Vivienda
+  etiqueta: Zona de ubicación de la vivienda
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 322
+  fuente_observacion: O1 5 A 14 fila 141
+- nombre: P56_Tiempo_Vive_Vivienda
+  etiqueta: Tiempo viviendo en la unidad habitacional
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 324
+  fuente_observacion: O1 5 A 14 fila 142
+- nombre: P56_Periodo_Vive_Vivienda
+  tipo: categoria_texto
+  requerido: captura
+  fuente_observacion: O1 5 A 14 fila 143
+- nombre: P57_Habitaciones_Dormitorio
+  etiqueta: Dormitorios de la vivienda
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 326
+  fuente_observacion: O1 5 A 14 fila 144
+- nombre: P58_Cuantas_Personas_Habitan
+  etiqueta: Personas que habitan en la vivienda
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 328
+  fuente_observacion: O1 5 A 14 fila 145
+- nombre: HACINAMIENTO
+  etiqueta: Hogares que habitan en viviendas con 3 o más de tres personas por  cuarto
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 330
+  fuente_observacion: O1 5 A 14 fila 146
+- nombre: P59_Cuantos_Menores_Habitan
+  etiqueta: Menores de 14 años que habitan en la vivienda
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 332
+  fuente_observacion: O1 5 A 14 fila 147
+- nombre: P60_Duermen_Con_Niño
+  etiqueta: Persona duerme en la misma habitación
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 334
+  fuente_observacion: O1 5 A 14 fila 148
+- nombre: P61_Duermen_Misma_Cama
+  etiqueta: Duerme en la misma cama
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 337
+  fuente_observacion: O1 5 A 14 fila 149
+- nombre: P61_Cuantas_Personas
+  etiqueta: Personas que duermen en la misma cama con el niño
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 341
+  fuente_observacion: O1 5 A 14 fila 150
+- nombre: P62_Tipo_Almohada
+  etiqueta: Material de almohada
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 344
+  fuente_observacion: O1 5 A 14 fila 151
+- nombre: ALMOHADA COD
+  etiqueta: Material de almohada codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 349
+  fuente_observacion: O1 5 A 14 fila 152
+- nombre: P63_Tiempo_Uso_Colchon
+  etiqueta: Tiempo uso colchón
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 351
+  fuente_observacion: O1 5 A 14 fila 153
+- nombre: P63_Periodo_Uso_Colchon
+  tipo: categoria_texto
+  requerido: captura
+  fuente_observacion: O1 5 A 14 fila 154
+- nombre: P64_Permanencia_Ventanas
+  etiqueta: Permanencia de las ventanas
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 353
+  fuente_observacion: O1 5 A 14 fila 155
+- nombre: VENTANAS CODIF.
+  etiqueta: Permanencia de las ventanas codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 357
+  fuente_observacion: O1 5 A 14 fila 156
+- nombre: P65_Donde_Cocina
+  etiqueta: Ubicación de la cocina
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 359
+  fuente_observacion: O1 5 A 14 fila 157
+- nombre: UBICACIÓN COCINA CODIF.
+  etiqueta: Ubicación de la cocina dicotómico
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 366
+  fuente_observacion: O1 5 A 14 fila 158
+- nombre: P66_Ventilación_Cocina
+  etiqueta: Cocina con adecuada ventilación
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 368
+  fuente_observacion: O1 5 A 14 fila 159
+- nombre: COCINA NO VENTILADA CODIF.
+  etiqueta: Cocina no cuenta con adecuada ventilación
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 371
+  fuente_observacion: O1 5 A 14 fila 160
+- nombre: P67_Energía_Cocina
+  etiqueta: Energía para cocinar
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 374
+  fuente_observacion: O1 5 A 14 fila 161
+- nombre: ENERGIA COCINAR CODIF.
+  etiqueta: Energía para cocinar dicotómica
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 382
+  fuente_observacion: O1 5 A 14 fila 162
+- nombre: P68_Baños_Aislados
+  etiqueta: Baños aislados
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 385
+  fuente_observacion: O1 5 A 14 fila 163
+- nombre: BAÑOS NO AISLADOS CODIF.
+  etiqueta: Baños no aislados
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 387
+  fuente_observacion: O1 5 A 14 fila 164
+- nombre: P69_Material_Paredes
+  etiqueta: Material paredes
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 389
+  fuente_observacion: O1 5 A 14 fila 165
+- nombre: PAREDES CODIF.
+  etiqueta: Material paredes codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 392
+  fuente_observacion: O1 5 A 14 fila 166
+- nombre: P70_Material_Pisos
+  etiqueta: Material pisos
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 394
+  fuente_observacion: O1 5 A 14 fila 167
+- nombre: PISOS CODIF.
+  etiqueta: Material pisos codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 396
+  fuente_observacion: O1 5 A 14 fila 168
+- nombre: P71_Secado_Ropa
+  etiqueta: Secado de la ropa
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 398
+  fuente_observacion: O1 5 A 14 fila 169
+- nombre: SECADO ROPA CODIF.
+  etiqueta: Secado de la ropa codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 400
+  fuente_observacion: O1 5 A 14 fila 170
+- nombre: P72_Hongos_Humedad
+  etiqueta: Hongos/ humedad en vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 402
+  fuente_observacion: O1 5 A 14 fila 171
+- nombre: P73_Humedad_Habitacion
+  etiqueta: Humedad en la habitación del niño
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 404
+  fuente_observacion: O1 5 A 14 fila 172
+- nombre: P74_Tiene_Mascotas
+  etiqueta: Tiene animales domésticos
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 408
+  fuente_observacion: O1 5 A 14 fila 173
+- nombre: P75_Tiene_Perros
+  etiqueta: Cuales y cuantos animales
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 174
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Cuantos_Perros
+  etiqueta: Cuales y cuantos animales
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 175
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Tiene_Gatos
+  etiqueta: Cuales y cuantos animales
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 176
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Cuantos_Gatos
+  etiqueta: Cuales y cuantos animales
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 177
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Tiene_Aves
+  etiqueta: Cuales y cuantos animales
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 178
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Cuantas_Aves
+  etiqueta: Cuales y cuantos animales
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 179
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Tiene_Otros
+  etiqueta: Cuales y cuantos animales
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 180
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Cuantos_Otros
+  etiqueta: Cuales y cuantos animales
+  tipo: entero
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 181
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P75_Cuales_Otros
+  etiqueta: Cuales y cuantos animales
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 410
+  fuente_observacion: O1 5 A 14 fila 182
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P76_Donde_Duermen_Mascotas
+  etiqueta: Lugar donde duermen los animales
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 416
+  fuente_observacion: O1 5 A 14 fila 183
+- nombre: DUERMEN MASCOTAS CODIF.
+  etiqueta: Lugar donde duermen los animales codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 418
+  fuente_observacion: O1 5 A 14 fila 184
+- nombre: P77_Niño_Convive_Mascotas
+  etiqueta: Convive con los animales desde hace un año
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 421
+  fuente_observacion: O1 5 A 14 fila 185
+- nombre: P78_Hay_Roedores
+  etiqueta: Presencia de roedores
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 424
+  fuente_observacion: O1 5 A 14 fila 186
+- nombre: P79_Hay_Cucarachas
+  etiqueta: Presencia de cucurachas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 427
+  fuente_observacion: O1 5 A 14 fila 187
+- nombre: PRESENCIA DE PLAGAS CODIF.
+  etiqueta: Presencia de plagas (roedores, cucarachas)
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 430
+  fuente_observacion: O1 5 A 14 fila 188
+- nombre: P80_Funciona_Negocio
+  etiqueta: Fabrica o negocio en la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 433
+  fuente_observacion: O1 5 A 14 fila 189
+- nombre: P80_Cual_Negocio
+  etiqueta: Tipo de negocio en la vivienda
+  tipo: texto_libre
+  requerido: captura
+  fuente_diccionario: D2 fila 435
+  fuente_observacion: O1 5 A 14 fila 190
+- nombre: P81_Trafico_Cerca
+  etiqueta: Tipo tráfcio cerca de la vivienda
+  tipo: categoria_texto
+  requerido: captura
+  fuente_diccionario: D2 fila 437
+  fuente_observacion: O1 5 A 14 fila 191
+- nombre: TRAFICO CODIF.
+  etiqueta: Tipo tráfico cerca de la vivienda codificado
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 439
+  fuente_observacion: O1 5 A 14 fila 192
+- nombre: P82_Construcciones_Cerca
+  etiqueta: Construcciones o vías no paviementadas cerca de la vivienda
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 441
+  fuente_observacion: O1 5 A 14 fila 193
+- nombre: P83_Agricultura_Ganaderia
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 194
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Explotacion_Minas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 195
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Venta_Material_Construccion
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 196
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Reparacion_Vehiculos
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 197
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Restaurantes_Chimenea
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 198
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Parqueadero_Buses
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 199
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Bares_Cantinas
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 200
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Industria_Manufacturera
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 451
+  fuente_observacion: O1 5 A 14 fila 201
+- nombre: P83_Incineradores
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 452
+  fuente_observacion: O1 5 A 14 fila 202
+- nombre: P83_Quemas_Cielo_Abierto
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 203
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Zona_Reciclaje
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 204
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Obras_Construccion
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 205
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Establecimientos_Culto
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 206
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Ornamentación
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 457
+  fuente_observacion: O1 5 A 14 fila 207
+- nombre: P83_Canales_Agua
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 442
+  fuente_observacion: O1 5 A 14 fila 208
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: P83_Lavandería
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 459
+  fuente_observacion: O1 5 A 14 fila 209
+- nombre: P83_Ninguno
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 459
+  fuente_observacion: O1 5 A 14 fila 210
+  nota: definición agrupada en el diccionario; las categorías se reparten entre varias filas
+- nombre: FUENTES_FIJAS
+  etiqueta: Fuentes fijas cerca de la vivienda
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 461
+  fuente_observacion: O1 5 A 14 fila 211
+- nombre: Niño_Con_Afectación
+  etiqueta: Menor con posible riesgo asociado a contaminación del aire
+  tipo: derivada
+  requerido: recodificacion
+  fuente_diccionario: D2 fila 463
+  fuente_observacion: O1 5 A 14 fila 212
+- nombre: Canalización
+  etiqueta: Personas que deben ser direccionadas a instituciones que por competencias deben dar respuestas sociales o de prestación de servicios
+    de salud
+  tipo: codigo
+  requerido: captura
+  fuente_diccionario: D2 fila 465
+  fuente_observacion: O1 5 A 14 fila 213
+- nombre: Observaciones
+  etiqueta: Observaciones y recomendaciones
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 467
+  fuente_observacion: O1 5 A 14 fila 214
+- nombre: Digitador
+  etiqueta: Nombre del digitador que ingresa los datos al sivigila
+  tipo: texto_libre
+  requerido: captura
+  personal: true
+  fuente_diccionario: D2 fila 468
+  fuente_observacion: O1 5 A 14 fila 215
+- nombre: RIESGO ACRE
+  etiqueta: Tipo de riesgo
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 470
+  fuente_observacion: O1 5 A 14 fila 216
+- nombre: Min_PM25
+  etiqueta: Valor promedio del material particulado PM2,5
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 473
+  fuente_observacion: O1 5 A 14 fila 217
+- nombre: Max_PM25
+  etiqueta: Valor promedio del material particulado PM10
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 480
+  fuente_observacion: O1 5 A 14 fila 218
+- nombre: x
+  etiqueta: coordenada x
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 486
+  fuente_observacion: O1 5 A 14 fila 219
+- nombre: y
+  etiqueta: coordenada y
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 490
+  fuente_observacion: O1 5 A 14 fila 220
+- nombre: id_geo
+  etiqueta: identificación geográfica
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 494
+  fuente_observacion: O1 5 A 14 fila 221
+- nombre: X Colegio
+  etiqueta: coordenada X Colegio
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 498
+  fuente_observacion: O1 5 A 14 fila 222
+- nombre: Y Colegio
+  etiqueta: coordenada Y Colegio
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 499
+  fuente_observacion: O1 5 A 14 fila 223
+- nombre: Valor ACRE COLEGIO
+  etiqueta: Tipo de riesgo
+  tipo: geografico
+  requerido: enriquecimiento
+  fuente_diccionario: D2 fila 500
+  fuente_observacion: O1 5 A 14 fila 224

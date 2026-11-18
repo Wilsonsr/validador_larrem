@@ -1,0 +1,1314 @@
+# Reglas – Personas de 60 años y más (VEA-3 / AR04). Base B3; diccionario D3; observaciones O1 hoja MAYOR 60.
+poblaciones: [mayores60]
+
+listas:
+  p4: &P4 [P4_Despiesta_Tos, P4_Tos_Noche, P4_Tos_Mañana]
+  p5: &P5 [P5_Expectoracion_Levantarse, P5_Expectoracion_DiaNoche, P5_Expectoracion_Purulenta, P5_Expectoracion_Sangre]
+  p6: &P6 [P6_Falta_Aire_Ejercicio, P6_Falta_Aire_Caminar_Pendiente, P6_Falta_Aire_Caminar_PropioPaso, P6_Falta_Aire_Reposo]
+  p7: &P7 [P7_Dolor_Toracico_Ejercicio, P7_Dolor_Toracico_Reposo]
+  p9: &P9 [P9_DX_Asma, P9_DX_EPOC, P9_DX_TB_Pulmonar, P9_DX_Neumonia, P9_DX_CA_Pulmonar]
+  p11: &P11 [P11_DX_HTA, P11_DX_Arritmia, P11_DX_Trombosis, P11_DX_Angina_Pecho, P11_DX_IAM, P11_DX_ACV]
+  p27: &P27 [P27_Polvo, P27_Gases, P27_Humo, P27_Vapores_Tóxicos]
+  combustibles: &COMB [P32_Combustible_Leña, P32_Combustible_Carbón, P32_Combustible_Excrementos, P32_Combustible_Envoltura,
+                       P32_Combustible_Cocinol, P32_Combustible_Alcohol]
+  anios_comb: &ANIOS [P32_Años_Leña, P32_Años_Carbón, P32_Años_Excrementos, P32_Años_Envoltura, P32_Años_Cocinol, P32_Años_Alcohol]
+  p40: &P40 [P40_Agricultura_Ganaderia, P40_Explotacion_Minas, P40_Venta_Material_Construccion, P40_Reparacion_Vehiculos,
+             P40_Restaurantes_Chimenea, P40_Parqueadero_Buses, P40_Bares_Cantinas, P40_Industria_Manufacturera, P40_Incineradores,
+             P40_Quemas_Cielo_Abierto, P40_Zona_Reciclaje, P40_Obras_Construccion, P40_Establecimientos_Culto, P40_Ornamentación,
+             P40_Canales_Agua, P40_Lavandería]
+  sintomas: &SINT [P3_Sibilancia_Alguna_Vez, P3_Sibilancia_Ultimo_Mes, P4_Despiesta_Tos, P4_Tos_Noche, P4_Tos_Mañana,
+                   P5_Expectoracion_Ultimo_Año, P6_Falta_Aire_Ejercicio, P6_Falta_Aire_Caminar_Pendiente,
+                   P6_Falta_Aire_Caminar_PropioPaso, P6_Falta_Aire_Reposo, P7_Dolor_Toracico_Ejercicio, P7_Dolor_Toracico_Reposo]
+  diligenciado_no_999: &DIL {todas: [{vacio: false}, {no_en: [999]}]}
+  localidades: &LOC [Usaquén, Chapinero, Santa Fe, San Cristóbal, Usme, Tunjuelito, Bosa, Kennedy, Fontibón, Engativá, Suba,
+                     Barrios Unidos, Teusaquillo, Los Mártires, Mártires, Antonio Nariño, Puente Aranda, La Candelaria, Candelaria,
+                     Rafael Uribe Uribe, Rafael Uribe, Ciudad Bolívar, Sumapaz]
+
+reglas:
+  # ================================================================= A–B. Información general y básica
+  - id: A_ACTA_FORMATO
+    descripcion: "Número de acta: AR + 04 (encuesta adulto mayor) + sigla de subred + 6 dígitos"
+    tipo: patron
+    variables: [No_Acta]
+    parametros: {patron: "AR04[NSEC]\\d{6}", descripcion_esperado: "AR04 + N/S/E/C + 6 dígitos"}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "pp.143-144", nota: "AR04 = Encuesta de prevalencia adulto mayor"}
+      - {doc: G1, ubicacion: "p.60"}
+    accion: "Corregir el número de acta."
+
+  - id: A_TIPODOC_DOMINIO
+    descripcion: "Tipo de documento dentro de las opciones documentadas"
+    tipo: dominio
+    variables: [Tipo_documento]
+    parametros: {valores: ["Cédula de Ciudadanía", "Cedula de ciudadanía", "Cédula de Extranjería", PEP, "Permiso por Protección Temporal", PPT, "Documento de Extranjería"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 9-13"}
+      - {doc: O1, ubicacion: "MAYOR 60 fila 9", nota: "CC, CE, DE"}
+    accion: "Verificar el tipo de documento."
+
+  - id: A_ID_CC_NUMERICO
+    descripcion: "Cédula de ciudadanía: identificación con solo dígitos"
+    tipo: patron
+    variables: [Identificación]
+    aplica_si: {var: Tipo_documento, en: ["Cédula de Ciudadanía", "Cedula de ciudadanía"]}
+    parametros: {patron: "\\d+", descripcion_esperado: "solo dígitos"}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.62", nota: "verificar que no tengan caracteres adicionales"}
+      - {doc: O1, ubicacion: "MAYOR 60 fila 10", nota: "número"}
+    accion: "Verificar el número de cédula."
+
+  - id: A_ID_DE_SIGLA
+    descripcion: "Documento de extranjería: la identificación inicia con la sigla seguida del número"
+    tipo: patron
+    variables: [Identificación]
+    aplica_si: {var: Tipo_documento, en: ["Documento de Extranjería", PEP, PPT, "Permiso por Protección Temporal"]}
+    parametros: {patron: "[A-Z]{2,4}\\s?\\d+", descripcion_esperado: "sigla en mayúsculas + número"}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.111"}
+    accion: "Completar la sigla del documento."
+
+  - id: A_PAIS_DOC_EXT
+    descripcion: "Documento de extranjería: país de procedencia distinto de Colombia"
+    tipo: condicional
+    variables: [Pais_Procedencia]
+    aplica_si: {var: Tipo_documento, en: ["Documento de Extranjería", PEP, PPT, "Permiso por Protección Temporal", "Cédula de Extranjería"]}
+    parametros: {entonces_cada: {no_en: [COLOMBIA]}, explicacion: "documento de extranjería con país Colombia"}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.62", nota: "tipos distintos a CC (PEP, PPT y CE) corresponden a país diferente a Colombia"}
+    accion: "Verificar documento y país."
+
+  - id: A_SEXO_DOMINIO
+    descripcion: "Sexo: Hombre, Mujer o Intersexual"
+    tipo: dominio
+    variables: [Sexo]
+    parametros: {valores: [Hombre, Mujer, Intersexual]}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.111"}
+      - {doc: D3, ubicacion: "filas 15-16"}
+    accion: "Corregir según el formato. No se infiere el sexo a partir del nombre."
+
+  - id: A_EDAD_CALCULADA
+    descripcion: "Edad en años cumplidos a la fecha de encuesta coincide con Edad"
+    tipo: funcion
+    variables: [Edad]
+    parametros: {nombre: edad_calculada, args: {nacimiento: Fecha_Nacimiento, encuesta: Fecha_Encuesta, edad: Edad}, opciones: {unidad: anios}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "pp.111-112", nota: "sin eximir al encuestador del cálculo para verificar el criterio de inclusión"}
+      - {doc: O1, ubicacion: "MAYOR 60 fila 13"}
+      - {doc: G1, ubicacion: "p.62"}
+    accion: "Verificar fechas y edad contra el soporte."
+
+  - id: A_EDAD_POBLACION
+    descripcion: "Criterio de inclusión: 60 años o más a la fecha de encuesta"
+    tipo: funcion
+    variables: [Fecha_Nacimiento]
+    parametros: {nombre: edad_poblacion, args: {nacimiento: Fecha_Nacimiento, encuesta: Fecha_Encuesta, etiqueta: "Edad (calculada)"}, opciones: {unidad: anios, min: 60}}
+    severidad: bloqueante
+    fuentes:
+      - {doc: I1, ubicacion: "p.112", nota: "persona de 60 o más años"}
+      - {doc: D3, ubicacion: "fila 18"}
+    accion: "Verificar la fecha de nacimiento."
+
+  - id: A_GRUPO_ETNICO_DOMINIO
+    descripcion: "Grupo étnico dentro de las opciones"
+    tipo: dominio
+    variables: [Grupo_etnico]
+    parametros: {valores: [Indígena, ROM, Palenquero, Afrodescendiente, Raizal, Ninguno]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "fila 19"}
+    accion: "Corregir según el formato."
+
+  - id: A_NIVEL_EDUCATIVO_DOMINIO
+    descripcion: "Nivel educativo dentro de las opciones"
+    tipo: dominio
+    variables: [Nivel_Educativo]
+    parametros: {valores: ["Primaria incompleta o en curso", "Primaria completa", "Secundaria incompleta o en curso", "Secundaria completa",
+                           "Técnico o tecnología incompleta o en curso", "Técnico o tecnología completa", "Superior incompleta o en curso",
+                           "Superior completa", "Sin estudios", "Posgrado"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 35-44"}
+      - {doc: G1, ubicacion: "p.63"}
+    accion: "Corregir según el formato."
+
+  - id: A_ZONA_DOMINIO
+    descripcion: "Zona_Urbana: 1 o 2"
+    tipo: dominio
+    variables: [Zona_Urbana]
+    parametros: {valores: [1, 2]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 45-46"}
+    accion: "Corregir según el formato."
+
+  - id: A_ZONA_RURAL_SUMAPAZ
+    descripcion: "Fuera de Sumapaz, Zona_Urbana = 1"
+    tipo: condicional
+    variables: [Zona_Urbana]
+    aplica_si: {var: Localidad, no_en: [Sumapaz]}
+    parametros: {entonces_cada: {en: [1]}, explicacion: "zona rural registrada fuera de Sumapaz"}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 23"}
+      - {doc: G1, ubicacion: "p.64"}
+    accion: "Revisión territorial; no corregir automáticamente."
+
+  - id: A_ZONA_SUMAPAZ_RURAL
+    descripcion: "En Sumapaz, Zona_Urbana = 2"
+    tipo: condicional
+    variables: [Zona_Urbana]
+    aplica_si: {var: Localidad, en: [Sumapaz]}
+    parametros: {entonces_cada: {en: [2]}}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 23"}
+    accion: "Revisión territorial."
+
+  - id: A_LOCALIDAD_DOMINIO
+    descripcion: "Localidad dentro del listado oficial (se aceptan formas abreviadas)"
+    tipo: dominio
+    variables: [Localidad]
+    parametros: {valores: *LOC}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.145"}
+    accion: "Corregir el nombre."
+
+  - id: A_UPZ_NUMERO_NOMBRE
+    descripcion: "Un mismo número de UPZ tiene un único nombre"
+    tipo: consistencia_grupo
+    parametros: {clave: N_UPZ, dependiente: Nombre_UPZ, ignorar: [999]}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.114"}
+    accion: "Verificar la UPZ."
+
+  - id: A_UPZ_LOCALIDAD
+    descripcion: "Un mismo número de UPZ pertenece a una única localidad"
+    tipo: consistencia_grupo
+    parametros: {clave: N_UPZ, dependiente: Localidad, ignorar: [999]}
+    severidad: alerta
+    fuentes:
+      - {doc: D3, ubicacion: "filas 49-50"}
+      - {doc: I1, ubicacion: "p.145"}
+    accion: "Verificar localidad y UPZ."
+
+  - id: A_ESTRATO_DOMINIO
+    descripcion: "Estrato entre 1 y 6"
+    tipo: dominio
+    variables: [Estrato]
+    parametros: {valores: [1, 2, 3, 4, 5, 6]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "fila 52"}
+    accion: "Verificar el estrato."
+
+  - id: A_DIRECCION_REPETIDA
+    descripcion: "Una dirección no se repite en el archivo, salvo estratos 5 y 6 (máximo dos)"
+    tipo: unicidad
+    variables: [Dirección]
+    parametros: {maximo_por_grupo: 1, excepcion_maximo: {si: {var: Estrato, en: [5, 6]}, maximo: 2}, explicacion: "dirección repetida"}
+    severidad: alerta
+    especiales: "Dentro del archivo; la revisión anual requiere el histórico."
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 24"}
+      - {doc: G1, ubicacion: "p.65"}
+      - {doc: I1, ubicacion: "p.114"}
+    accion: "Candidato a revisión; no eliminar sin verificar."
+
+  - id: A_INQUILINATO_COMPLEMENTO_UN
+    descripcion: "Si P33 es inquilinato, la dirección contiene el complemento UN"
+    tipo: condicional
+    estado: provisional
+    motivo_estado: "O1 MAYOR 60 fila 24 asocia el complemento con P33, pero P33 es la vivienda donde habitó la mayor parte de la vida (I1 p.132), no necesariamente la actual. Confirmar."
+    variables: [Dirección]
+    aplica_si: {var: P33_Tipo_Vivienda, en: [Inquilinato]}
+    parametros: {entonces_cada: {patron: ".*\\bUN\\s?\\d+.*"}, explicacion: "inquilinato sin complemento UN"}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 24"}
+      - {doc: G1, ubicacion: "p.78"}
+    accion: "Verificar el complemento."
+
+  # ================================================================= Afiliación
+  - id: A_SGSS_NINGUNO_SALTO
+    descripcion: "Sin afiliación: salto a P3; P2_EPS y P2_Otra_EPS = 999"
+    tipo: condicional
+    variables: [P2_EPS, P2_Otra_EPS]
+    aplica_si: {var: P1_SGSS, en: [Ninguno]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.116", nota: "salto a la pregunta 3 cuando se selecciona Ninguno"}
+    accion: "Verificar la afiliación."
+
+  - id: A_REGIMEN_EXCEPCIONAL_EPS
+    descripcion: "Régimen excepcional: EAPB del régimen de excepción"
+    tipo: condicional
+    variables: [P2_EPS]
+    aplica_si: {var: P1_SGSS, en: ["Régimen excepcional"]}
+    parametros:
+      entonces_cada: {en: ["Fuerzas Militares", "Policía Nacional", "Ecopetrol", "Magisterio", "Universidades Públicas", "Unisalud", "Ferrocarriles", "Otro"]}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 filas 32-33"}
+      - {doc: G1, ubicacion: "p.67"}
+    accion: "Verificar la EAPB."
+
+  - id: A_EPS_OTRA
+    descripcion: "Si P2_EPS = Otro, P2_Otra_EPS tiene el nombre; en otro caso 999"
+    tipo: condicional
+    variables: [P2_Otra_EPS]
+    estado: provisional
+    motivo_estado: "Relación P2_EPS / P2_Otra_EPS descrita de forma incompleta (G1 p.67); se aplica la práctica observada. Confirmar."
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P2_EPS, en: [Otro]}, {var: P2_Otra_EPS, no_en: [999]}, {var: P2_Otra_EPS, vacio: false}]}
+          - {todas: [{var: P2_EPS, no_en: [Otro]}, {var: P2_Otra_EPS, en: [999]}]}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.67"}
+      - {doc: D3, ubicacion: "filas 61-62"}
+    accion: "Verificar la EAPB."
+
+  # ================================================================= C. Antecedentes en salud
+  - id: A_DOM_BINARIOS
+    descripcion: "Respuestas SI/NO: 1 o 2"
+    tipo: dominio
+    variables: [P3_Sibilancia_Alguna_Vez, P4_Despiesta_Tos, P4_Tos_Noche, P4_Tos_Mañana, P4_Sin_Tos, P5_Expectoracion_Ultimo_Año,
+                P6_Falta_Aire_Ejercicio, P6_Falta_Aire_Caminar_Pendiente, P6_Falta_Aire_Caminar_PropioPaso, P6_Falta_Aire_Reposo,
+                P6_Ninguno, P7_Dolor_Toracico_Ejercicio, P7_Dolor_Toracico_Reposo, P7_Ninguno, P9_DX_Asma, P9_DX_EPOC, P9_DX_TB_Pulmonar,
+                P9_DX_Neumonia, P9_DX_CA_Pulmonar, P9_DX_Ninguno, P10_Usa_Oxigeno, P11_DX_HTA, P11_DX_Arritmia, P11_DX_Trombosis,
+                P11_DX_Angina_Pecho, P11_DX_IAM, P11_DX_ACV, P11_DX_Ninguno, P31_Cocicó_En_Su_Vida, P37_Funciono_Fabrica_Negocio,
+                P39_Construcciones_Cerca, P40_Agricultura_Ganaderia, P40_Explotacion_Minas, P40_Venta_Material_Construccion,
+                P40_Reparacion_Vehiculos, P40_Restaurantes_Chimenea, P40_Parqueadero_Buses, P40_Bares_Cantinas,
+                P40_Industria_Manufacturera, P40_Incineradores, P40_Quemas_Cielo_Abierto, P40_Zona_Reciclaje, P40_Obras_Construccion,
+                P40_Establecimientos_Culto, P40_Ornamentación, P40_Canales_Agua, P40_Lavandería, P40_Ninguno,
+                TOS AGRUPADA COFID., DIFICULTAD RESP. AGRUPADA COFID., DOLOR TORACICO AGRUPADA COFID., ALGUN ANTEC RESPIRAT. CODIF.,
+                ALGUN ANTEC CARDIOVASC. CODIF., FUENTES FIJAS, TABAQUISMO PESADO, Adulto_Con_Riesgo_Posible, Canalización]
+    parametros: {valores: [1, 2]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 63-153, 203, 266-267, 306-307, 315-339"}
+      - {doc: O1, ubicacion: "MAYOR 60 filas 35-157"}
+      - {doc: G1, ubicacion: "pp.67-81"}
+    accion: "Corregir según el formato."
+
+  - id: A_DOM_SI_NO_NSNR
+    descripcion: "Respuestas con NS/NR: 1, 2 o 99"
+    tipo: dominio
+    variables: [P8_Asistió_Consulta_Medica, P12_Cirugia_Torax, P13_Pasa_Tiempo_Aire_Libre, P15_Actividad_Fisica, P18_Fuma,
+                P24_Contacto_Fumadores_Pasado, P25_Contacto_Fumadores_Presente, P25_1_Dispositivos_SEAN_SSSN, P27_Exposicion_Toxicos,
+                NO ACTIVIDAD FISICA CODIF]
+    parametros: {valores: [1, 2, 99]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 113-115, 154-156, 159-161, 170-175, 184, 206, 209-210, 226-228"}
+    accion: "Corregir según el formato."
+
+  - id: A_DOM_CON_SALTO
+    descripcion: "Respuestas dentro de un salto: 1, 2, 99 o 999"
+    tipo: dominio
+    variables: [P3_Sibilancia_Ultimo_Mes, P5_Expectoracion_Levantarse, P5_Expectoracion_DiaNoche, P5_Expectoracion_Purulenta,
+                P5_Expectoracion_Sangre, P19_Fumó_En_Algun_Momento, P27_Polvo, P27_Gases, P27_Humo, P27_Vapores_Tóxicos,
+                P32_Combustible_Leña, P32_Combustible_Carbón, P32_Combustible_Excrementos, P32_Combustible_Envoltura,
+                P32_Combustible_Cocinol, P32_Combustible_Alcohol]
+    parametros: {valores: [1, 2, 99, 999]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 65-67, 81-92, 185-186, 232-247, 274-278"}
+    accion: "Corregir según el formato."
+
+  - id: A_P3_SALTO
+    descripcion: "Sin sibilancias alguna vez (P3 = 2): salto a P4; sibilancias en el último mes = 999"
+    tipo: condicional
+    variables: [P3_Sibilancia_Ultimo_Mes]
+    aplica_si: {var: P3_Sibilancia_Alguna_Vez, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    especiales: "999 indica salto; su recodificación analítica a 2 (D3 fila 67, O1 fila 36) no se aplica a la captura."
+    fuentes:
+      - {doc: D3, ubicacion: "filas 63-67"}
+      - {doc: G1, ubicacion: "p.67"}
+      - {doc: I1, ubicacion: "p.117"}
+    accion: "Verificar el salto."
+
+  - id: A_P3_SI
+    descripcion: "Con sibilancias alguna vez (P3 = 1): último mes = 1 o 2"
+    tipo: condicional
+    variables: [P3_Sibilancia_Ultimo_Mes]
+    aplica_si: {var: P3_Sibilancia_Alguna_Vez, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 65-66", nota: "se responde cuando la P3 es SI"}
+    accion: "Completar desde el formato."
+
+  - id: A_GESTION_SINTOMA
+    descripcion: "Sibilancias último mes, expectoración (al levantarse, día/noche, purulenta), falta de aire o dolor torácico en reposo sin consulta médica (P8 ≠ 1): verificar gestión en observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [P3_Sibilancia_Ultimo_Mes, P5_Expectoracion_Levantarse, P6_Falta_Aire_Reposo, P7_Dolor_Toracico_Reposo, P8_Asistió_Consulta_Medica, Observaciones]
+    aplica_si:
+      todas:
+        - {var: P8_Asistió_Consulta_Medica, no_en: [1]}
+        - alguna:
+            - {var: P3_Sibilancia_Ultimo_Mes, en: [1]}
+            - {var: P5_Expectoracion_Levantarse, en: [1]}
+            - {var: P5_Expectoracion_DiaNoche, en: [1]}
+            - {var: P5_Expectoracion_Purulenta, en: [1]}
+            - {var: P6_Falta_Aire_Reposo, en: [1]}
+            - {var: P7_Dolor_Toracico_Reposo, en: [1]}
+    parametros: {solicitud: "Verificar que observaciones registre la gestión (orientación a urgencias o canalización)."}
+    severidad: revision
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 filas 36, 43-45, 50, 54", nota: "si la respuesta de la P8 es SI no es necesaria la observación"}
+      - {doc: G1, ubicacion: "pp.67-69"}
+
+  - id: A_P4_SIN_TOS
+    descripcion: "P4_Sin_Tos = 1 solo si las opciones de tos son NO; si hay tos, P4_Sin_Tos = 2"
+    tipo: exclusion_ninguno
+    variables: [P4_Sin_Tos]
+    parametros: {opciones: *P4, ninguno: P4_Sin_Tos}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 68-75"}
+      - {doc: O1, ubicacion: "MAYOR 60 filas 37-40"}
+    accion: "Verificar en el formato."
+
+  - id: A_TOS_AGRUPADA
+    descripcion: "TOS AGRUPADA COFID.: 1 si alguna opción de tos de P4 es SI; 2 si ninguna"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P4, destino: TOS AGRUPADA COFID.}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 41"}
+      - {doc: D3, ubicacion: "filas 76-77"}
+    accion: "Recalcular."
+
+  - id: A_P5_SALTO
+    descripcion: "Sin expectoración (P5 = 2): salto a P6; opciones de expectoración = 999"
+    tipo: condicional
+    variables: *P5
+    aplica_si: {var: P5_Expectoracion_Ultimo_Año, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 78-92", nota: "salto a la P6 cuando la respuesta es NO"}
+      - {doc: I1, ubicacion: "p.119"}
+    accion: "Verificar el salto."
+
+  - id: A_P5_SI
+    descripcion: "Con expectoración (P5 = 1): opciones de expectoración = 1 o 2"
+    tipo: condicional
+    variables: *P5
+    aplica_si: {var: P5_Expectoracion_Ultimo_Año, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 81-92", nota: "múltiple respuesta cuando la anterior es SI"}
+    accion: "Completar desde el formato."
+
+  - id: A_P6_NINGUNO
+    descripcion: "P6_Ninguno = 1 solo si las opciones de dificultad respiratoria son NO"
+    tipo: exclusion_ninguno
+    variables: [P6_Ninguno]
+    parametros: {opciones: *P6, ninguno: P6_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 51"}
+      - {doc: I1, ubicacion: "p.119", nota: "si la respuesta es ninguna será tomada como única respuesta"}
+    accion: "Verificar en el formato."
+
+  - id: A_DIFICULTAD_AGRUPADA
+    descripcion: "DIFICULTAD RESP. AGRUPADA COFID.: 1 si alguna opción de P6 es SI; 2 si ninguna"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P6, destino: DIFICULTAD RESP. AGRUPADA COFID.}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 52"}
+      - {doc: D3, ubicacion: "filas 103-104"}
+    accion: "Recalcular."
+
+  - id: A_P7_NINGUNO
+    descripcion: "P7_Ninguno = 1 solo si las opciones de dolor torácico son NO"
+    tipo: exclusion_ninguno
+    variables: [P7_Ninguno]
+    parametros: {opciones: *P7, ninguno: P7_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 55"}
+    accion: "Verificar en el formato."
+
+  - id: A_DOLOR_AGRUPADA
+    descripcion: "DOLOR TORACICO AGRUPADA COFID.: 1 si alguna opción de P7 es SI; 2 si ninguna"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P7, destino: DOLOR TORACICO AGRUPADA COFID.}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 56"}
+      - {doc: D3, ubicacion: "filas 111-112"}
+    accion: "Recalcular."
+
+  - id: A_P8_SINTOMAS
+    descripcion: "Consulta médica en el último mes (P8 = 1): al menos un síntoma de P3 a P7"
+    tipo: al_menos_uno
+    variables: *SINT
+    aplica_si: {var: P8_Asistió_Consulta_Medica, en: [1]}
+    parametros: {valor: 1, etiqueta: "P3-P7 (síntomas)"}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.69"}
+      - {doc: I1, ubicacion: "p.120"}
+    accion: "Verificar en el formato."
+
+  - id: A_P9_NINGUNO
+    descripcion: "P9_DX_Ninguno = 1 solo si no hay diagnóstico respiratorio"
+    tipo: exclusion_ninguno
+    variables: [P9_DX_Ninguno]
+    parametros: {opciones: *P9, ninguno: P9_DX_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 63"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANTEC_RESPIRATORIO
+    descripcion: "ALGUN ANTEC RESPIRAT. CODIF.: 1 si algún diagnóstico de P9; 2 si ninguno"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P9, destino: ALGUN ANTEC RESPIRAT. CODIF.}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 64"}
+      - {doc: D3, ubicacion: "filas 128-129"}
+    accion: "Recalcular."
+
+  - id: A_TB_SEGUIMIENTO
+    descripcion: "Tuberculosis pulmonar diagnosticada: verificar seguimiento en observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [P9_DX_TB_Pulmonar, Observaciones]
+    aplica_si: {var: P9_DX_TB_Pulmonar, en: [1]}
+    parametros: {solicitud: "Verificar en observaciones qué seguimiento se ha realizado."}
+    severidad: revision
+    fuentes:
+      - {doc: G1, ubicacion: "p.70"}
+      - {doc: I1, ubicacion: "p.121"}
+
+  - id: A_P10_SALTO
+    descripcion: "No usa oxígeno (P10 = 2): frecuencia, tiempo y periodo = 999"
+    tipo: condicional
+    variables: [P10_Frecuencia_Oxigeno, P10_Tiempo, P10_Periodo]
+    aplica_si: {var: P10_Usa_Oxigeno, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 130-137", nota: "cuando es No se salta a la pregunta 11"}
+      - {doc: O1, ubicacion: "MAYOR 60 filas 66-67"}
+      - {doc: G1, ubicacion: "p.70"}
+    accion: "Verificar el salto."
+
+  - id: A_P10_SI
+    descripcion: "Usa oxígeno (P10 = 1): frecuencia (Ocasionalmente/Permanentemente), tiempo y periodo (años/meses) diligenciados"
+    tipo: condicional
+    variables: [P10_Frecuencia_Oxigeno, P10_Tiempo, P10_Periodo]
+    aplica_si: {var: P10_Usa_Oxigeno, en: [1]}
+    parametros:
+      entonces:
+        todas:
+          - {var: P10_Frecuencia_Oxigeno, en: [Ocasionalmente, Permanentemente, Permanente]}
+          - {var: P10_Tiempo, numero: true, excepto: [999]}
+          - {var: P10_Periodo, en: ["Año(s)", "Mes(es)", Años, Meses]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 132-137"}
+      - {doc: I1, ubicacion: "p.122"}
+    accion: "Completar desde el formato."
+
+  - id: A_P10_MESES
+    descripcion: "Tiempo de uso de oxígeno en meses: entre 1 y 11 (desde 12 meses se registra en años)"
+    tipo: rango
+    variables: [P10_Tiempo]
+    aplica_si: {var: P10_Periodo, en: ["Mes(es)", Meses]}
+    parametros: {min: 1, max: 11, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 68", nota: "si reporta meses debe ser inferior a 12"}
+      - {doc: I1, ubicacion: "p.122", nota: "en el recuadro de meses solo se incluye hasta 11 meses"}
+      - {doc: G1, ubicacion: "p.70"}
+    accion: "Convertir a años según el instructivo."
+
+  - id: A_P11_NINGUNO
+    descripcion: "P11_DX_Ninguno = 1 solo si no hay diagnóstico cardiovascular"
+    tipo: exclusion_ninguno
+    variables: [P11_DX_Ninguno]
+    parametros: {opciones: *P11, ninguno: P11_DX_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 75"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANTEC_CARDIOVASCULAR
+    descripcion: "ALGUN ANTEC CARDIOVASC. CODIF.: 1 si algún diagnóstico de P11; 2 si ninguno"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P11, destino: ALGUN ANTEC CARDIOVASC. CODIF.}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 76"}
+      - {doc: D3, ubicacion: "filas 152-153"}
+    accion: "Recalcular."
+
+  - id: A_P12_CUAL
+    descripcion: "Cirugía de tórax (P12 = 1): cuál diligenciada; si P12 ≠ 1, cuál = 999"
+    tipo: condicional
+    variables: [P12_Cual_Cirugia]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P12_Cirugia_Torax, en: [1]}, {var: P12_Cual_Cirugia, vacio: false}, {var: P12_Cual_Cirugia, no_en: [999]}]}
+          - {todas: [{var: P12_Cirugia_Torax, en: [2, 99]}, {var: P12_Cual_Cirugia, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 78", nota: "999 corresponde a los que no tuvieron cirugía"}
+      - {doc: D3, ubicacion: "filas 154-158"}
+    accion: "Verificar en el formato."
+
+  - id: A_P12_CUAL_REVISION
+    descripcion: "La cirugía registrada debe ser de tórax"
+    tipo: revision
+    estado: revision_humana
+    variables: [P12_Cual_Cirugia]
+    aplica_si: {todas: [{var: P12_Cual_Cirugia, vacio: false}, {var: P12_Cual_Cirugia, no_en: [999]}]}
+    parametros: {solicitud: "Verificar ortografía y que la cirugía tenga ubicación en el tórax; unificar nombres repetidos."}
+    severidad: revision
+    fuentes:
+      - {doc: G1, ubicacion: "p.71"}
+      - {doc: I1, ubicacion: "p.123"}
+
+  # ================================================================= F. Calidad de vida
+  - id: A_P13_SALTO
+    descripcion: "No pasa tiempo al aire libre (P13 = 2): horas y horario = 999"
+    tipo: condicional
+    variables: [P13_Horas_Tiempo_Aire_Libre, P14_Horario]
+    aplica_si: {var: P13_Pasa_Tiempo_Aire_Libre, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 159-169", nota: "pasar a la P15 cuando la respuesta es NO"}
+      - {doc: O1, ubicacion: "MAYOR 60 filas 80-81"}
+      - {doc: G1, ubicacion: "p.71"}
+    accion: "Verificar el salto."
+
+  - id: A_P13_SI
+    descripcion: "Pasa tiempo al aire libre (P13 = 1): horas (número) y horario diligenciados"
+    tipo: condicional
+    variables: [P13_Horas_Tiempo_Aire_Libre, P14_Horario]
+    aplica_si: {var: P13_Pasa_Tiempo_Aire_Libre, en: [1]}
+    parametros:
+      entonces:
+        todas:
+          - {var: P13_Horas_Tiempo_Aire_Libre, numero: true, excepto: [999]}
+          - {var: P14_Horario, en: [Mañana, Tarde, Noche, "Mañana/Tarde", "Tarde/Noche", "Mañana/ tarde", "Tarde/ noche"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 162-169"}
+      - {doc: G1, ubicacion: "pp.71-72"}
+    accion: "Completar desde el formato."
+
+  - id: A_P15_SALTO
+    descripcion: "No realiza actividad física (P15 = 2 o NS/NR): tipo de espacio y frecuencia = 999"
+    tipo: condicional
+    variables: [P16_Tipo_Espacio, P17_Frecuencia]
+    aplica_si: {var: P15_Actividad_Fisica, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.124", nota: "si la respuesta es No o NS/NR pase a la pregunta 18"}
+      - {doc: D3, ubicacion: "filas 170-183"}
+    accion: "Verificar el salto."
+
+  - id: A_P15_SI
+    descripcion: "Realiza actividad física (P15 = 1): tipo de espacio y frecuencia dentro de las opciones"
+    tipo: condicional
+    variables: [P16_Tipo_Espacio, P17_Frecuencia]
+    aplica_si: {var: P15_Actividad_Fisica, en: [1]}
+    parametros:
+      entonces: {todas: [{var: P16_Tipo_Espacio, en: [Abierto, Cerrado]}, {var: P17_Frecuencia, en: [Diario, Semanal, Mensual, Ocasional]}]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 176-183"}
+      - {doc: I1, ubicacion: "pp.124-125"}
+    accion: "Completar desde el formato."
+
+  - id: A_NO_ACTIVIDAD_FISICA_COD
+    descripcion: "NO ACTIVIDAD FISICA CODIF: 1 si no realiza (P15 = 2), 2 si realiza (P15 = 1), 99 NS/NR"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P15_Actividad_Fisica, destino: NO ACTIVIDAD FISICA CODIF, mapa: {1: 2, 2: 1, 99: 99}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 83"}
+      - {doc: D3, ubicacion: "filas 173-175"}
+    accion: "Recalcular."
+
+  # ================================================================= G. Exposición a tóxicos
+  - id: A_FUMA_IMPLICA_FUMO
+    descripcion: "Si fuma actualmente (P18 = 1), también fumó en algún momento (P19 = 1)"
+    tipo: condicional
+    variables: [P19_Fumó_En_Algun_Momento]
+    aplica_si: {var: P18_Fuma, en: [1]}
+    parametros: {entonces_cada: {en: [1]}, explicacion: "fuma actualmente pero P19 no registra que haya fumado"}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "pp.73-74", nota: "verificar concordancia entre P18 y P19"}
+    accion: "Verificar en el formato."
+
+  - id: A_NO_FUMA_SALTO
+    descripcion: "No fuma ni fumó (P18 = 2 y P19 = 2): P20, P21, P22, P23 y su periodo = 999"
+    tipo: condicional
+    variables: [P20_Frecuencia, P21_Cuantos_Cigarrillos, P22_Edad_Inicio_Fumar, P23_Tiempo_Fumar, P23_Periodo_Fumar]
+    aplica_si: {todas: [{var: P18_Fuma, en: [2]}, {var: P19_Fumó_En_Algun_Momento, en: [2]}]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.74", nota: "cuando P18 y P19 son NO, P20 a P23 tendrán 999"}
+      - {doc: D3, ubicacion: "fila 186", nota: "salto a la P24 cuando la respuesta es NO"}
+    accion: "Verificar el salto."
+
+  - id: A_FUMADOR_DATOS
+    descripcion: "Fuma o fumó (P18 = 1 o P19 = 1): frecuencia, cigarrillos, edad de inicio, tiempo y periodo diligenciados"
+    tipo: condicional
+    variables: [P20_Frecuencia, P21_Cuantos_Cigarrillos, P22_Edad_Inicio_Fumar, P23_Tiempo_Fumar, P23_Periodo_Fumar]
+    aplica_si: {alguna: [{var: P18_Fuma, en: [1]}, {var: P19_Fumó_En_Algun_Momento, en: [1]}]}
+    parametros:
+      entonces:
+        todas:
+          - {var: P20_Frecuencia, en: [Diario, Diaria, Semanal]}
+          - {var: P21_Cuantos_Cigarrillos, numero: true, excepto: [999]}
+          - {var: P22_Edad_Inicio_Fumar, numero: true, excepto: [999]}
+          - {var: P23_Tiempo_Fumar, numero: true, excepto: [999]}
+          - {var: P23_Periodo_Fumar, en: ["Año(s)", "Mes(es)", Años, Meses]}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "pp.73-74"}
+      - {doc: D3, ubicacion: "filas 187-202"}
+    accion: "Completar desde el formato."
+
+  - id: A_P23_MESES
+    descripcion: "Tiempo fumando en meses: entre 1 y 11"
+    tipo: rango
+    variables: [P23_Tiempo_Fumar]
+    aplica_si: {var: P23_Periodo_Fumar, en: ["Mes(es)", Meses]}
+    parametros: {min: 1, max: 11, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 93"}
+      - {doc: G1, ubicacion: "p.74"}
+      - {doc: I1, ubicacion: "p.126"}
+    accion: "Convertir a años según el instructivo."
+
+  - id: A_P23_NO_SUPERA_EDAD
+    descripcion: "El tiempo fumando (años) no supera la edad"
+    tipo: comparacion
+    aplica_si: {var: P23_Periodo_Fumar, en: ["Año(s)", Años]}
+    parametros: {izquierda: {var: P23_Tiempo_Fumar}, operador: "<=", derecha: {var: Edad}, especiales: [999], explicacion: "el tiempo fumando supera la edad"}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.126", nota: "no podrá superar el tiempo de vida del adulto"}
+    accion: "Verificar el tiempo fumando."
+
+  - id: A_P22_NO_SUPERA_EDAD
+    descripcion: "La edad de inicio de consumo no supera la edad actual"
+    tipo: comparacion
+    parametros: {izquierda: {var: P22_Edad_Inicio_Fumar}, operador: "<=", derecha: {var: Edad}, especiales: [999], explicacion: "la edad de inicio supera la edad actual"}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.74", nota: "revisar valores extremos"}
+      - {doc: D3, ubicacion: "filas 197-198"}
+    accion: "Verificar la edad de inicio."
+
+  - id: A_EDAD_INICIO_MAS_TIEMPO
+    descripcion: "Fumador actual (P18 = 1): edad de inicio + tiempo fumando (años) = edad actual"
+    tipo: funcion
+    variables: [P22_Edad_Inicio_Fumar, P23_Tiempo_Fumar]
+    aplica_si: {var: P18_Fuma, en: [1]}
+    parametros: {nombre: suma_edad_tabaco, args: {edad: Edad, inicio: P22_Edad_Inicio_Fumar, tiempo: P23_Tiempo_Fumar, periodo: P23_Periodo_Fumar}}
+    severidad: alerta
+    especiales: "Comparación exacta en años cumplidos, como lo indican las fuentes; no se aplica tolerancia."
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 86", nota: "la suma de P22 y P23 debe dar la edad actual"}
+      - {doc: G1, ubicacion: "pp.73-74"}
+    accion: "Verificar edad de inicio y tiempo fumando."
+
+  - id: A_NIVEL_CONSUMO
+    version: 2
+    descripcion: "NIVEL CONSUMO TABACO TOTAL para fumadores actuales: Leve 1-5, Moderado 6-15, Severo 16 o más (diccionario; decisión DP-06)"
+    tipo: recodificacion_intervalos
+    etapa: recodificacion
+    aplica_si: {var: P18_Fuma, en: [1]}
+    parametros:
+      origen: P21_Cuantos_Cigarrillos
+      destino: NIVEL CONSUMO TABACO TOTAL
+      intervalos: [{min: 1, max: 5, valor: Leve}, {min: 6, max: 15, valor: Moderado}, {min: 16, valor: Severo}]
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 192-197", nota: "se realiza con las personas que refirieron que fuman en el presente"}
+      - {doc: O1, ubicacion: "MAYOR 60 fila 90"}
+    accion: "Recalcular a partir de P21."
+
+  - id: A_TABAQUISMO_PESADO
+    version: 3
+    descripcion: "TABAQUISMO PESADO: para quien fuma (P18 = 1) o fumó (P19 = 1), 1 si cigarrillos diarios × años fumando / 20 ≥ 10 y 2 si no; quien no fuma ni fumó = 2. Semanal ÷ 7; meses ÷ 12"
+    tipo: funcion
+    etapa: recodificacion
+    variables: [TABAQUISMO PESADO]
+    parametros:
+      nombre: tabaquismo_pesado
+      args: {fuma: P18_Fuma, fumo: P19_Fumó_En_Algun_Momento, cigarrillos: P21_Cuantos_Cigarrillos, frecuencia: P20_Frecuencia, tiempo: P23_Tiempo_Fumar, periodo: P23_Periodo_Fumar, destino: TABAQUISMO PESADO}
+      opciones: {umbral: 10, divisor: 20}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 203-205", nota: "fórmula paquetes/año; pesado cuando el resultado es 10 o más"}
+      - {doc: O1, ubicacion: "MAYOR 60 fila 94"}
+      - {doc: PT, ubicacion: "pasos 2 a 8", nota: "frecuencia semanal ÷ 7; meses ÷ 12; P18 = 1 y P19 = 1; 10 o más = tabaquismo pesado"}
+    accion: "Recalcular a partir de P20, P21 y P23."
+
+  - id: A_P24_SALTO
+    descripcion: "Sin contacto con fumadores en el pasado (P24 = 2 o NS/NR): tiempo de contacto = 999"
+    tipo: condicional
+    variables: [P24_Tiempo_Contacto]
+    aplica_si: {var: P24_Contacto_Fumadores_Pasado, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 96", nota: "999 los que no tuvieron contacto"}
+      - {doc: G1, ubicacion: "p.74"}
+    accion: "Verificar en el formato."
+
+  - id: A_P24_SI
+    descripcion: "Con contacto con fumadores en el pasado (P24 = 1): tiempo en años diligenciado"
+    tipo: condicional
+    variables: [P24_Tiempo_Contacto]
+    aplica_si: {var: P24_Contacto_Fumadores_Pasado, en: [1]}
+    parametros: {entonces_cada: {numero: true, excepto: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 207-208"}
+      - {doc: I1, ubicacion: "p.126"}
+    accion: "Completar el tiempo de contacto."
+
+  - id: A_DISPOSITIVOS_FUMA
+    descripcion: "Uso de dispositivos SEAN/SSSN (P25_1 = 1): P18 también debe ser 1"
+    tipo: condicional
+    variables: [P18_Fuma]
+    aplica_si: {var: P25_1_Dispositivos_SEAN_SSSN, en: [1]}
+    parametros: {entonces_cada: {en: [1]}, explicacion: "registra uso de dispositivos pero P18 no es SI"}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 98"}
+    accion: "Verificar en el formato."
+
+  - id: A_P26_DOMINIO
+    descripcion: "Ocupación principal dentro de las opciones del formato"
+    tipo: dominio
+    variables: [P26_Ocupacion_Principal]
+    parametros: {valores: ["Administrativo u oficina", Bombero, Bomberos, "Trabajadores de salud", "Trabajadores en educación", "Trabajadores de educación",
+                           "Vendedor ambulante", "Ventas y servicios", "Extracción primaria - extractiva", "Extracción primaria y extractiva", "Extracción primaria",
+                           "Operación de equipos, transporte y oficios", "Procesamiento, fabricación y ensamble",
+                           "Servicios generales de aseo y reciclaje", "Servicios de aseo y reciclaje", "Servicios religiosos y esotéricos",
+                           "Expendedores de combustibles", "Defensa civil", "Defensa Civil", "Fuerza pública", Hogar]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 211-225"}
+      - {doc: I1, ubicacion: "pp.128-129"}
+    accion: "Corregir según el formato."
+
+  - id: A_VENDEDOR_AMBULANTE
+    descripcion: "Vendedor ambulante: exposición a tóxicos (P27 = 1) con al menos una exposición marcada"
+    tipo: condicional
+    variables: [P27_Exposicion_Toxicos]
+    aplica_si: {var: P26_Ocupacion_Principal, en: ["Vendedor ambulante"]}
+    parametros:
+      entonces:
+        todas:
+          - {var: P27_Exposicion_Toxicos, en: [1]}
+          - alguna: [{var: P27_Polvo, en: [1]}, {var: P27_Gases, en: [1]}, {var: P27_Humo, en: [1]}, {var: P27_Vapores_Tóxicos, en: [1]}]
+      explicacion: "vendedor ambulante sin exposición registrada; verificar si la exposición fue en zona rural"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 99"}
+      - {doc: D3, ubicacion: "fila 212"}
+      - {doc: G1, ubicacion: "p.75", nota: "se asume expuesto, a menos que refiera exposición en zona rural"}
+    accion: "Verificar en el formato."
+
+  - id: A_P27_SALTO
+    descripcion: "Sin exposición a tóxicos (P27 = 2 o NS/NR): salto a P30; exposiciones, espacio y tiempo = 999"
+    tipo: condicional
+    variables: [P27_Polvo, P27_Gases, P27_Humo, P27_Vapores_Tóxicos, P28_Espacio_Exposicion, ESPACIO EXPOSI. CODIF., P29_Tiempo_Exposicion, P29_Periodo_Exposicion]
+    aplica_si: {var: P27_Exposicion_Toxicos, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 226-258", nota: "salto a la P30 cuando la respuesta es NO"}
+      - {doc: I1, ubicacion: "p.130", nota: "si la respuesta es No o NS/NR pase a la pregunta 30"}
+      - {doc: O1, ubicacion: "MAYOR 60 filas 102-109"}
+    accion: "Verificar el salto."
+
+  - id: A_P27_SI
+    descripcion: "Con exposición a tóxicos (P27 = 1): al menos una exposición marcada"
+    tipo: al_menos_uno
+    variables: *P27
+    aplica_si: {var: P27_Exposicion_Toxicos, en: [1]}
+    parametros: {valor: 1, etiqueta: "P27 tipo de exposición"}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.130", nota: "si la respuesta es positiva indicar cuáles"}
+    accion: "Completar el tipo de exposición."
+
+  - id: A_P27_SI_DATOS
+    descripcion: "Con exposición a tóxicos (P27 = 1): espacio, tiempo y periodo diligenciados"
+    tipo: condicional
+    variables: [P28_Espacio_Exposicion, P29_Tiempo_Exposicion, P29_Periodo_Exposicion]
+    aplica_si: {var: P27_Exposicion_Toxicos, en: [1]}
+    parametros:
+      entonces:
+        todas:
+          - {var: P28_Espacio_Exposicion, en: [Abierto, Cerrado]}
+          - {var: P29_Tiempo_Exposicion, numero: true, excepto: [999, 9999]}
+          - {var: P29_Periodo_Exposicion, en: ["Año(s)", "Mes(es)", Años, Meses]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 248-258"}
+      - {doc: G1, ubicacion: "pp.76-77"}
+    accion: "Completar desde el formato."
+
+  - id: A_P29_MESES
+    descripcion: "Tiempo de exposición en meses: entre 1 y 11"
+    tipo: rango
+    variables: [P29_Tiempo_Exposicion]
+    aplica_si: {var: P29_Periodo_Exposicion, en: ["Mes(es)", Meses]}
+    parametros: {min: 1, max: 11, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 109"}
+      - {doc: G1, ubicacion: "p.76"}
+    accion: "Convertir a años según el instructivo."
+
+  - id: A_ESPACIO_EXPOSICION_COD
+    descripcion: "ESPACIO EXPOSI. CODIF.: cerrado = 1, abierto = 2, 999 se conserva"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P28_Espacio_Exposicion, destino: ESPACIO EXPOSI. CODIF., mapa: {Cerrado: 1, Abierto: 2, 999: 999}}
+    severidad: error
+    especiales: "D3 indica interpretar 999 como 2 para el análisis; esa transformación es analítica y no se aplica aquí."
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 107"}
+      - {doc: D3, ubicacion: "filas 251-253"}
+    accion: "Recalcular."
+
+  - id: A_HISTORICAS_SIN_DATO
+    descripcion: "Variables del sistema anterior (P27_Cual_Otra, P32_Combustible, P32_Años): se esperan como SIN DATO"
+    tipo: dominio
+    variables: [P27_Cual_Otra, P32_Combustible, P32_Años]
+    parametros: {valores: ["SIN DATO", 999]}
+    severidad: alerta
+    especiales: "No se exige su diligenciamiento; solo se alerta si aparecen datos en campos retirados."
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 filas 101, 113-114", nota: "para eliminar del SIVIGILA; SIVIGILA antiguo"}
+      - {doc: D3, ubicacion: "filas 229-231, 268-272", nota: "desde 2020 SIN DATO"}
+    accion: "Confirmar con el equipo si el campo debe permanecer en la base."
+
+  - id: A_P30_DOMINIO
+    descripcion: "Ubicación de la cocina dentro de las opciones"
+    tipo: dominio
+    variables: [P30_Ubicacion_Cocina]
+    parametros: {valores: ["En espacio dedicado solo para cocinar", "Espacio usado también para dormir", "En espacio usado también para dormir",
+                           "En sala comedor", "En la sala comedor", "En un patio, corredor, enramada al aire libre", "En un patio, Corredor o Enramada al aire libre",
+                           "No tenía cocina", "No hay cocina"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 259-263"}
+      - {doc: G1, ubicacion: "p.77"}
+    accion: "Corregir según el formato."
+
+  - id: A_UBICACION_COCINA_COD
+    descripcion: "UBICACIÓN COCINA CODIF.: 1 sala comedor o espacio para dormir; 2 las demás opciones"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P30_Ubicacion_Cocina
+      destino: UBICACIÓN COCINA CODIF.
+      mapa: {"Espacio usado también para dormir": 1, "En espacio usado también para dormir": 1, "En sala comedor": 1, "En la sala comedor": 1,
+             "En espacio dedicado solo para cocinar": 2, "En un patio, corredor, enramada al aire libre": 2, "En un patio, Corredor o Enramada al aire libre": 2,
+             "No tenía cocina": 2, "No hay cocina": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 111"}
+      - {doc: D3, ubicacion: "filas 264-265"}
+    accion: "Recalcular."
+
+  - id: A_SIN_COCINA_SALTO
+    descripcion: "No tenía cocina: salto a P33; P31 y combustibles = 999"
+    tipo: condicional
+    variables: [P31_Cocicó_En_Su_Vida]
+    aplica_si: {var: P30_Ubicacion_Cocina, en: ["No tenía cocina", "No hay cocina"]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.131", nota: "si la vivienda no cuenta con cocina pase a la pregunta 33"}
+    accion: "Verificar el salto."
+
+  - id: A_P31_SALTO
+    descripcion: "No cocinó en su vida (P31 = 2): salto a P33; combustibles y años = 999"
+    tipo: condicional
+    variables: [P32_Combustible_Leña, P32_Años_Leña, P32_Combustible_Carbón, P32_Años_Carbón, P32_Combustible_Excrementos,
+                P32_Años_Excrementos, P32_Combustible_Envoltura, P32_Años_Envoltura, P32_Combustible_Cocinol, P32_Años_Cocinol,
+                P32_Combustible_Alcohol, P32_Años_Alcohol]
+    aplica_si: {var: P31_Cocicó_En_Su_Vida, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 266-267", nota: "cuando la respuesta es NO se hace salto a la P33"}
+      - {doc: O1, ubicacion: "MAYOR 60 filas 115-126", nota: "999 los que no cocinaron"}
+      - {doc: G1, ubicacion: "p.77"}
+    accion: "Verificar el salto."
+
+  - id: A_P31_SI_COMBUSTIBLE
+    descripcion: "Cocinó en su vida (P31 = 1): al menos un combustible de P32 registrado"
+    tipo: al_menos_uno
+    variables: *COMB
+    aplica_si: {var: P31_Cocicó_En_Su_Vida, en: [1]}
+    parametros: {valor: 1, etiqueta: "P32 combustibles"}
+    severidad: alerta
+    especiales: "La pregunta 31 indaga solo combustibles de biomasa; quien cocinó con gas o electricidad puede no marcar ninguno."
+    fuentes:
+      - {doc: G1, ubicacion: "p.77", nota: "si la respuesta es SI verificar que se encuentre registrado alguno de los combustibles de la P32"}
+      - {doc: I1, ubicacion: "p.131"}
+    accion: "Verificar en el formato."
+
+  - id: A_P31_SI_RESPONDE
+    descripcion: "Cocinó en su vida (P31 = 1): cada combustible de P32 se responde (1, 2 o 99)"
+    tipo: condicional
+    variables: *COMB
+    aplica_si: {var: P31_Cocicó_En_Su_Vida, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 274-278"}
+    accion: "Completar desde el formato."
+
+  - id: A_ANIOS_LENA
+    descripcion: "Años de uso de leña: número si se usó (= 1); 999 si no"
+    tipo: condicional
+    variables: [P32_Años_Leña]
+    parametros: &ANIOS_REGLA
+      entonces:
+        alguna:
+          - {todas: [{var: P32_Combustible_Leña, en: [1]}, {var: P32_Años_Leña, numero: true, excepto: [999]}]}
+          - {todas: [{var: P32_Combustible_Leña, en: [2, 99, 999]}, {var: P32_Años_Leña, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 116", nota: "número de años y opción 999"}
+      - {doc: G1, ubicacion: "p.77"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANIOS_CARBON
+    descripcion: "Años de uso de carbón: número si se usó; 999 si no"
+    tipo: condicional
+    variables: [P32_Años_Carbón]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P32_Combustible_Carbón, en: [1]}, {var: P32_Años_Carbón, numero: true, excepto: [999]}]}
+          - {todas: [{var: P32_Combustible_Carbón, en: [2, 99, 999]}, {var: P32_Años_Carbón, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 118"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANIOS_EXCREMENTOS
+    descripcion: "Años de uso de excrementos: número si se usó; 999 si no"
+    tipo: condicional
+    variables: [P32_Años_Excrementos]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P32_Combustible_Excrementos, en: [1]}, {var: P32_Años_Excrementos, numero: true, excepto: [999]}]}
+          - {todas: [{var: P32_Combustible_Excrementos, en: [2, 99, 999]}, {var: P32_Años_Excrementos, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 120"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANIOS_ENVOLTURA
+    descripcion: "Años de uso de envoltura vegetal: número si se usó; 999 si no"
+    tipo: condicional
+    variables: [P32_Años_Envoltura]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P32_Combustible_Envoltura, en: [1]}, {var: P32_Años_Envoltura, numero: true, excepto: [999]}]}
+          - {todas: [{var: P32_Combustible_Envoltura, en: [2, 99, 999]}, {var: P32_Años_Envoltura, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 122"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANIOS_COCINOL
+    descripcion: "Años de uso de cocinol: número si se usó; 999 si no"
+    tipo: condicional
+    variables: [P32_Años_Cocinol]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P32_Combustible_Cocinol, en: [1]}, {var: P32_Años_Cocinol, numero: true, excepto: [999]}]}
+          - {todas: [{var: P32_Combustible_Cocinol, en: [2, 99, 999]}, {var: P32_Años_Cocinol, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 124"}
+    accion: "Verificar en el formato."
+
+  - id: A_ANIOS_ALCOHOL
+    descripcion: "Años de uso de alcohol: número si se usó; 999 si no"
+    tipo: condicional
+    variables: [P32_Años_Alcohol]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P32_Combustible_Alcohol, en: [1]}, {var: P32_Años_Alcohol, numero: true, excepto: [999]}]}
+          - {todas: [{var: P32_Combustible_Alcohol, en: [2, 99, 999]}, {var: P32_Años_Alcohol, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 126"}
+    accion: "Verificar en el formato."
+
+  # ================================================================= H. Condiciones de la vivienda
+  - id: A_P33_DOMINIO
+    descripcion: "Tipo de vivienda dentro de las opciones"
+    tipo: dominio
+    variables: [P33_Tipo_Vivienda]
+    parametros: {valores: ["Casa (Independiente)", "Casa (Propiedad Horizontal)", "Apartamento (Propiedad horizontal)", "Apartamento (Independiente)",
+                           "Habitación", "En una edificación no destinada para habitar", "Edificio en construcción", "Inquilinato"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 282-289"}
+    accion: "Corregir según el formato."
+
+  - id: A_TIPO_VIVIENDA_COD
+    descripcion: "TIPO VIVIENDA CODIF.: 1 habitación, inquilinato, edificación no destinada o en construcción; 2 casas y apartamentos"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P33_Tipo_Vivienda
+      destino: TIPO VIVIENDA CODIF.
+      mapa: {"Habitación": 1, "Inquilinato": 1, "En una edificación no destinada para habitar": 1, "Edificio en construcción": 1,
+             "Casa (Independiente)": 2, "Casa (Propiedad Horizontal)": 2, "Apartamento (Propiedad horizontal)": 2, "Apartamento (Independiente)": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 128"}
+      - {doc: D3, ubicacion: "filas 290-291"}
+    accion: "Recalcular."
+
+  - id: A_P34_DOMINIO
+    descripcion: "Zona de la vivienda: Zona Urbana o Zona Rural"
+    tipo: dominio
+    variables: [P34_Zona_Vivienda]
+    parametros: {valores: ["Zona Urbana", "Zona Rural"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 292-293"}
+    accion: "Corregir según el formato."
+
+  - id: A_ZONA_URBANA_COD
+    descripcion: "ZONA URBANA CODIF.: urbana = 1, rural = 2"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P34_Zona_Vivienda, destino: ZONA URBANA CODIF., mapa: {"Zona Urbana": 1, "Zona Rural": 2}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 130"}
+      - {doc: D3, ubicacion: "filas 294-295"}
+    accion: "Recalcular."
+
+  - id: A_P35_DOMINIO
+    descripcion: "Material de paredes dentro de las dos categorías"
+    tipo: dominio
+    variables: [P35_Material_Paredes]
+    parametros: {valores: ["Ladrillo/Madera/Bahareque/Piedra/Metal/Cemento sin pintar", "Pared resanada y pintada/Prefabricada/Drywall/Baldosin", "Pared resanada y pintada/Prefabricada/Drywall/Baldosín"]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 296-298"}
+    accion: "Corregir según el formato."
+
+  - id: A_PAREDES_COD
+    descripcion: "PAREDES CODIF.: 1 con riesgo; 2 sin riesgo"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P35_Material_Paredes
+      destino: PAREDES CODIF.
+      mapa: {"Ladrillo/Madera/Bahareque/Piedra/Metal/Cemento sin pintar": 1, "Pared resanada y pintada/Prefabricada/Drywall/Baldosin": 2, "Pared resanada y pintada/Prefabricada/Drywall/Baldosín": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 132"}
+      - {doc: D3, ubicacion: "filas 299-300"}
+    accion: "Recalcular."
+
+  - id: A_P36_DOMINIO
+    descripcion: "Material de pisos dentro de las dos categorías"
+    tipo: dominio
+    variables: [P36_Material_Pisos]
+    parametros: {valores: ["Alfombra/Tierra/Caucho corrugado/Cemento/Ladrillo/Madera", "Baldosín/Mineral/Caucho liso", "Baldosín/Mineral/Caucho liso."]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 301-303"}
+    accion: "Corregir según el formato."
+
+  - id: A_PISOS_COD
+    descripcion: "PISOS CODIF.: 1 con riesgo; 2 sin riesgo"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P36_Material_Pisos
+      destino: PISOS CODIF.
+      mapa: {"Alfombra/Tierra/Caucho corrugado/Cemento/Ladrillo/Madera": 1, "Baldosín/Mineral/Caucho liso": 2, "Baldosín/Mineral/Caucho liso.": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 134"}
+      - {doc: D3, ubicacion: "filas 304-305"}
+    accion: "Recalcular."
+
+  - id: A_P37_CUAL
+    descripcion: "Negocio en la vivienda (P37 = 1): tipo diligenciado; si P37 = 2, tipo = 999"
+    tipo: condicional
+    variables: [P37_Cual_Negocio]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P37_Funciono_Fabrica_Negocio, en: [1]}, {var: P37_Cual_Negocio, vacio: false}, {var: P37_Cual_Negocio, no_en: [999]}]}
+          - {todas: [{var: P37_Funciono_Fabrica_Negocio, en: [2]}, {var: P37_Cual_Negocio, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 306-309"}
+    accion: "Verificar en el formato."
+
+  # ================================================================= I. Extradomiciliario
+  - id: A_P38_DOMINIO
+    descripcion: "Tipo de tráfico: Pesado o Liviano"
+    tipo: dominio
+    variables: [P38_Trafico_Cerca]
+    parametros: {valores: ["Pesado (Circulación de camiones, buses, busetas)", "Liviano (Únicamente vehículos particulares, taxis y motos)", Pesado, Liviano]}
+    severidad: error
+    fuentes:
+      - {doc: D3, ubicacion: "filas 310-312"}
+    accion: "Corregir según el formato."
+
+  - id: A_TRAFICO_COD
+    descripcion: "TRAFICO CODIF.: 1 pesado; 2 liviano"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P38_Trafico_Cerca
+      destino: TRAFICO CODIF.
+      mapa: {"Pesado (Circulación de camiones, buses, busetas)": 1, "Liviano (Únicamente vehículos particulares, taxis y motos)": 2, Pesado: 1, Liviano: 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 138"}
+      - {doc: D3, ubicacion: "filas 313-314"}
+    accion: "Recalcular."
+
+  - id: A_P40_NINGUNO
+    descripcion: "P40_Ninguno = 1 solo si ninguna fuente fija está marcada"
+    tipo: exclusion_ninguno
+    variables: [P40_Ninguno]
+    parametros: {opciones: *P40, ninguno: P40_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 156"}
+      - {doc: D3, ubicacion: "filas 317-333"}
+    accion: "Verificar en el formato."
+
+  - id: A_FUENTES_FIJAS
+    descripcion: "FUENTES FIJAS: 1 si al menos una opción de P40 = 1; 2 si ninguna"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P40, destino: FUENTES FIJAS}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "MAYOR 60 fila 157"}
+      - {doc: D3, ubicacion: "filas 334-335"}
+    accion: "Recalcular."
+
+  - id: A_ADULTO_RIESGO
+    descripcion: "Adulto con riesgo posible = 1 si sibilancias último mes, falta de aire en reposo y dolor torácico en reposo son afirmativas; en otro caso 2"
+    tipo: condicional
+    etapa: recodificacion
+    variables: [Adulto_Con_Riesgo_Posible]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P3_Sibilancia_Ultimo_Mes, en: [1]}, {var: P6_Falta_Aire_Reposo, en: [1]}, {var: P7_Dolor_Toracico_Reposo, en: [1]}, {var: Adulto_Con_Riesgo_Posible, en: [1]}]}
+          - {todas: [{alguna: [{var: P3_Sibilancia_Ultimo_Mes, no_en: [1]}, {var: P6_Falta_Aire_Reposo, no_en: [1]}, {var: P7_Dolor_Toracico_Reposo, no_en: [1]}]}, {var: Adulto_Con_Riesgo_Posible, en: [2]}]}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.138"}
+      - {doc: D3, ubicacion: "filas 336-337"}
+      - {doc: O1, ubicacion: "MAYOR 60 fila 158"}
+    accion: "Recalcular."
+
+  - id: A_CANALIZACION_CRITERIOS
+    descripcion: "Criterio de canalización (sibilancias último mes, expectoración con sangre, dificultad respiratoria en reposo o dolor torácico) sin canalización: verificar observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [Canalización, Observaciones]
+    aplica_si:
+      todas:
+        - {var: Canalización, en: [2]}
+        - alguna:
+            - {var: P3_Sibilancia_Ultimo_Mes, en: [1]}
+            - {var: P5_Expectoracion_Sangre, en: [1]}
+            - {var: P6_Falta_Aire_Reposo, en: [1]}
+            - {var: DOLOR TORACICO AGRUPADA COFID., en: [1]}
+    parametros: {solicitud: "Verificar en observaciones el seguimiento médico o la razón por la que no se canalizó."}
+    severidad: revision
+    fuentes:
+      - {doc: I1, ubicacion: "p.139", nota: "criterios para el proceso de canalización en personas de 60 y más años"}
+
+  - id: A_CANALIZACION_MOTIVO
+    descripcion: "Canalización = 1: verificar el motivo en observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [Canalización, Observaciones]
+    aplica_si: {var: Canalización, en: [1]}
+    parametros: {solicitud: "Verificar en observaciones por qué se realizó la canalización."}
+    severidad: revision
+    fuentes:
+      - {doc: G1, ubicacion: "p.81"}
+
+  - id: A_NSNR_REVISION
+    version: 2
+    descripcion: "Respuesta 99 (NS/NR o pregunta sin contestar): verificar en observaciones que fue la respuesta del encuestado"
+    tipo: revision
+    variables: [P8_Asistió_Consulta_Medica, P12_Cirugia_Torax, P13_Pasa_Tiempo_Aire_Libre, P15_Actividad_Fisica, P18_Fuma,
+                P19_Fumó_En_Algun_Momento, P24_Contacto_Fumadores_Pasado, P25_Contacto_Fumadores_Presente,
+                P25_1_Dispositivos_SEAN_SSSN, P27_Exposicion_Toxicos, P27_Polvo, P27_Gases, P27_Humo, P27_Vapores_Tóxicos,
+                P32_Combustible_Leña, P32_Combustible_Carbón, P32_Combustible_Excrementos, P32_Combustible_Envoltura,
+                P32_Combustible_Cocinol, P32_Combustible_Alcohol]
+    parametros: {valores: [99], solicitud: "Verificar que observaciones indique que NS/NR corresponde a lo reportado."}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: 99 como alerta (SOL-010)"}
+      - {doc: G1, ubicacion: "pp.69-75"}

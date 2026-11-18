@@ -1,0 +1,1964 @@
+# Reglas – Personas de 5 a 14 años (VEA-8 / AR03). Base B2; diccionario D2; observaciones O1 hoja 5 A 14.
+poblaciones: ["5a14"]
+
+listas:
+  sintomas: &SINT [P5_Tos_Seca, P6_Tos_Ejercicio_Leve, P7_Tos_Reir_Llorar, P8_Depierta_Tos, P9_Sintomas_Sin_Gripa,
+                   P10_Sintomas_Ultimo_Año, P11_Mocos_Nariz_Tapada_Ultimo_Año, P13_Tos_Flemas_Con_Resfrio,
+                   P14_TosFlemas_Sin_Resfrio, P15_Tos_Flemas_Dias, P16_Sibilancia_Alguna_Vez, P17_Sibilancia_Ultimo_Año,
+                   P18_Sibilancia_Gripa_Ult_Año, P20_Desp_Silbidos_Mas_De_Una_Vez_Semana, P21_Sibilancia_Impide_Habla,
+                   P22_Sibilancia_Act_Fisica]
+  meses: &MESES [P12_Enero, P12_Febrero, P12_Marzo, P12_Abril, P12_Mayo, P12_Junio, P12_Julio, P12_Agosto, P12_Septiembre,
+                 P12_Octubre, P12_Noviembre, P12_Diciembre]
+  p34: &P34 [P34_Clima, P34_Flores, P34_Emociones, P34_Humo, P34_Animales, P34_Ropa_Lana, P34_Presencia_Gripa, P34_Comida, P34_Jabon, P34_Otro]
+  p39: &P39 [P39_Retirar_Animales, P39_Retirar_Peluches, P39_Disminuir_Consumo_Tabaco, P39_Cambio_Vivienda, P39_Limpieza_Desinfección,
+             P39_Cambio_Almohadas, P39_Cambio_Sabanas, P39_Cambios_Estructurales]
+  p83: &P83 [P83_Agricultura_Ganaderia, P83_Explotacion_Minas, P83_Venta_Material_Construccion, P83_Reparacion_Vehiculos,
+             P83_Restaurantes_Chimenea, P83_Parqueadero_Buses, P83_Bares_Cantinas, P83_Industria_Manufacturera, P83_Incineradores,
+             P83_Quemas_Cielo_Abierto, P83_Zona_Reciclaje, P83_Obras_Construccion, P83_Establecimientos_Culto, P83_Ornamentación,
+             P83_Canales_Agua, P83_Lavandería]
+  mascotas_dep: &MASC [P75_Tiene_Perros, P75_Cuantos_Perros, P75_Tiene_Gatos, P75_Cuantos_Gatos, P75_Tiene_Aves, P75_Cuantas_Aves,
+                       P75_Tiene_Otros, P75_Cuantos_Otros, P75_Cuales_Otros, P76_Donde_Duermen_Mascotas, DUERMEN MASCOTAS CODIF.,
+                       P77_Niño_Convive_Mascotas]
+  diligenciado_no_999: &DIL {todas: [{vacio: false}, {no_en: [999]}]}
+  localidades: &LOC [Usaquén, Chapinero, Santa Fe, San Cristóbal, Usme, Tunjuelito, Bosa, Kennedy, Fontibón, Engativá, Suba,
+                     Barrios Unidos, Teusaquillo, Los Mártires, Mártires, Antonio Nariño, Puente Aranda, La Candelaria, Candelaria,
+                     Rafael Uribe Uribe, Rafael Uribe, Ciudad Bolívar, Sumapaz]
+
+reglas:
+  # ================================================================= A. Información general
+  - id: E_ACTA_FORMATO
+    descripcion: "Número de acta: AR + 03 (encuesta 5 a 14 años) + sigla de subred + 6 dígitos"
+    tipo: patron
+    variables: [No_Acta]
+    parametros: {patron: "AR03[NSEC]\\d{6}", descripcion_esperado: "AR03 + N/S/E/C + 6 dígitos"}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "pp.143-144", nota: "AR03 = Encuesta de prevalencia niños de 5 a 14 años"}
+      - {doc: G1, ubicacion: "p.29"}
+    accion: "Corregir el número de acta."
+
+  - id: E_TIPODOC_DOMINIO
+    descripcion: "Tipo de documento del menor dentro de las opciones documentadas"
+    tipo: dominio
+    variables: [Tipo_Documento]
+    parametros: {valores: [NUIP, "Registro Civil", "Tarjeta de Identidad", PEP, PPT, "Permiso por Proteccion Temporal", "Permiso por Protección Temporal",
+                           "Documento de Extranjería", "Cedula Extranjería", "Cédula de Extranjería"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 9-16"}
+      - {doc: I1, ubicacion: "p.59"}
+    accion: "Verificar el tipo de documento."
+
+  - id: E_ID_NUMERICO
+    descripcion: "Si el documento es NUIP, registro civil o tarjeta de identidad, la identificación contiene solo dígitos"
+    tipo: patron
+    variables: [Identificación]
+    aplica_si: {var: Tipo_Documento, en: [NUIP, "Registro Civil", "Tarjeta de Identidad"]}
+    parametros: {patron: "\\d+", descripcion_esperado: "solo dígitos"}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.30", nota: "valor numérico, sin caracteres adicionales"}
+      - {doc: I1, ubicacion: "p.59"}
+    accion: "Verificar el número de documento."
+
+  - id: E_ID_DE_SIGLA
+    descripcion: "Documento de extranjería: la identificación inicia con la sigla en mayúscula seguida del número"
+    tipo: patron
+    variables: [Identificación]
+    aplica_si: {var: Tipo_Documento, en: ["Documento de Extranjería", PEP, PPT, "Permiso por Proteccion Temporal", "Permiso por Protección Temporal"]}
+    parametros: {patron: "[A-Z]{2,4}\\s?\\d+", descripcion_esperado: "sigla en mayúsculas + número"}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.59"}
+      - {doc: O1, ubicacion: "5 A 14 fila 10"}
+      - {doc: D2, ubicacion: "fila 17"}
+    accion: "Completar la sigla del documento."
+
+  - id: E_TI_DESDE_8
+    descripcion: "Niño de 8 años o más con documento colombiano: el tipo de documento es Tarjeta de Identidad"
+    tipo: condicional
+    estado: provisional
+    variables: [Tipo_Documento]
+    aplica_si: {todas: [{var: Edad, cmp: ">=", valor: 8}, {var: Tipo_Documento, no_en: ["Documento de Extranjería", PEP, PPT, "Permiso por Proteccion Temporal", "Permiso por Protección Temporal"]}]}
+    parametros: {entonces_cada: {en: ["Tarjeta de Identidad"]}, esperado: "Tarjeta de Identidad", explicacion: "tiene 8 años o más y no registra tarjeta de identidad: revisar la observación"}
+    severidad: alerta
+    especiales: "Provisional: el equipo indicó 8 años; la tarjeta de identidad se expide desde los 7. No aplica a documentos de extranjería."
+    fuentes:
+      - {doc: RV, ubicacion: "5 a 14: tarjeta de identidad desde los 8 años (SOL-005)"}
+    accion: "Verificar el tipo de documento con el soporte y la observación."
+  - id: E_SEXO_DOMINIO
+    descripcion: "Sexo: Hombre, Mujer o Intersexual"
+    tipo: dominio
+    variables: [Sexo]
+    parametros: {valores: [Hombre, Mujer, Intersexual]}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.60"}
+      - {doc: D2, ubicacion: "filas 18-19"}
+    accion: "Corregir según el formato. No se infiere el sexo a partir del nombre."
+
+  - id: E_SEXO_COD
+    descripcion: "Sexo- Cod: Hombre = 1, Mujer = 2"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: Sexo
+      destino: "Sexo- Cod"
+      mapa: {Hombre: 1, Mujer: 2}
+      conflicto: {Intersexual: "la codificación de Intersexual en Sexo- Cod no está documentada"}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 12"}
+      - {doc: D2, ubicacion: "filas 20-21"}
+    accion: "Recalcular a partir de la respuesta original."
+
+  - id: E_EDAD_CALCULADA
+    descripcion: "Edad en años cumplidos a la fecha de encuesta coincide con Edad"
+    tipo: funcion
+    variables: [Edad]
+    parametros: {nombre: edad_calculada, args: {nacimiento: Fecha_Nacimiento, encuesta: Fecha_Encuesta, edad: Edad}, opciones: {unidad: anios}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.60", nota: "calculada por SIVIGILA con la fecha de nacimiento y la fecha de encuesta"}
+      - {doc: O1, ubicacion: "5 A 14 fila 14"}
+    accion: "Verificar fechas y edad contra el soporte."
+
+  - id: E_EDAD_POBLACION
+    descripcion: "Criterio de inclusión: entre 5 y 14 años a la fecha de encuesta"
+    tipo: funcion
+    variables: [Fecha_Nacimiento]
+    parametros: {nombre: edad_poblacion, args: {nacimiento: Fecha_Nacimiento, encuesta: Fecha_Encuesta, etiqueta: "Edad (calculada)"}, opciones: {unidad: anios, min: 5, max: 14}}
+    severidad: bloqueante
+    fuentes:
+      - {doc: I1, ubicacion: "p.60", nota: "criterio de inclusión de edad: entre 5 y 14 años"}
+      - {doc: D2, ubicacion: "fila 23"}
+    accion: "Verificar la fecha de nacimiento; si es correcta, el registro no pertenece a esta base."
+
+  - id: E_GRUPO_ETNICO_DOMINIO
+    descripcion: "Grupo étnico dentro de las opciones del formato"
+    tipo: dominio
+    variables: [Grupo_etnico]
+    parametros: {valores: [Indígena, ROM, Palenquero, Afrodescendiente, Raizal, Ninguno]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 24"}
+    accion: "Corregir según el formato."
+
+  - id: E_CORREO1_FORMATO
+    descripcion: "Segundo campo de correo (Correo_Electronico1): sintaxis válida, 8888 o 7777"
+    tipo: patron
+    variables: [Correo_Electronico1]
+    parametros:
+      patron: "[^\\s@]+@[^\\s@]+\\.[^\\s@]+"
+      permitidos: [8888, 7777]
+      no_evaluables: {"9999": "el diccionario admite 9999=Sin dato, la guía no (decisión pendiente)"}
+      descripcion_esperado: "correo con @ y dominio, 8888 o 7777"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 27"}
+      - {doc: D2, ubicacion: "filas 47-50"}
+    accion: "Verificar el correo."
+
+
+  - id: E_CORREO1_DIGITACION
+    descripcion: "Correo sin errores frecuentes de digitación (gmail, hotmail, outlook; terminación .com)"
+    tipo: condicional
+    variables: [Correo_Electronico1]
+    aplica_si: {var: Correo_Electronico1, patron: ".*@.*"}
+    parametros: {entonces_cada: {negar: {patron: "(?i).*@(gmai|gmial|gmil|gmal|gamil|gnail|gmaill|gemail|gmail[a-z]+|hotmai|hotmial|hotmal|hotmil|homail|hotamil|hotmaill|htmail|outlok|outloo|oulook|outlock|outllok|otlook|yaho|yahho|yhaoo)\\.[a-z.]+|.*@(gmail|hotmail|outlook|yahoo)|.*@gmail\\.(co|es|con|cm|om|comm|coom)|.*\\.(con|cm|comm|coom|c0m|cmo|ocm)|.*@.*\\.\\..*|.*\\s.*"}}, esperado: "dominio bien escrito (gmail.com, hotmail.com, outlook.com…) y sin espacios", explicacion: "el dominio o la terminación del correo parece mal digitado"}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: correo electrónico (SOL-012)"}
+    accion: "Verificar el correo con el formato físico (dominio y terminación)."
+  - id: E_TIPODOC_ENC_DOMINIO
+    descripcion: "Tipo de documento del encuestado dentro de las opciones"
+    tipo: dominio
+    variables: [Tipo_Documento_Encuestado]
+    parametros: {valores: ["Cédula de Ciudadanía", "Cédula de Extranjería", PEP, PPT, "Permiso por Protección Temporal", "Documento de Extranjería"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 41-44"}
+    accion: "Corregir según el formato."
+
+  - id: E_ID_ENC_CC_NUMERICO
+    descripcion: "Encuestado con cédula de ciudadanía: identificación con solo dígitos"
+    tipo: patron
+    variables: [Identificacion_Encuestado]
+    aplica_si: {var: Tipo_Documento_Encuestado, en: ["Cédula de Ciudadanía"]}
+    parametros: {patron: "\\d+", descripcion_esperado: "solo dígitos"}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.33"}
+    accion: "Verificar el número de documento."
+
+  - id: E_ID_ENC_TEXTO
+    descripcion: "La identificación del encuestado se almacena como texto"
+    tipo: almacenado_como_texto
+    variables: [Identificacion_Encuestado]
+    severidad: alerta
+    fuentes:
+      - {doc: DX, ubicacion: "secciones 2 y 4"}
+    accion: "Formatear como texto."
+
+  - id: E_PARENTESCO_REVISION
+    descripcion: "Parentesco distinto de madre o padre: verificar soporte en observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [Parentesco_Encuestado, Observaciones]
+    aplica_si: {var: Parentesco_Encuestado, no_en: [MADRE, PADRE]}
+    parametros: {solicitud: "Verificar en observaciones la delegación por sentencia judicial y el soporte."}
+    severidad: revision
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 26"}
+      - {doc: G1, ubicacion: "p.34"}
+      - {doc: I1, ubicacion: "p.65"}
+
+  # ================================================================= Ubicación
+  - id: E_ZONA_DOMINIO
+    descripcion: "Zona_Urbana: 1 o 2"
+    tipo: dominio
+    variables: [Zona_Urbana]
+    parametros: {valores: [1, 2]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 51-52"}
+    accion: "Corregir según el formato."
+
+  - id: E_ZONA_RURAL_SUMAPAZ
+    descripcion: "Fuera de Sumapaz, Zona_Urbana = 1"
+    tipo: condicional
+    variables: [Zona_Urbana]
+    aplica_si: {var: Localidad, no_en: [Sumapaz]}
+    parametros: {entonces_cada: {en: [1]}, explicacion: "zona rural registrada fuera de Sumapaz"}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 30"}
+      - {doc: G1, ubicacion: "p.34"}
+    accion: "Revisión territorial."
+
+  - id: E_ZONA_SUMAPAZ_RURAL
+    descripcion: "En Sumapaz, Zona_Urbana = 2"
+    tipo: condicional
+    variables: [Zona_Urbana]
+    aplica_si: {var: Localidad, en: [Sumapaz]}
+    parametros: {entonces_cada: {en: [2]}}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 30"}
+    accion: "Revisión territorial."
+
+  - id: E_ZONA_P55
+    descripcion: "Zona_Urbana concuerda con la ubicación de la vivienda (P55)"
+    tipo: condicional
+    variables: [Zona_Urbana, P55_Ubicacion_Vivienda]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: Zona_Urbana, en: [1]}, {var: P55_Ubicacion_Vivienda, en: ["Zona Urbana"]}]}
+          - {todas: [{var: Zona_Urbana, en: [2]}, {var: P55_Ubicacion_Vivienda, en: ["Zona Rural"]}]}
+      explicacion: "la zona de la información básica no coincide con la ubicación de la vivienda"
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.51"}
+      - {doc: D2, ubicacion: "filas 322-323"}
+    accion: "Verificar la zona."
+
+  - id: E_LOCALIDAD_DOMINIO
+    descripcion: "Localidad dentro del listado oficial (se aceptan formas abreviadas)"
+    tipo: dominio
+    variables: [Localidad]
+    parametros: {valores: *LOC}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.145"}
+    accion: "Corregir el nombre de la localidad."
+
+  - id: E_COLEGIO_LOCALIDAD_DOMINIO
+    descripcion: "Localidad del colegio dentro del listado de Bogotá o 999"
+    tipo: dominio
+    variables: [P4_Localidad_Colegio]
+    parametros: {valores: [999, Usaquén, Chapinero, Santa Fe, San Cristóbal, Usme, Tunjuelito, Bosa, Kennedy, Fontibón, Engativá, Suba,
+                           Barrios Unidos, Teusaquillo, Los Mártires, Mártires, Antonio Nariño, Puente Aranda, La Candelaria, Candelaria,
+                           Rafael Uribe Uribe, Rafael Uribe, Ciudad Bolívar, Sumapaz]}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.37", nota: "verificar que el colegio esté ubicado en Bogotá"}
+    accion: "Unificar la ortografía de la localidad."
+
+  - id: E_UPZ_NUMERO_NOMBRE
+    descripcion: "Un mismo número de UPZ tiene un único nombre en el archivo"
+    tipo: consistencia_grupo
+    parametros: {clave: N_UPZ, dependiente: Nombre_UPZ, ignorar: [999]}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.64"}
+    accion: "Verificar la UPZ."
+
+  - id: E_UPZ_LOCALIDAD
+    descripcion: "Un mismo número de UPZ pertenece a una única localidad"
+    tipo: consistencia_grupo
+    parametros: {clave: N_UPZ, dependiente: Localidad, ignorar: [999]}
+    severidad: alerta
+    fuentes:
+      - {doc: D2, ubicacion: "filas 55-56"}
+      - {doc: I1, ubicacion: "p.145"}
+    accion: "Verificar localidad y UPZ."
+
+  - id: E_ESTRATO_DOMINIO
+    descripcion: "Estrato entre 1 y 6"
+    tipo: dominio
+    variables: [Estrato]
+    parametros: {valores: [1, 2, 3, 4, 5, 6]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 58"}
+    accion: "Verificar el estrato."
+
+  - id: E_DIRECCION_REPETIDA
+    version: 2
+    descripcion: "Una dirección no se repite en el archivo, salvo estratos 5 y 6 e inquilinatos (máximo dos)"
+    tipo: unicidad
+    variables: [Dirección]
+    parametros: {maximo_por_grupo: 1, excepcion_maximo: {si: {alguna: [{var: Estrato, en: [5, 6]}, {var: P54_Tipo_Vivienda, en: [Inquilinato]}]}, maximo: 2}, explicacion: "dirección repetida"}
+    severidad: alerta
+    especiales: "Dentro del archivo; la revisión anual requiere el histórico."
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: inquilinato, hasta 2 encuestas por unidad (SOL-008)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 29"}
+      - {doc: G1, ubicacion: "p.34", nota: "verificar que en la misma vivienda no haya dos o más niños en la misma temática"}
+      - {doc: I1, ubicacion: "p.64"}
+    accion: "Candidato a revisión; no eliminar sin verificar."
+
+  - id: E_INQUILINATO_COMPLEMENTO_UN
+    descripcion: "Inquilinato: la dirección contiene el complemento UN"
+    tipo: condicional
+    variables: [Dirección]
+    aplica_si: {var: P54_Tipo_Vivienda, en: [Inquilinato]}
+    parametros: {entonces_cada: {patron: ".*\\bUN\\s?\\d+.*"}, explicacion: "inquilinato sin complemento UN"}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 29"}
+      - {doc: G1, ubicacion: "p.51"}
+    accion: "Completar el complemento."
+
+
+  - id: E_VIVIENDA_COMPLEMENTO_APTO_IND
+    descripcion: "Apartamento independiente: la dirección contiene el complemento AP (apartamento) o PI (piso)"
+    tipo: condicional
+    estado: provisional
+    variables: [Dirección]
+    aplica_si: {var: P54_Tipo_Vivienda, en: ["Apartamento (Independiente)"]}
+    parametros: {entonces_cada: {patron: "(?i).*\\b(AP|PI)(\\b|\\s?\\d).*"}, esperado: "dirección con complemento AP (apartamento) o PI (piso)", explicacion: "apartamento independiente sin complemento AP o PI: revisar la dirección o el tipo de vivienda"}
+    severidad: alerta
+    especiales: "Provisional: el equipo debe confirmar la lista de complementos aceptados y si es error o alerta."
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: tipo de vivienda y dirección (SOL-007)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 29"}
+    accion: "Completar el complemento de la dirección o corregir el tipo de vivienda."
+
+  - id: E_VIVIENDA_COMPLEMENTO_APTO_PH
+    descripcion: "Apartamento en propiedad horizontal: la dirección contiene el complemento AP"
+    tipo: condicional
+    estado: provisional
+    variables: [Dirección]
+    aplica_si: {var: P54_Tipo_Vivienda, en: ["Apartamento (Propiedad horizontal)"]}
+    parametros: {entonces_cada: {patron: "(?i).*\\b(AP|APTO)(\\b|\\s?\\d).*"}, esperado: "dirección con complemento AP (apartamento)", explicacion: "apartamento en propiedad horizontal sin complemento AP"}
+    severidad: alerta
+    especiales: "Provisional: el equipo debe confirmar la lista de complementos aceptados."
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: tipo de vivienda y dirección (SOL-007)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 29"}
+    accion: "Completar el complemento de la dirección o corregir el tipo de vivienda."
+
+  - id: E_VIVIENDA_COMPLEMENTO_CASA_PH
+    descripcion: "Casa en propiedad horizontal: la dirección contiene un complemento (CA, IN, BL, TO, MZ…)"
+    tipo: condicional
+    estado: provisional
+    variables: [Dirección]
+    aplica_si: {var: P54_Tipo_Vivienda, en: ["Casa (Propiedad Horizontal)"]}
+    parametros: {entonces_cada: {patron: "(?i).*\\b(CA|CS|IN|BL|TO|MZ|ET|AG|LT|SM|AP|UN)(\\b|\\s?\\d).*"}, esperado: "dirección con complemento (CA, IN, BL, TO, MZ…)", explicacion: "casa en propiedad horizontal sin complemento en la dirección"}
+    severidad: alerta
+    especiales: "Provisional: el equipo debe confirmar la lista de complementos aceptados."
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: tipo de vivienda y dirección (SOL-007)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 29"}
+    accion: "Completar el complemento de la dirección o corregir el tipo de vivienda."
+  # ================================================================= Afiliación y colegio
+  - id: E_SGSS_NINGUNO_SALTO
+    descripcion: "Sin afiliación: salto a P3; P2_EAPB y P2_Otra_EAPB = 999"
+    tipo: condicional
+    variables: [P2_EAPB, P2_Otra_EAPB]
+    aplica_si: {var: P1_SGSS, en: [Ninguno]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.66", nota: "salto a la pregunta 3 cuando se selecciona NINGUNO"}
+    accion: "Verificar afiliación."
+
+  - id: E_REGIMEN_EXCEPCIONAL_EAPB
+    descripcion: "Régimen excepcional: EAPB del régimen de excepción"
+    tipo: condicional
+    variables: [P2_EAPB]
+    aplica_si: {var: P1_SGSS, en: ["Régimen excepcional"]}
+    parametros:
+      entonces_cada: {en: ["Fuerzas Militares", "Policía Nacional", "Ecopetrol", "Magisterio", "Universidades Públicas", "Unisalud", "Ferrocarriles", "Otro"]}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 filas 37-38"}
+      - {doc: G1, ubicacion: "p.36"}
+    accion: "Verificar la EAPB."
+
+  - id: E_EAPB_OTRA
+    descripcion: "Si P2_EAPB = Otro, P2_Otra_EAPB tiene el nombre; en otro caso 999"
+    tipo: condicional
+    variables: [P2_Otra_EAPB]
+    estado: provisional
+    motivo_estado: "Relación P2_EAPB / P2_Otra_EAPB descrita de forma incompleta en G1 p.36; se aplica la práctica observada. Confirmar."
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P2_EAPB, en: [Otro]}, {var: P2_Otra_EAPB, no_en: [999]}, {var: P2_Otra_EAPB, vacio: false}]}
+          - {todas: [{var: P2_EAPB, no_en: [Otro]}, {var: P2_Otra_EAPB, en: [999]}]}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.36"}
+      - {doc: D2, ubicacion: "filas 68-70"}
+    accion: "Verificar la EAPB."
+
+  - id: E_P3_DOMINIO
+    descripcion: "P3 asiste a colegio: 1 o 2"
+    tipo: dominio
+    variables: [P3_Asiste_Colegio]
+    parametros: {valores: [1, 2]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 71-72"}
+      - {doc: O1, ubicacion: "5 A 14 fila 40"}
+    accion: "Corregir según el formato."
+
+  - id: E_P3_SALTO_COLEGIO
+    descripcion: "No asiste a colegio: salto a P5; datos del colegio = 999"
+    tipo: condicional
+    variables: [P4_Colegio, P4_Dirección_Colegio, P4_Localidad_Colegio, P4_Num_UPZ_Colegio, P4_UPZ_Colegio, P4_Barrio_Colegio]
+    aplica_si: {var: P3_Asiste_Colegio, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.67", nota: "en caso de que el menor no asista se presenta salto a la pregunta 5"}
+      - {doc: G1, ubicacion: "p.37"}
+    accion: "Verificar asistencia y datos de la institución."
+
+  - id: E_P3_COLEGIO_DILIGENCIADO
+    descripcion: "Asiste a colegio: nombre, dirección, localidad y UPZ de la institución diligenciados"
+    tipo: condicional
+    variables: [P4_Colegio, P4_Dirección_Colegio, P4_Localidad_Colegio, P4_Num_UPZ_Colegio, P4_UPZ_Colegio]
+    aplica_si: {var: P3_Asiste_Colegio, en: [1]}
+    parametros: {entonces_cada: *DIL}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.37"}
+      - {doc: I1, ubicacion: "p.68"}
+    accion: "Completar con el listado de instituciones."
+
+  - id: E_P3_BARRIO_COLEGIO
+    descripcion: "Asiste a colegio: barrio de la institución distinto de 999 (puede quedar vacío si no está en el codificador)"
+    tipo: condicional
+    variables: [P4_Barrio_Colegio]
+    aplica_si: {var: P3_Asiste_Colegio, en: [1]}
+    parametros: {entonces_cada: {alguna: [{vacio: true}, {no_en: [999]}]}}
+    severidad: alerta
+    fuentes:
+      - {doc: D2, ubicacion: "filas 83-84", nota: "se pueden presentar valores vacíos ya que el codificador de la SDS puede no tener el nombre"}
+      - {doc: G1, ubicacion: "p.38"}
+    accion: "Completar el barrio de la institución."
+
+  - id: E_P3_NO_ESTUDIA_6
+    descripcion: "No asiste a colegio con 6 años o más: verificar en observaciones el motivo y la gestión"
+    tipo: revision
+    estado: revision_humana
+    variables: [P3_Asiste_Colegio, Edad, Observaciones]
+    aplica_si: {todas: [{var: P3_Asiste_Colegio, en: [2]}, {var: Edad, cmp: ">=", valor: 6}]}
+    parametros: {solicitud: "Revisar en observaciones por qué el menor no está estudiando y la gestión de escolarización."}
+    severidad: revision
+    fuentes:
+      - {doc: G1, ubicacion: "p.37"}
+      - {doc: I1, ubicacion: "p.67"}
+
+  - id: E_COLEGIO_DIRECCION
+    version: 2
+    descripcion: "Un mismo colegio no presenta direcciones distintas"
+    tipo: consistencia_grupo
+    parametros: {clave: P4_Colegio, dependiente: P4_Dirección_Colegio, ignorar: [999], marcar: minoria}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: colegios, marcar la minoría (SOL-009)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 42"}
+      - {doc: G1, ubicacion: "p.37"}
+    accion: "Unificar con el listado oficial."
+
+  - id: E_COLEGIO_LOCALIDAD
+    version: 2
+    descripcion: "Un mismo colegio no presenta localidades distintas"
+    tipo: consistencia_grupo
+    parametros: {clave: P4_Colegio, dependiente: P4_Localidad_Colegio, ignorar: [999], marcar: minoria}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: colegios, marcar la minoría (SOL-009)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 43"}
+    accion: "Unificar con el listado oficial."
+
+  - id: E_COLEGIO_UPZ
+    version: 2
+    descripcion: "Un mismo colegio no presenta UPZ distintas"
+    tipo: consistencia_grupo
+    parametros: {clave: P4_Colegio, dependiente: P4_Num_UPZ_Colegio, ignorar: [999], marcar: minoria}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: colegios, marcar la minoría (SOL-009)"}
+      - {doc: O1, ubicacion: "5 A 14 filas 44-45"}
+    accion: "Unificar con el listado oficial."
+
+  - id: E_COLEGIO_BARRIO
+    version: 2
+    descripcion: "Un mismo colegio no presenta barrios distintos"
+    tipo: consistencia_grupo
+    parametros: {clave: P4_Colegio, dependiente: P4_Barrio_Colegio, ignorar: [999], marcar: minoria}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: colegios, marcar la minoría (SOL-009)"}
+      - {doc: O1, ubicacion: "5 A 14 fila 46"}
+    accion: "Unificar con el listado oficial."
+
+  # ================================================================= B. Síntomas
+  - id: E_DOM_BINARIOS
+    descripcion: "Respuestas SI/NO sin otras opciones: 1 o 2"
+    tipo: dominio
+    variables: [P68_Baños_Aislados, P72_Hongos_Humedad, P74_Tiene_Mascotas, P80_Funciona_Negocio,
+                P82_Construcciones_Cerca, P83_Agricultura_Ganaderia, P83_Explotacion_Minas, P83_Venta_Material_Construccion,
+                P83_Reparacion_Vehiculos, P83_Restaurantes_Chimenea, P83_Parqueadero_Buses, P83_Bares_Cantinas,
+                P83_Industria_Manufacturera, P83_Incineradores, P83_Quemas_Cielo_Abierto, P83_Zona_Reciclaje, P83_Obras_Construccion,
+                P83_Establecimientos_Culto, P83_Ornamentación, P83_Canales_Agua, P83_Lavandería, P83_Ninguno, Niño_Con_Afectación, Canalización]
+    parametros: {valores: [1, 2]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 385-386, 402-403, 408-409, 433-434, 441-462"}
+      - {doc: O1, ubicacion: "5 A 14 filas 163-231"}
+    accion: "Corregir según el formato."
+
+  - id: E_DOM_P34_P39
+    descripcion: "Situaciones desencadenantes (P34) y cambios en casa (P39): 1, 2 o 999"
+    tipo: dominio
+    variables: [P34_Clima, P34_Flores, P34_Emociones, P34_Humo, P34_Animales, P34_Ropa_Lana, P34_Presencia_Gripa, P34_Comida,
+                P34_Jabon, P34_Otro, P34_Ninguno, P39_Retirar_Animales, P39_Retirar_Peluches, P39_Disminuir_Consumo_Tabaco,
+                P39_Cambio_Vivienda, P39_Limpieza_Desinfección, P39_Cambio_Almohadas, P39_Cambio_Sabanas, P39_Cambios_Estructurales,
+                P39_Ningún_Cambio]
+    parametros: {valores: [1, 2, 999]}
+    severidad: error
+    especiales: "La base registra 1/2 aunque la documentación indica 999 cuando no aplica; el uso del 999 queda en la decisión DP-10."
+    fuentes:
+      - {doc: D2, ubicacion: "filas 198-209, 225-233"}
+      - {doc: O1, ubicacion: "5 A 14 filas 94-118", nota: "opciones 1, 2 y 999"}
+      - {doc: G1, ubicacion: "p.46"}
+    accion: "Corregir según el formato."
+
+  - id: E_DOM_MESES
+    descripcion: "Meses de síntomas (P12): 1, 2 o 999"
+    tipo: dominio
+    variables: *MESES
+    parametros: {valores: [1, 2, 999]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 106-107"}
+      - {doc: G1, ubicacion: "p.40", nota: "puede encontrar 1, 2 o 999"}
+    accion: "Corregir según el formato."
+
+  - id: E_DOM_SI_NO_NSNR
+    descripcion: "Respuestas con NS/NR: 1, 2 o 99"
+    tipo: dominio
+    variables: [P5_Tos_Seca, P6_Tos_Ejercicio_Leve, P7_Tos_Reir_Llorar, P8_Depierta_Tos, P9_Sintomas_Sin_Gripa,
+                P11_Mocos_Nariz_Tapada_Ultimo_Año, P13_Tos_Flemas_Con_Resfrio, P14_TosFlemas_Sin_Resfrio, P16_Sibilancia_Alguna_Vez,
+                P24_Niño_Consulta_Medica, P25_Familiar_Falto_Por_Consulta, P26_Bajo_Peso_Al_Nacer, P27_Lactancia_Materna,
+                P28_1_Desnutricion, P28_2_Obesidad, P28_DX_Malnutricion, P29_DX_Enf_Bronquios, P38_DX_Rinitis, P41_Cirugia_Torax,
+                P42_Consumo_Tabaco_Hogar, P44_Madre_Fumo_En_Embarazo, P45_Madre_Contacto_Fumadores, P46_Madre_Fumo_Dos_Años_Niño,
+                P47_Contacto_Toxicos_Trabajo, P49_DX_Padres_Enf_Respiratoria, P53_Persona_Contacto_Niños_Pacientes,
+                P60_Duermen_Con_Niño, P78_Hay_Roedores, P79_Hay_Cucarachas]
+    parametros: {valores: [1, 2, 99]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 85-99, 103-117, 122-124, 149-160, 170-182, 222-224, 238-246, 254-273, 282-284, 309-311, 334-336, 424-429"}
+      - {doc: G1, ubicacion: "pp.39-57"}
+    accion: "Corregir según el formato."
+
+  - id: E_DOM_CON_SALTO
+    descripcion: "Respuestas dentro de un salto: 1, 2, 99 o 999"
+    tipo: dominio
+    variables: [P10_Sintomas_Ultimo_Año, P15_Tos_Flemas_Dias, P17_Sibilancia_Ultimo_Año, P18_Sibilancia_Gripa_Ult_Año,
+                P20_Desp_Silbidos_Mas_De_Una_Vez_Semana, P21_Sibilancia_Impide_Habla, P22_Sibilancia_Act_Fisica, P30_DX_Bronquitis,
+                P31_DX_Neumonia, P32_DX_TB_Pulmonar, P33_DX_Asma, P35_Medicamentos_Ult_Año, P36_Usa_Inhalador, P37_Plan_Escrito,
+                P40_CongesTÍOn_Nasal_Actividades, P43_Tabaquismo_Pasivo, P48_Cambia_Ropa, P61_Duermen_Misma_Cama,
+                P66_Ventilación_Cocina, P73_Humedad_Habitacion, P75_Tiene_Perros, P75_Tiene_Gatos, P75_Tiene_Aves, P75_Tiene_Otros,
+                P77_Niño_Convive_Mascotas]
+    parametros: {valores: [1, 2, 99, 999]}
+    severidad: error
+    especiales: "Unión de las categorías de D2 y G1 para cada pregunta con salto; el 999 corresponde al salto."
+    fuentes:
+      - {doc: D2, ubicacion: "filas 100-102, 118-121, 125-144, 182-197, 210-221, 234-237, 250-253, 274-277, 337-340, 368-370, 404-407, 410-414, 421-423"}
+      - {doc: G1, ubicacion: "pp.39-57"}
+    accion: "Corregir según el formato."
+
+  - id: E_DOM_AUSENTISMO
+    descripcion: "P23 ausentismo: 1, 2, 99 o 9 (no aplica)"
+    tipo: dominio
+    variables: [P23_Ausentismo_Escolar]
+    parametros: {valores: [1, 2, 9, 99]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 145-148"}
+    accion: "Corregir según el formato."
+
+  - id: E_P9_SALTO
+    descripcion: "Sin estornudos/mocos sin gripa (P9 = 2): salto a P11; P10 = 999"
+    tipo: condicional
+    variables: [P10_Sintomas_Ultimo_Año]
+    aplica_si: {var: P9_Sintomas_Sin_Gripa, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 97-102", nota: "contiene salto a la P11 cuando la respuesta es NO"}
+      - {doc: G1, ubicacion: "p.39"}
+    accion: "Verificar el salto."
+
+  - id: E_P9_SI
+    descripcion: "Con estornudos/mocos sin gripa (P9 = 1): P10 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P10_Sintomas_Ultimo_Año]
+    aplica_si: {var: P9_Sintomas_Sin_Gripa, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 100", nota: "se diligencia cuando la P9 es SI"}
+    accion: "Completar P10."
+
+  - id: E_P11_MESES_NO
+    descripcion: "Sin síntomas en el último año (P11 = 2): todos los meses de P12 = 2"
+    tipo: condicional
+    variables: *MESES
+    aplica_si: {var: P11_Mocos_Nariz_Tapada_Ultimo_Año, en: [2]}
+    parametros: {entonces_cada: {en: [2]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.39", nota: "si la respuesta es 2 (NO) en la P12 se debe encontrar 2 en los meses"}
+    accion: "Verificar P11 y los meses."
+
+  - id: E_P11_MESES_SI
+    descripcion: "Con síntomas en el último año (P11 = 1): al menos un mes de P12 = 1"
+    tipo: al_menos_uno
+    variables: *MESES
+    aplica_si: {var: P11_Mocos_Nariz_Tapada_Ultimo_Año, en: [1]}
+    parametros: {valor: 1, etiqueta: "P12_meses"}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 filas 54-65"}
+      - {doc: G1, ubicacion: "p.39"}
+    accion: "Completar los meses."
+
+  - id: E_P13_DIAS_SI
+    descripcion: "Tos con flema con resfrío (P13 = 1): número de días ≥ 1"
+    tipo: condicional
+    variables: [P13_Cuantos_Dias]
+    aplica_si: {var: P13_Tos_Flemas_Con_Resfrio, en: [1]}
+    parametros: {entonces_cada: {todas: [{no_en: [999]}, {cmp: ">=", valor: 1}]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 108-113"}
+      - {doc: G1, ubicacion: "p.40"}
+    accion: "Completar el número de días."
+
+  - id: E_P13_DIAS_NO
+    descripcion: "Sin tos con flema con resfrío (P13 = 2 o 99): días = 999"
+    tipo: condicional
+    variables: [P13_Cuantos_Dias]
+    aplica_si: {var: P13_Tos_Flemas_Con_Resfrio, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 111-112", nota: "999 = sin dato"}
+    accion: "Verificar en el formato."
+
+  - id: E_P14_DIAS_SI
+    descripcion: "Tos con flema sin resfrío (P14 = 1): número de días ≥ 1"
+    tipo: condicional
+    variables: [P14_Cuantos_Dias]
+    aplica_si: {var: P14_TosFlemas_Sin_Resfrio, en: [1]}
+    parametros: {entonces_cada: {todas: [{no_en: [999]}, {cmp: ">=", valor: 1}]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 113-117"}
+    accion: "Completar el número de días."
+
+  - id: E_P14_DIAS_NO
+    descripcion: "Sin tos con flema sin resfrío (P14 = 2 o 99): días = 999"
+    tipo: condicional
+    variables: [P14_Cuantos_Dias]
+    aplica_si: {var: P14_TosFlemas_Sin_Resfrio, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 116-117"}
+    accion: "Verificar en el formato."
+
+  - id: E_P15_SALTO
+    descripcion: "P13 y P14 negativas o NS/NR: P15 no se responde (999)"
+    tipo: condicional
+    variables: [P15_Tos_Flemas_Dias]
+    aplica_si: {todas: [{var: P13_Tos_Flemas_Con_Resfrio, en: [2, 99]}, {var: P14_TosFlemas_Sin_Resfrio, en: [2, 99]}]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 114-121", nota: "cuando P14 es NO junto con P13 NO no se responde la P15"}
+      - {doc: G1, ubicacion: "p.40", nota: "si P13 y P14 son NO o NS/NR, pasa a la P16"}
+    accion: "Verificar el salto."
+
+  - id: E_P15_SI
+    descripcion: "P13 o P14 positiva: P15 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P15_Tos_Flemas_Dias]
+    aplica_si: {alguna: [{var: P13_Tos_Flemas_Con_Resfrio, en: [1]}, {var: P14_TosFlemas_Sin_Resfrio, en: [1]}]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 118-121", nota: "se responde cuando P13 y/o P14 han sido positivas"}
+    accion: "Completar P15."
+
+  - id: E_P16_SALTO
+    descripcion: "Sin sibilancias alguna vez (P16 = 2): salto a P23; P17 a P22 = 999"
+    tipo: condicional
+    variables: [P17_Sibilancia_Ultimo_Año, P18_Sibilancia_Gripa_Ult_Año, P19_Ataques_Sibilancia, P20_Desp_Silbidos_Mas_De_Una_Vez_Semana,
+                P21_Sibilancia_Impide_Habla, P22_Sibilancia_Act_Fisica]
+    aplica_si: {var: P16_Sibilancia_Alguna_Vez, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    especiales: "999 indica salto. La recodificación analítica 999 → 2 de P17 (D2 fila 128) no se aplica a la captura."
+    fuentes:
+      - {doc: D2, ubicacion: "filas 122-144", nota: "salto a la P23 cuando es NO"}
+      - {doc: I1, ubicacion: "p.73"}
+      - {doc: G1, ubicacion: "p.41"}
+    accion: "Verificar el salto."
+
+  - id: E_P16_SI
+    descripcion: "Con sibilancias alguna vez (P16 = 1): P17 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P17_Sibilancia_Ultimo_Año]
+    aplica_si: {var: P16_Sibilancia_Alguna_Vez, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 125-128"}
+    accion: "Completar P17."
+
+  - id: E_P17_SALTO
+    descripcion: "Sin sibilancias en el último año (P17 = 2): salto a P23; P18 a P22 = 999"
+    tipo: condicional
+    variables: [P18_Sibilancia_Gripa_Ult_Año, P19_Ataques_Sibilancia, P20_Desp_Silbidos_Mas_De_Una_Vez_Semana, P21_Sibilancia_Impide_Habla, P22_Sibilancia_Act_Fisica]
+    aplica_si: {var: P17_Sibilancia_Ultimo_Año, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 125-128", nota: "cuando la respuesta es NO se debe saltar a la P23"}
+      - {doc: G1, ubicacion: "p.41"}
+    accion: "Verificar el salto."
+
+  - id: E_P18_SALTO
+    descripcion: "Sin sibilancias con gripa (P18 = 2): salto a P23; P19 a P22 = 999"
+    tipo: condicional
+    variables: [P19_Ataques_Sibilancia, P20_Desp_Silbidos_Mas_De_Una_Vez_Semana, P21_Sibilancia_Impide_Habla, P22_Sibilancia_Act_Fisica]
+    aplica_si: {var: P18_Sibilancia_Gripa_Ult_Año, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 129-131", nota: "cuando la respuesta es NO se debe saltar a la P23"}
+      - {doc: G1, ubicacion: "p.41"}
+    accion: "Verificar el salto."
+
+  - id: E_P19_RANGO
+    descripcion: "P19 número de ataques: entero ≥ 0 o 999"
+    tipo: rango
+    variables: [P19_Ataques_Sibilancia]
+    parametros: {min: 0, entero: true, especiales: [999]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 132-133"}
+    accion: "Corregir el número de ataques."
+
+  - id: E_AUSENTISMO_NO_ASISTE
+    descripcion: "No asiste a colegio (P3 = 2): ausentismo P23 = 9"
+    tipo: condicional
+    variables: [P23_Ausentismo_Escolar]
+    aplica_si: {var: P3_Asiste_Colegio, en: [2]}
+    parametros: {entonces_cada: {en: [9]}, explicacion: "no asiste a colegio y el ausentismo no está en 9 = no aplica"}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 78"}
+      - {doc: G1, ubicacion: "p.42"}
+    accion: "Verificar cuál respuesta está equivocada; no cambiar automáticamente."
+
+  - id: E_AUSENTISMO_ASISTE
+    version: 2
+    descripcion: "Asiste a colegio (P3 = 1): ausentismo = 1 o 2"
+    tipo: condicional
+    variables: [P23_Ausentismo_Escolar]
+    aplica_si: {var: P3_Asiste_Colegio, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2]}, esperado: "1 (sí) o 2 (no)", explicacion: "asiste a colegio: el ausentismo debe ser 1 (sí) o 2 (no), no 99 ni 999"}
+    severidad: error
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: ausentismo = 99 cuando asiste (SOL-011)"}
+      - {doc: G1, ubicacion: "p.42"}
+    accion: "Verificar P3 y P23."
+
+  - id: E_AUSENTISMO_SINTOMAS
+    descripcion: "Ausentismo (P23 = 1): al menos un síntoma afirmativo entre P5 y P22 (excepto P12)"
+    tipo: al_menos_uno
+    variables: *SINT
+    aplica_si: {var: P23_Ausentismo_Escolar, en: [1]}
+    parametros: {valor: 1, etiqueta: "P5-P22 (síntomas)", explicacion: "ausentismo sin síntomas afirmativos; revisar observaciones"}
+    severidad: alerta
+    fuentes:
+      - {doc: D2, ubicacion: "filas 145-148"}
+      - {doc: G1, ubicacion: "p.42"}
+      - {doc: I1, ubicacion: "p.76"}
+    accion: "Revisar observaciones."
+
+  - id: E_P24_SINTOMAS
+    descripcion: "Consulta médica por síntomas (P24 = 1): al menos un síntoma afirmativo entre P5 y P22"
+    tipo: al_menos_uno
+    variables: *SINT
+    aplica_si: {var: P24_Niño_Consulta_Medica, en: [1]}
+    parametros: {valor: 1, etiqueta: "P5-P22 (síntomas)"}
+    severidad: alerta
+    fuentes:
+      - {doc: D2, ubicacion: "fila 149"}
+      - {doc: O1, ubicacion: "5 A 14 fila 79"}
+    accion: "Verificar en el formato."
+
+  - id: E_P25_SINTOMAS
+    descripcion: "Familiar faltó al trabajo (P25 = 1): al menos un síntoma afirmativo entre P5 y P22"
+    tipo: al_menos_uno
+    variables: *SINT
+    aplica_si: {var: P25_Familiar_Falto_Por_Consulta, en: [1]}
+    parametros: {valor: 1, etiqueta: "P5-P22 (síntomas)"}
+    severidad: alerta
+    fuentes:
+      - {doc: D2, ubicacion: "filas 152-154"}
+      - {doc: O1, ubicacion: "5 A 14 fila 80"}
+    accion: "Verificar en el formato."
+
+  - id: E_NSNR_REVISION
+    version: 2
+    descripcion: "Respuesta 99 (NS/NR o pregunta sin contestar): verificar en observaciones que fue la respuesta del encuestado"
+    tipo: revision
+    variables: [P5_Tos_Seca, P6_Tos_Ejercicio_Leve, P7_Tos_Reir_Llorar, P8_Depierta_Tos, P9_Sintomas_Sin_Gripa, P10_Sintomas_Ultimo_Año,
+                P11_Mocos_Nariz_Tapada_Ultimo_Año, P13_Tos_Flemas_Con_Resfrio, P14_TosFlemas_Sin_Resfrio, P15_Tos_Flemas_Dias,
+                P16_Sibilancia_Alguna_Vez, P21_Sibilancia_Impide_Habla, P22_Sibilancia_Act_Fisica,
+                P24_Niño_Consulta_Medica, P25_Familiar_Falto_Por_Consulta, P26_Bajo_Peso_Al_Nacer, P27_Lactancia_Materna,
+                P28_1_Desnutricion, P28_2_Obesidad, P29_DX_Enf_Bronquios, P30_DX_Bronquitis, P31_DX_Neumonia, P32_DX_TB_Pulmonar,
+                P33_DX_Asma, P35_Medicamentos_Ult_Año, P36_Usa_Inhalador, P37_Plan_Escrito, P38_DX_Rinitis, P40_CongesTÍOn_Nasal_Actividades,
+                P41_Cirugia_Torax, P42_Consumo_Tabaco_Hogar, P43_Tabaquismo_Pasivo, P44_Madre_Fumo_En_Embarazo,
+                P45_Madre_Contacto_Fumadores, P46_Madre_Fumo_Dos_Años_Niño, P47_Contacto_Toxicos_Trabajo, P48_Cambia_Ropa,
+                P49_DX_Padres_Enf_Respiratoria, P53_Persona_Contacto_Niños_Pacientes, P60_Duermen_Con_Niño, P61_Duermen_Misma_Cama,
+                P73_Humedad_Habitacion, P78_Hay_Roedores, P79_Hay_Cucarachas]
+    parametros: {valores: [99], solicitud: "Verificar que observaciones indique que NS/NR corresponde a lo reportado."}
+    severidad: alerta
+    fuentes:
+      - {doc: RV, ubicacion: "Ajustes al validador: 99 como alerta (SOL-010)"}
+      - {doc: G1, ubicacion: "pp.39-57"}
+      - {doc: O1, ubicacion: "5 A 14 filas 47-53"}
+
+  # ================================================================= C. Enfermedades anteriores
+  - id: E_NO_LACTANCIA_COD
+    descripcion: "NO LACTANCIA CODIFICADA: 1 si no recibió (P27 = 2), 2 si recibió, 99 NS/NR"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P27_Lactancia_Materna, destino: NO LACTANCIA CODIFICADA, mapa: {1: 2, 2: 1, 99: 99}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 83"}
+      - {doc: D2, ubicacion: "filas 161-163"}
+    accion: "Recalcular a partir de P27."
+
+  - id: E_P27_TIEMPO_NO
+    descripcion: "Sin lactancia exclusiva (P27 = 2): tiempo = 999"
+    tipo: condicional
+    variables: [P27_Tiempo_Lactancia]
+    aplica_si: {var: P27_Lactancia_Materna, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.79", nota: "cuando la respuesta es SI se diligencia el tiempo"}
+      - {doc: D2, ubicacion: "filas 164-165"}
+    accion: "Verificar P27 y el tiempo."
+
+  - id: E_P27_TIEMPO_SI
+    descripcion: "Con lactancia exclusiva (P27 = 1): tiempo en meses, entero ≥ 0"
+    tipo: rango
+    variables: [P27_Tiempo_Lactancia]
+    aplica_si: {var: P27_Lactancia_Materna, en: [1]}
+    parametros: {min: 0, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.79"}
+    accion: "Completar el tiempo."
+
+  - id: E_P27_TIEMPO_EDAD
+    descripcion: "El tiempo de lactancia no supera la edad del menor en meses"
+    tipo: funcion
+    variables: [P27_Tiempo_Lactancia]
+    aplica_si: {var: P27_Lactancia_Materna, en: [1]}
+    parametros: {nombre: meses_hasta_edad, args: {meses: P27_Tiempo_Lactancia, nacimiento: Fecha_Nacimiento, encuesta: Fecha_Encuesta}, opciones: {especiales: [999]}, explicacion: "la lactancia supera la edad del menor"}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 84"}
+    accion: "Verificar el tiempo de lactancia."
+
+  - id: E_P27_JUSTIFICACION
+    descripcion: "Justificación de lactancia obligatoria si no recibió o si la duración difiere de 6 meses"
+    tipo: funcion
+    variables: [Justificacion_Lactancia]
+    parametros:
+      nombre: lactancia_justificacion
+      args: {lactancia: P27_Lactancia_Materna, tiempo: P27_Tiempo_Lactancia, justificacion: Justificacion_Lactancia, nacimiento: Fecha_Nacimiento, encuesta: Fecha_Encuesta}
+      opciones: {codigos_sin_justificacion: [9999, 999, "SIN DATO"]}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.79"}
+      - {doc: D2, ubicacion: "filas 166-169"}
+      - {doc: O1, ubicacion: "5 A 14 filas 84-85"}
+    accion: "Verificar la justificación."
+
+  - id: E_P28_MALNUTRICION
+    descripcion: "P28_DX_Malnutricion = 1 si desnutrición u obesidad; 2 si ambas = 2"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: [P28_1_Desnutricion, P28_2_Obesidad], destino: P28_DX_Malnutricion}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 176", nota: "desde el 2021 se calcula a partir de P28_1 y P28_2"}
+      - {doc: O1, ubicacion: "5 A 14 fila 88"}
+    accion: "Recalcular."
+
+  - id: E_P28_OBSERVACION
+    descripcion: "Diagnóstico de desnutrición u obesidad: observaciones sobre el estado nutricional"
+    tipo: revision
+    estado: revision_humana
+    variables: [P28_1_Desnutricion, P28_2_Obesidad, Observaciones]
+    aplica_si: {alguna: [{var: P28_1_Desnutricion, en: [1]}, {var: P28_2_Obesidad, en: [1]}]}
+    parametros: {solicitud: "Verificar que observaciones aclare la condición actual y la canalización."}
+    severidad: revision
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 filas 86-87"}
+      - {doc: G1, ubicacion: "pp.43-44"}
+
+  - id: E_P29_SALTO
+    descripcion: "Sin enfermedad pulmonar (P29 = 2): salto a P38; P30 a P33 y P35 a P37 = 999"
+    tipo: condicional
+    variables: [P30_DX_Bronquitis, P31_DX_Neumonia, P32_DX_TB_Pulmonar, P33_DX_Asma, P35_Medicamentos_Ult_Año, P36_Usa_Inhalador, P37_Plan_Escrito]
+    aplica_si: {var: P29_DX_Enf_Bronquios, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    especiales: "Las opciones de P34 se registran con 2 en la base y no se incluyen (decisión DP-10)."
+    fuentes:
+      - {doc: D2, ubicacion: "filas 179-181", nota: "salto a la P38 cuando la respuesta es NO"}
+      - {doc: O1, ubicacion: "5 A 14 fila 89"}
+      - {doc: G1, ubicacion: "p.44"}
+    accion: "Verificar el salto."
+
+  - id: E_P29_SI_RESPONDE
+    descripcion: "Con enfermedad pulmonar (P29 = 1): P30 a P33 se responden (no 999)"
+    tipo: condicional
+    variables: [P30_DX_Bronquitis, P31_DX_Neumonia, P32_DX_TB_Pulmonar, P33_DX_Asma]
+    aplica_si: {var: P29_DX_Enf_Bronquios, en: [1]}
+    parametros: {entonces_cada: *DIL}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 182-197"}
+    accion: "Completar desde el formato."
+
+  - id: E_P29_SI_ALGUNA
+    descripcion: "Con enfermedad pulmonar (P29 = 1): al menos una enfermedad de P30 a P33 o aclaración en observaciones"
+    tipo: al_menos_uno
+    variables: [P30_DX_Bronquitis, P31_DX_Neumonia, P32_DX_TB_Pulmonar, P33_DX_Asma]
+    aplica_si: {var: P29_DX_Enf_Bronquios, en: [1]}
+    parametros: {valor: 1, etiqueta: "P30-P33", explicacion: "no se seleccionó enfermedad; verificar si observaciones registra la enfermedad"}
+    severidad: alerta
+    fuentes:
+      - {doc: G1, ubicacion: "p.44", nota: "seleccionar al menos una de P30 a P33 o anexar en observaciones la enfermedad"}
+      - {doc: O1, ubicacion: "5 A 14 fila 89"}
+    accion: "Revisar observaciones."
+
+  - id: E_P33_NO_SALTO
+    descripcion: "Sin asma (P33 distinto de 1): P35 a P37 = 999 (se diligencian cuando P33 es positiva)"
+    tipo: condicional
+    variables: [P35_Medicamentos_Ult_Año, P36_Usa_Inhalador, P37_Plan_Escrito]
+    aplica_si: {var: P33_DX_Asma, en: [2, 99, 999]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 210-221", nota: "se diligencia cuando la P33 es positiva"}
+    accion: "Verificar el salto."
+
+  - id: E_P33_SI
+    descripcion: "Con asma (P33 = 1): P35 a P37 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P35_Medicamentos_Ult_Año, P36_Usa_Inhalador, P37_Plan_Escrito]
+    aplica_si: {var: P33_DX_Asma, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 210-221"}
+    accion: "Completar desde el formato."
+
+  - id: E_P34_NINGUNA
+    descripcion: "Con asma (P33 = 1): P34_Ninguno = 1 solo si ninguna situación desencadenante está marcada"
+    tipo: exclusion_ninguno
+    variables: [P34_Ninguno]
+    aplica_si: {var: P33_DX_Asma, en: [1]}
+    parametros: {opciones: *P34, ninguno: P34_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 198-209"}
+      - {doc: G1, ubicacion: "p.46"}
+    accion: "Verificar en el formato."
+
+  - id: E_P34_CUAL
+    descripcion: "Otra situación (P34_Otro = 1): cuál diligenciado; si P34_Otro = 2, cuál = 999"
+    tipo: condicional
+    variables: [P34_Cual_Otro]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P34_Otro, en: [1]}, {var: P34_Cual_Otro, vacio: false}, {var: P34_Cual_Otro, no_en: [999]}]}
+          - {todas: [{var: P34_Otro, en: [2, 999]}, {var: P34_Cual_Otro, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 198", nota: "en P34_Cual_Otro ingresar en texto otra situación cuando P34_Otro = 1"}
+    accion: "Verificar en el formato."
+
+  - id: E_P38_SALTO
+    descripcion: "Asma y rinitis negativas: salto a P41; P40 = 999"
+    tipo: condicional
+    variables: [P40_CongesTÍOn_Nasal_Actividades]
+    aplica_si: {todas: [{var: P33_DX_Asma, en: [2, 99, 999]}, {var: P38_DX_Rinitis, en: [2, 99]}]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    especiales: "Las opciones de P39 se registran con 2 en la base y no se incluyen (decisión DP-10)."
+    fuentes:
+      - {doc: D2, ubicacion: "filas 222-237", nota: "saltar a la P41 cuando las P33 y P38 son negativas"}
+      - {doc: G1, ubicacion: "p.46"}
+    accion: "Verificar el salto."
+
+  - id: E_P40_REQUERIDA
+    version: 2
+    descripcion: "Si asma (P33) o rinitis (P38) es positiva, P40 debe estar respondida: 1, 2 o 99"
+    tipo: condicional
+    variables: [P40_CongesTÍOn_Nasal_Actividades]
+    aplica_si: {alguna: [{var: P33_DX_Asma, en: [1]}, {var: P38_DX_Rinitis, en: [1]}]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}, explicacion: "asma (P33) o rinitis (P38) es positiva, así que P40 debe estar respondida (1, 2 o 99) y no en 999"}
+    severidad: error
+    fuentes:
+      - {doc: RV, ubicacion: "5 a 14: el error de P38 corresponde a P40 (SOL-006)"}
+      - {doc: D2, ubicacion: "filas 234-237", nota: "se diligencia cuando la P33 y/o P38 son positivas"}
+    accion: "Completar P40."
+
+  - id: E_P39_NINGUN_CAMBIO
+    descripcion: "Asma o rinitis positivas: P39_Ningún_Cambio = 1 solo si no se marcó ningún cambio"
+    tipo: exclusion_ninguno
+    variables: [P39_Ningún_Cambio]
+    aplica_si: {alguna: [{var: P33_DX_Asma, en: [1]}, {var: P38_DX_Rinitis, en: [1]}]}
+    parametros: {opciones: *P39, ninguno: P39_Ningún_Cambio}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 225-233"}
+    accion: "Verificar en el formato."
+
+  - id: E_P41_CUAL
+    descripcion: "Cirugía de tórax (P41 = 1): cuál diligenciada; si P41 ≠ 1, cuál = 999"
+    tipo: condicional
+    variables: [P41_Cual_Cirugia]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P41_Cirugia_Torax, en: [1]}, {var: P41_Cual_Cirugia, vacio: false}, {var: P41_Cual_Cirugia, no_en: [999]}]}
+          - {todas: [{var: P41_Cirugia_Torax, en: [2, 99]}, {var: P41_Cual_Cirugia, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 238-242"}
+    accion: "Verificar en el formato."
+
+  - id: E_P41_CUAL_REVISION
+    descripcion: "La cirugía registrada debe ser de tórax"
+    tipo: revision
+    estado: revision_humana
+    variables: [P41_Cual_Cirugia]
+    aplica_si: {todas: [{var: P41_Cual_Cirugia, vacio: false}, {var: P41_Cual_Cirugia, no_en: [999]}]}
+    parametros: {solicitud: "Verificar ortografía y que la cirugía tenga ubicación en el tórax."}
+    severidad: revision
+    fuentes:
+      - {doc: G1, ubicacion: "p.47"}
+
+  # ================================================================= D. Tóxicos
+  - id: E_P42_SALTO
+    descripcion: "Sin consumo de tabaco en el hogar (P42 = 2): salto a P44; cuál y P43 = 999"
+    tipo: condicional
+    variables: [P42_Cual_Consumo, P43_Tabaquismo_Pasivo]
+    aplica_si: {var: P42_Consumo_Tabaco_Hogar, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 243-253", nota: "tener en cuenta el salto a la P44"}
+      - {doc: G1, ubicacion: "p.48"}
+    accion: "Verificar el salto."
+
+  - id: E_P42_SI
+    descripcion: "Con consumo de tabaco en el hogar: cuál diligenciado y P43 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P42_Cual_Consumo, P43_Tabaquismo_Pasivo]
+    aplica_si: {var: P42_Consumo_Tabaco_Hogar, en: [1]}
+    parametros:
+      entonces: {todas: [{var: P42_Cual_Consumo, vacio: false}, {var: P42_Cual_Consumo, no_en: [999]}, {var: P43_Tabaquismo_Pasivo, en: [1, 2, 99]}]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 246-253"}
+    accion: "Completar desde el formato."
+
+
+  - id: E_P42_RECOMENDACION
+    descripcion: "Consumo de tabaco en el hogar (P42 = 1): verificar en observaciones que se dejó la recomendación"
+    tipo: revision
+    estado: revision_humana
+    variables: [P42_Consumo_Tabaco_Hogar, Observaciones]
+    aplica_si: {var: P42_Consumo_Tabaco_Hogar, en: [1]}
+    parametros: {solicitud: "Revisar en observaciones que quedó la recomendación sobre el consumo de cigarrillo en el hogar."}
+    severidad: revision
+    fuentes:
+      - {doc: RV, ubicacion: "5 a 14: P42, recomendación sobre consumo de cigarrillo (SOL-019)"}
+  - id: E_PRODUCTO_TABACO
+    descripcion: "Producto de tabaco: cigarrillo, tabaco, SEAN, SSSN o PTC, o 999"
+    tipo: patron
+    variables: [P42_Cual_Consumo, P44_Cual_Fumar, P45_Cual_Contacto]
+    parametros:
+      patron: "(?i)(CIGARRILLO|TABACO|SEAN|SSSN|PTC)(\\s*(,|/|Y|-)\\s*(CIGARRILLO|TABACO|SEAN|SSSN|PTC))*"
+      permitidos: [999]
+      descripcion_esperado: "CIGARRILLO, TABACO, SEAN, SSSN o PTC"
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 filas 123, 126, 128"}
+      - {doc: D2, ubicacion: "filas 246-249"}
+    accion: "Estandarizar el texto."
+
+  - id: E_P44_CUAL
+    descripcion: "Madre fumó en el embarazo (P44 = 1): cuál diligenciado; si no, 999"
+    tipo: condicional
+    variables: [P44_Cual_Fumar]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P44_Madre_Fumo_En_Embarazo, en: [1]}, {var: P44_Cual_Fumar, vacio: false}, {var: P44_Cual_Fumar, no_en: [999]}]}
+          - {todas: [{var: P44_Madre_Fumo_En_Embarazo, en: [2, 99]}, {var: P44_Cual_Fumar, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 254-260"}
+    accion: "Verificar en el formato."
+
+  - id: E_P45_CUAL
+    descripcion: "Madre en contacto con fumadores (P45 = 1): cuál diligenciado; si no, 999"
+    tipo: condicional
+    variables: [P45_Cual_Contacto]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P45_Madre_Contacto_Fumadores, en: [1]}, {var: P45_Cual_Contacto, vacio: false}, {var: P45_Cual_Contacto, no_en: [999]}]}
+          - {todas: [{var: P45_Madre_Contacto_Fumadores, en: [2, 99]}, {var: P45_Cual_Contacto, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 261-267"}
+    accion: "Verificar en el formato."
+
+  - id: E_P47_SALTO
+    descripcion: "Sin contacto con tóxicos (P47 = 2 o NS/NR): salto a P49; P48 y su codificación = 999"
+    tipo: condicional
+    variables: [P48_Cambia_Ropa, NO CAMBIA ROPA CODIF.]
+    aplica_si: {var: P47_Contacto_Toxicos_Trabajo, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 271-281", nota: "salto a la P49 cuando la respuesta es NO"}
+      - {doc: I1, ubicacion: "p.89", nota: "si la respuesta es negativa o NS/NR siga el filtro"}
+    accion: "Verificar el salto."
+
+  - id: E_P47_SI
+    descripcion: "Con contacto con tóxicos (P47 = 1): P48 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P48_Cambia_Ropa]
+    aplica_si: {var: P47_Contacto_Toxicos_Trabajo, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 274-277"}
+    accion: "Completar P48."
+
+  - id: E_NO_CAMBIA_ROPA_COD
+    descripcion: "NO CAMBIA ROPA CODIF.: 1 si no cambia (P48 = 2), 2 si cambia (P48 = 1), 99 y 999 se conservan"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P48_Cambia_Ropa, destino: NO CAMBIA ROPA CODIF., mapa: {1: 2, 2: 1, 99: 99, 999: 999}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 132"}
+      - {doc: D2, ubicacion: "filas 278-281"}
+    accion: "Recalcular a partir de P48."
+
+  # ================================================================= F. Sociodemográfico
+  - id: E_P50_DOMINIO
+    descripcion: "Ingresos del hogar dentro de las opciones"
+    tipo: dominio
+    variables: [P50_Ingresos_Hogar]
+    parametros: {valores: ["No alcanzan para cubrir los gastos mínimos", "Sólo alcanza para cubrir gastos mínimos", "Solo alcanzan para cubrir los gatos mínimos", "Cubren más de los gastos mínimos", "Cubren más de los gatos mínimos"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 285-287"}
+    accion: "Corregir según el formato."
+
+  - id: E_INGRESOS_COD
+    descripcion: "INGRESOS CODIF.: 1 no alcanzan; 2 alcanzan o cubren más"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P50_Ingresos_Hogar
+      destino: INGRESOS CODIF.
+      mapa: {"No alcanzan para cubrir los gastos mínimos": 1, "Sólo alcanza para cubrir gastos mínimos": 2, "Solo alcanzan para cubrir los gatos mínimos": 2, "Cubren más de los gastos mínimos": 2, "Cubren más de los gatos mínimos": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 135"}
+      - {doc: D2, ubicacion: "filas 288-289"}
+    accion: "Recalcular."
+
+  - id: E_P51_DOMINIO
+    descripcion: "Nivel educativo del cuidador dentro de las opciones"
+    tipo: dominio
+    variables: [P51_Nivel_Educativo_Cuidador]
+    parametros: {valores: ["Primaria incompleta o en curso", "Primaria completa", "Secundaria incompleta o en curso", "Secundaria completa",
+                           "Técnico o tecnología incompleta o en curso", "Técnico o tecnología completa", "Superior incompleta o en curso",
+                           "Superior completa", "Posgrado", "Postgrado", "Sin estudios"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 290-299"}
+    accion: "Corregir según el formato."
+
+  - id: E_P52_DOMINIO
+    descripcion: "Ocupación del cuidador dentro de las opciones"
+    tipo: dominio
+    variables: [P52_Ocupacion_Cuidador]
+    parametros: {valores: ["Trabajador independiente o por cuenta propia", "Patrón o empleador", "Obrero o empleado", "Trabajador independiente - contratista",
+                           "Trabajador independiente, contratista", "Empleado(a) doméstico(a)", "Empleado (a) doméstica (a)", "Estudiante - aprendíz",
+                           "Estudiante, aprendiz", "Trabajador familiar sin remuneración", "Oficios del hogar", "Desempleado", "Desempleado (a)"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 300-308"}
+    accion: "Corregir según el formato."
+
+  # ================================================================= G. Intradomiciliario
+  - id: E_P54_DOMINIO
+    descripcion: "Tipo de vivienda dentro de las opciones"
+    tipo: dominio
+    variables: [P54_Tipo_Vivienda]
+    parametros: {valores: ["Casa (Independiente)", "Casa (Propiedad Horizontal)", "Apartamento (Propiedad horizontal)", "Apartamento (Independiente)",
+                           "Habitación", "En una edificación no destinada para habitar", "Edificio en construcción", "Inquilinato"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 312-319"}
+    accion: "Corregir según el formato."
+
+  - id: E_TIPO_VIVIENDA_COD
+    descripcion: "TIPO VIVIENDA CODIF.: 1 habitación, inquilinato, edificación no destinada o en construcción; 2 casas y apartamentos"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P54_Tipo_Vivienda
+      destino: TIPO VIVIENDA CODIF.
+      mapa: {"Habitación": 1, "Inquilinato": 1, "En una edificación no destinada para habitar": 1, "Edificio en construcción": 1,
+             "Casa (Independiente)": 2, "Casa (Propiedad Horizontal)": 2, "Apartamento (Propiedad horizontal)": 2, "Apartamento (Independiente)": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 140"}
+      - {doc: D2, ubicacion: "filas 320-321"}
+    accion: "Recalcular."
+
+  - id: E_P55_DOMINIO
+    descripcion: "Ubicación de la vivienda: Zona Urbana o Zona Rural"
+    tipo: dominio
+    variables: [P55_Ubicacion_Vivienda]
+    parametros: {valores: ["Zona Urbana", "Zona Rural"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 322-323"}
+    accion: "Corregir según el formato."
+
+  - id: E_P56_PERIODO_ANIOS
+    descripcion: "Tiempo en la vivienda registrado en años"
+    tipo: dominio
+    variables: [P56_Periodo_Vive_Vivienda]
+    parametros: {valores: ["Año(s)"]}
+    severidad: alerta
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 143", nota: "años"}
+      - {doc: I1, ubicacion: "p.93", nota: "registre el número de años"}
+    accion: "Verificar la unidad del tiempo en la vivienda."
+
+  - id: E_P56_INCLUSION
+    descripcion: "Criterio de inclusión: al menos 1 año viviendo en la vivienda"
+    tipo: rango
+    variables: [P56_Tiempo_Vive_Vivienda]
+    aplica_si: {var: P56_Periodo_Vive_Vivienda, en: ["Año(s)"]}
+    parametros: {min: 1, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 142", nota: "mínimo un año por criterio de inclusión; menos es error"}
+      - {doc: I1, ubicacion: "p.62, p.93"}
+    accion: "Verificar; si es correcto, el registro no cumple el criterio de inclusión."
+
+  - id: E_P56_NO_SUPERA_EDAD
+    descripcion: "El tiempo en la vivienda (años) no supera la edad del menor"
+    tipo: comparacion
+    aplica_si: {var: P56_Periodo_Vive_Vivienda, en: ["Año(s)"]}
+    parametros: {izquierda: {var: P56_Tiempo_Vive_Vivienda}, operador: "<=", derecha: {var: Edad}, explicacion: "el tiempo de residencia supera la edad"}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.93", nota: "en ningún caso podrá ser mayor a su tiempo de vida"}
+      - {doc: D2, ubicacion: "filas 324-325"}
+    accion: "Verificar el tiempo de residencia."
+
+  - id: E_HOGAR_RANGOS
+    descripcion: "Personas que habitan ≥ 1 y menores de 14 años ≥ 1"
+    tipo: rango
+    variables: [P58_Cuantas_Personas_Habitan, P59_Cuantos_Menores_Habitan]
+    parametros: {min: 1, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "p.94", nota: "tampoco podrá ser cero menores"}
+      - {doc: O1, ubicacion: "5 A 14 filas 145, 147", nota: "deben incluir al menor"}
+    accion: "Verificar la composición del hogar."
+
+  - id: E_HABITACIONES_RANGO
+    descripcion: "Habitaciones para dormir: entero ≥ 0"
+    tipo: rango
+    variables: [P57_Habitaciones_Dormitorio]
+    parametros: {min: 0, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 326"}
+    accion: "Verificar el número de habitaciones."
+
+  - id: E_MENORES_NO_SUPERAN_PERSONAS
+    descripcion: "Menores de 14 años ≤ personas que habitan la vivienda"
+    tipo: comparacion
+    parametros: {izquierda: {var: P59_Cuantos_Menores_Habitan}, operador: "<=", derecha: {var: P58_Cuantas_Personas_Habitan}, explicacion: "hay más menores que personas"}
+    severidad: error
+    especiales: "La igualdad queda como decisión pendiente DP-07."
+    fuentes:
+      - {doc: I1, ubicacion: "p.94"}
+      - {doc: O1, ubicacion: "5 A 14 fila 147"}
+    accion: "Verificar la composición del hogar."
+
+  - id: E_HACINAMIENTO
+    descripcion: "HACINAMIENTO: 1 si personas / habitaciones ≥ 3; 2 si menor"
+    tipo: recodificacion_razon
+    etapa: recodificacion
+    parametros: {numerador: P58_Cuantas_Personas_Habitan, denominador: P57_Habitaciones_Dormitorio, destino: HACINAMIENTO, umbral: 3}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 146"}
+      - {doc: D2, ubicacion: "filas 330-331"}
+    accion: "Recalcular."
+
+  - id: E_P60_SALTO
+    descripcion: "Nadie duerme en la habitación (P60 = 2): salto a P62; P61 y cuántas = 999"
+    tipo: condicional
+    variables: [P61_Duermen_Misma_Cama, P61_Cuantas_Personas]
+    aplica_si: {var: P60_Duermen_Con_Niño, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 334-336", nota: "salto a la P62 cuando la respuesta es NO"}
+      - {doc: O1, ubicacion: "5 A 14 filas 149-150"}
+    accion: "Verificar el salto."
+
+  - id: E_P61_CAMA_NO
+    descripcion: "No duerme con alguien en la misma cama (P61 = 2 o 99): cuántas = 999"
+    tipo: condicional
+    variables: [P61_Cuantas_Personas]
+    aplica_si: {var: P61_Duermen_Misma_Cama, en: [2, 99]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 341-343"}
+    accion: "Verificar en el formato."
+
+  - id: E_P61_CUANTAS_SI
+    descripcion: "Duerme con alguien en la misma cama (P61 = 1): cuántas ≥ 1"
+    tipo: rango
+    variables: [P61_Cuantas_Personas]
+    aplica_si: {var: P61_Duermen_Misma_Cama, en: [1]}
+    parametros: {min: 1, entero: true}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 341-343"}
+    accion: "Completar el número de personas."
+
+  - id: E_P61_CUANTAS_MAXIMO
+    descripcion: "Personas que duermen con el menor ≤ personas que habitan − 1"
+    tipo: comparacion
+    aplica_si: {var: P61_Duermen_Misma_Cama, en: [1]}
+    parametros: {izquierda: {var: P61_Cuantas_Personas}, operador: "<=", derecha: {var: P58_Cuantas_Personas_Habitan, suma: -1}, especiales: [999], explicacion: "duermen con el menor más personas de las que habitan la vivienda"}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 342", nota: "concordancia con P58"}
+      - {doc: I1, ubicacion: "p.95", nota: "excluyendo al menor de la encuesta"}
+    accion: "Verificar el número de personas."
+
+  - id: E_P62_DOMINIO
+    descripcion: "Tipo de almohada dentro de las dos categorías"
+    tipo: dominio
+    variables: [P62_Tipo_Almohada]
+    parametros: {valores: ["Plumas, retazos, cobija o guata", "Fibra sintética, espuma, látex, algodón (Hipoalergénicos) o no usa almohada"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 344-348"}
+    accion: "Corregir según el formato."
+
+  - id: E_ALMOHADA_COD
+    descripcion: "ALMOHADA COD: 1 plumas, retazos, cobija o guata; 2 fibra sintética, espuma, látex, algodón o no usa"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P62_Tipo_Almohada
+      destino: ALMOHADA COD
+      mapa: {"Plumas, retazos, cobija o guata": 1, "Fibra sintética, espuma, látex, algodón (Hipoalergénicos) o no usa almohada": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 152"}
+      - {doc: D2, ubicacion: "filas 349-350"}
+    accion: "Recalcular."
+
+  - id: E_P63_PERIODO_DOMINIO
+    descripcion: "Periodo de uso del colchón: Año(s) o Mes(es)"
+    tipo: dominio
+    variables: [P63_Periodo_Uso_Colchon]
+    parametros: {valores: ["Año(s)", "Mes(es)"]}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 154"}
+      - {doc: D2, ubicacion: "filas 351-352"}
+    accion: "Corregir según el formato."
+
+  - id: E_P63_MESES
+    descripcion: "Uso del colchón en meses: entre 1 y 11 (desde 12 meses se registra en años). El valor 12 queda no evaluable"
+    tipo: rango
+    variables: [P63_Tiempo_Uso_Colchon]
+    aplica_si: {var: P63_Periodo_Uso_Colchon, en: ["Mes(es)"]}
+    parametros:
+      min: 1
+      max: 11
+      entero: true
+      conflicto: {"12": "I1 p.96 indica registrar en años desde los 12 meses; O1 5 A 14 fila 154 dice 'no debe superar 12' (decisión pendiente DP-08)"}
+    severidad: alerta
+    fuentes:
+      - {doc: I1, ubicacion: "p.96", nota: "si es el caso de los días registrar 1 mes; a partir de los 12 meses se coloca años"}
+      - {doc: O1, ubicacion: "5 A 14 fila 154"}
+      - {doc: D2, ubicacion: "fila 352", nota: "en meses cuando es inferior a 12 meses"}
+    accion: "Convertir a años si corresponde."
+
+  - id: E_P64_DOMINIO
+    descripcion: "Permanencia de ventanas: Abiertas o Cerradas o sin ventanas"
+    tipo: dominio
+    variables: [P64_Permanencia_Ventanas]
+    parametros: {valores: [Abiertas, "Cerradas o sin ventanas"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 353-356"}
+    accion: "Corregir según el formato."
+
+  - id: E_VENTANAS_COD
+    descripcion: "VENTANAS CODIF.: 1 cerradas o sin ventanas; 2 abiertas"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P64_Permanencia_Ventanas, destino: VENTANAS CODIF., mapa: {Abiertas: 2, "Cerradas o sin ventanas": 1}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 156"}
+      - {doc: D2, ubicacion: "filas 357-358"}
+    accion: "Recalcular."
+
+  - id: E_P65_DOMINIO
+    descripcion: "Ubicación de la cocina dentro de las opciones"
+    tipo: dominio
+    variables: [P65_Donde_Cocina]
+    parametros: {valores: ["En espacio dedicado solo para cocinar", "Espacio usado también para dormir", "En espacio usado también para dormir",
+                           "En sala comedor", "En la sala comedor", "En un patio, corredor, enramada al aire libre", "No hay cocina"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 359-365"}
+    accion: "Corregir según el formato."
+
+  - id: E_UBICACION_COCINA_COD
+    descripcion: "UBICACIÓN COCINA CODIF.: 1 espacio para dormir o sala comedor; 2 espacio solo para cocinar, patio o no hay cocina"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P65_Donde_Cocina
+      destino: UBICACIÓN COCINA CODIF.
+      mapa: {"Espacio usado también para dormir": 1, "En espacio usado también para dormir": 1, "En sala comedor": 1, "En la sala comedor": 1,
+             "En espacio dedicado solo para cocinar": 2, "En un patio, corredor, enramada al aire libre": 2, "No hay cocina": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 158"}
+      - {doc: D2, ubicacion: "filas 366-367"}
+    accion: "Recalcular."
+
+  - id: E_P65_SIN_COCINA
+    descripcion: "No hay cocina: salto a P68; ventilación y energía = 999"
+    tipo: condicional
+    variables: [P66_Ventilación_Cocina, P67_Energía_Cocina]
+    aplica_si: {var: P65_Donde_Cocina, en: ["No hay cocina"]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "fila 360", nota: "salto a la P68 cuando la respuesta es NO HAY COCINA"}
+      - {doc: G1, ubicacion: "p.54"}
+    accion: "Verificar en el formato."
+
+  - id: E_COCINA_NO_VENTILADA_COD
+    descripcion: "COCINA NO VENTILADA CODIF.: 1 si no tiene ventilación adecuada (P66 = 2), 2 si la tiene, 999 sin dato"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    estado: provisional
+    motivo_estado: "O1 5 A 14 fila 160 repite el texto de UBICACIÓN COCINA; se aplica D2 filas 368-373. Confirmar (DP-04)."
+    parametros: {origen: P66_Ventilación_Cocina, destino: COCINA NO VENTILADA CODIF., mapa: {1: 2, 2: 1, 999: 999}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 368-373"}
+      - {doc: O1, ubicacion: "5 A 14 fila 160"}
+    accion: "Recalcular."
+
+  - id: E_P67_DOMINIO
+    descripcion: "Energía para cocinar dentro de las opciones"
+    tipo: dominio
+    variables: [P67_Energía_Cocina]
+    parametros: {valores: [Alcohol, Carbón, Cocinol, Eléctrica, "Gas Natural", "Gas Propano", Leña, 999]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 374-381"}
+    accion: "Corregir según el formato."
+
+  - id: E_ENERGIA_COD
+    version: 2
+    descripcion: "ENERGIA COCINAR CODIF.: 1 alcohol, carbón, cocinol, leña, gas propano; 2 gas natural y eléctrica (diccionario; decisión DP-03)"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P67_Energía_Cocina
+      destino: ENERGIA COCINAR CODIF.
+      mapa: {Alcohol: 1, Carbón: 1, Cocinol: 1, Leña: 1, "Gas Propano": 1, "Gas Natural": 2, Eléctrica: 2, 999: 999}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 374-384"}
+      - {doc: O1, ubicacion: "5 A 14 fila 162"}
+    accion: "Recalcular."
+
+  - id: E_BANOS_COD
+    descripcion: "BAÑOS NO AISLADOS CODIF.: 1 si no están aislados (P68 = 2), 2 si lo están"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P68_Baños_Aislados, destino: BAÑOS NO AISLADOS CODIF., mapa: {1: 2, 2: 1}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 164"}
+      - {doc: D2, ubicacion: "filas 385-388"}
+    accion: "Recalcular."
+
+  - id: E_P69_DOMINIO
+    descripcion: "Material de paredes dentro de las dos categorías"
+    tipo: dominio
+    variables: [P69_Material_Paredes]
+    parametros: {valores: ["Ladrillo/Madera/Bahareque/Piedra/Metal/Cemento sin pintar", "Pared resanada y pintada/Prefabricada/Drywall/Baldosin", "Pared resanada y pintada/Prefabricada/Drywall/Baldosín"]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 389-391"}
+    accion: "Corregir según el formato."
+
+  - id: E_PAREDES_COD
+    descripcion: "PAREDES CODIF.: 1 con riesgo; 2 sin riesgo"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P69_Material_Paredes
+      destino: PAREDES CODIF.
+      mapa: {"Ladrillo/Madera/Bahareque/Piedra/Metal/Cemento sin pintar": 1, "Pared resanada y pintada/Prefabricada/Drywall/Baldosin": 2, "Pared resanada y pintada/Prefabricada/Drywall/Baldosín": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 166"}
+      - {doc: D2, ubicacion: "filas 392-393"}
+    accion: "Recalcular."
+
+  - id: E_P70_DOMINIO
+    descripcion: "Material de pisos dentro de las dos categorías"
+    tipo: dominio
+    variables: [P70_Material_Pisos]
+    parametros: {valores: ["Alfombra/Tierra/Caucho corrugado/Cemento/Ladrillo/Madera", "Baldosín/Mineral/Caucho liso", "Baldosín/Mineral/Caucho liso."]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 394-395"}
+      - {doc: DX, ubicacion: "sección 3", nota: "tres registros con etiqueta abreviada"}
+    accion: "Corregir la etiqueta según el formato."
+
+  - id: E_PISOS_COD
+    descripcion: "PISOS CODIF.: 1 con riesgo; 2 sin riesgo"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P70_Material_Pisos
+      destino: PISOS CODIF.
+      mapa: {"Alfombra/Tierra/Caucho corrugado/Cemento/Ladrillo/Madera": 1, "Baldosín/Mineral/Caucho liso": 2, "Baldosín/Mineral/Caucho liso.": 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 168"}
+      - {doc: D2, ubicacion: "filas 396-397"}
+    accion: "Recalcular."
+
+  - id: E_P71_DOMINIO
+    descripcion: "Secado de ropa: Intradomiciliario o Extradomiciliario"
+    tipo: dominio
+    variables: [P71_Secado_Ropa]
+    parametros: {valores: [Intradomiciliario, Extradomiciliario]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 398-399"}
+    accion: "Corregir según el formato."
+
+  - id: E_SECADO_COD
+    descripcion: "SECADO ROPA CODIF.: 1 intradomiciliario; 2 extradomiciliario"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros: {origen: P71_Secado_Ropa, destino: SECADO ROPA CODIF., mapa: {Intradomiciliario: 1, Extradomiciliario: 2}}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 170"}
+      - {doc: D2, ubicacion: "filas 400-401"}
+    accion: "Recalcular."
+
+  - id: E_P72_SALTO
+    descripcion: "Sin hongos ni humedad (P72 = 2): salto a P74; P73 = 999"
+    tipo: condicional
+    variables: [P73_Humedad_Habitacion]
+    aplica_si: {var: P72_Hongos_Humedad, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 402-403", nota: "salto a la P74 en caso que la respuesta sea NO"}
+      - {doc: O1, ubicacion: "5 A 14 fila 172"}
+    accion: "Verificar el salto."
+
+  - id: E_P72_SI
+    descripcion: "Con hongos o humedad (P72 = 1): P73 = 1, 2 o 99"
+    tipo: condicional
+    variables: [P73_Humedad_Habitacion]
+    aplica_si: {var: P72_Hongos_Humedad, en: [1]}
+    parametros: {entonces_cada: {en: [1, 2, 99]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 404-407"}
+    accion: "Completar P73."
+
+  - id: E_P74_SALTO
+    descripcion: "Sin mascotas (P74 = 2): salto a P78; preguntas de mascotas = 999"
+    tipo: condicional
+    variables: *MASC
+    aplica_si: {var: P74_Tiene_Mascotas, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 408-423", nota: "salto a la P78"}
+      - {doc: G1, ubicacion: "p.55"}
+    accion: "Verificar el salto."
+
+  - id: E_P74_SI_TIPO
+    descripcion: "Con mascotas (P74 = 1): al menos un tipo de mascota registrado"
+    tipo: al_menos_uno
+    variables: [P75_Tiene_Perros, P75_Tiene_Gatos, P75_Tiene_Aves, P75_Tiene_Otros]
+    aplica_si: {var: P74_Tiene_Mascotas, en: [1]}
+    parametros: {valor: 1, etiqueta: "P75 tipo de mascota"}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.55"}
+    accion: "Completar el tipo de mascota."
+
+  - id: E_P74_SI_RESPONDE
+    descripcion: "Con mascotas (P74 = 1): tipos (1/2), P76 y P77 diligenciados"
+    tipo: condicional
+    variables: [P75_Tiene_Perros, P75_Tiene_Gatos, P75_Tiene_Aves, P75_Tiene_Otros, P76_Donde_Duermen_Mascotas, P77_Niño_Convive_Mascotas]
+    aplica_si: {var: P74_Tiene_Mascotas, en: [1]}
+    parametros: {entonces_cada: *DIL}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 410-423"}
+    accion: "Completar desde el formato."
+
+  - id: E_PERROS_SI
+    descripcion: "Tiene perros (= 1): cantidad ≥ 1"
+    tipo: condicional
+    variables: [P75_Cuantos_Perros]
+    aplica_si: {var: P75_Tiene_Perros, en: [1]}
+    parametros: {entonces_cada: {todas: [{no_en: [999]}, {cmp: ">=", valor: 1}]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "pp.55-57"}
+    accion: "Completar la cantidad."
+
+  - id: E_GATOS_SI
+    descripcion: "Tiene gatos (= 1): cantidad ≥ 1"
+    tipo: condicional
+    variables: [P75_Cuantos_Gatos]
+    aplica_si: {var: P75_Tiene_Gatos, en: [1]}
+    parametros: {entonces_cada: {todas: [{no_en: [999]}, {cmp: ">=", valor: 1}]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Completar la cantidad."
+
+  - id: E_AVES_SI
+    descripcion: "Tiene aves (= 1): cantidad ≥ 1"
+    tipo: condicional
+    variables: [P75_Cuantas_Aves]
+    aplica_si: {var: P75_Tiene_Aves, en: [1]}
+    parametros: {entonces_cada: {todas: [{no_en: [999]}, {cmp: ">=", valor: 1}]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Completar la cantidad."
+
+  - id: E_OTROS_SI
+    descripcion: "Tiene otros animales (= 1): cantidad y cuáles diligenciados"
+    tipo: condicional
+    variables: [P75_Cuantos_Otros, P75_Cuales_Otros]
+    aplica_si: {var: P75_Tiene_Otros, en: [1]}
+    parametros: {entonces_cada: *DIL}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Completar."
+
+  - id: E_PERROS_NO
+    descripcion: "No tiene perros (= 2): cantidad = 999"
+    tipo: condicional
+    variables: [P75_Cuantos_Perros]
+    aplica_si: {var: P75_Tiene_Perros, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.56"}
+    accion: "Verificar en el formato."
+
+  - id: E_GATOS_NO
+    descripcion: "No tiene gatos (= 2): cantidad = 999"
+    tipo: condicional
+    variables: [P75_Cuantos_Gatos]
+    aplica_si: {var: P75_Tiene_Gatos, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Verificar en el formato."
+
+  - id: E_AVES_NO
+    descripcion: "No tiene aves (= 2): cantidad = 999"
+    tipo: condicional
+    variables: [P75_Cuantas_Aves]
+    aplica_si: {var: P75_Tiene_Aves, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Verificar en el formato."
+
+  - id: E_OTROS_NO
+    descripcion: "No tiene otros animales (= 2): cantidad y cuáles = 999"
+    tipo: condicional
+    variables: [P75_Cuantos_Otros, P75_Cuales_Otros]
+    aplica_si: {var: P75_Tiene_Otros, en: [2]}
+    parametros: {entonces_cada: {en: [999]}}
+    severidad: error
+    fuentes:
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Verificar en el formato."
+
+  - id: E_OTROS_ANIMALES_SIN_RIESGO
+    descripcion: "En 'otros animales' no se registran peces, tortugas ni insectos"
+    tipo: condicional
+    variables: [P75_Cuales_Otros]
+    aplica_si: {todas: [{var: P75_Cuales_Otros, vacio: false}, {var: P75_Cuales_Otros, no_en: [999]}]}
+    parametros: {entonces_cada: {negar: {contiene: [PEZ, PECES, PESCADO, TORTUGA, INSECTO]}}}
+    severidad: alerta
+    fuentes:
+      - {doc: D2, ubicacion: "fila 410", nota: "los peces no son considerados de riesgo"}
+      - {doc: I1, ubicacion: "p.100"}
+    accion: "Retirar el animal sin riesgo."
+
+  - id: E_P76_DOMINIO
+    descripcion: "Lugar donde duermen las mascotas dentro de las opciones o 999"
+    tipo: dominio
+    variables: [P76_Donde_Duermen_Mascotas]
+    parametros: {valores: ["En la habitación del niño(a)", "En la habitación del niño", "Dentro de la casa pero fuera de la habitación del niño(a)",
+                           "Dentro de la casa pero fuera de la habitación fuera de la vivienda", "Dentro de la casa, pero fuera de la habitación", "Fuera de la vivienda", 999]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 416-417"}
+      - {doc: G1, ubicacion: "p.57"}
+    accion: "Corregir según el formato."
+
+  - id: E_DUERMEN_MASCOTAS_COD
+    descripcion: "DUERMEN MASCOTAS CODIF.: 1 en la habitación del niño; 2 fuera de la habitación o de la vivienda; 999 por salto"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P76_Donde_Duermen_Mascotas
+      destino: DUERMEN MASCOTAS CODIF.
+      mapa: {"En la habitación del niño(a)": 1, "En la habitación del niño": 1, "Dentro de la casa pero fuera de la habitación del niño(a)": 2,
+             "Dentro de la casa, pero fuera de la habitación": 2, "Fuera de la vivienda": 2, 999: 999}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 184"}
+      - {doc: D2, ubicacion: "filas 418-420"}
+    accion: "Recalcular."
+
+  - id: E_PLAGAS_COD
+    descripcion: "PRESENCIA DE PLAGAS CODIF.: 1 si hay roedores o cucarachas; 2 si no"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: [P78_Hay_Roedores, P79_Hay_Cucarachas], destino: PRESENCIA DE PLAGAS CODIF.}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 188"}
+      - {doc: D2, ubicacion: "filas 430-432"}
+    accion: "Recalcular."
+
+  - id: E_P80_CUAL
+    descripcion: "Negocio en la vivienda (P80 = 1): tipo diligenciado; si P80 = 2, tipo = 999"
+    tipo: condicional
+    variables: [P80_Cual_Negocio]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P80_Funciona_Negocio, en: [1]}, {var: P80_Cual_Negocio, vacio: false}, {var: P80_Cual_Negocio, no_en: [999]}]}
+          - {todas: [{var: P80_Funciona_Negocio, en: [2]}, {var: P80_Cual_Negocio, en: [999]}]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 433-436"}
+    accion: "Verificar en el formato."
+
+  - id: E_P81_DOMINIO
+    descripcion: "Tipo de tráfico: Pesado o Liviano"
+    tipo: dominio
+    variables: [P81_Trafico_Cerca]
+    parametros: {valores: ["Pesado (Circulación de camiones, buses, busetas)", "Liviano (Únicamente vehículos particulares, taxis y motos)", Pesado, Liviano]}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 437-438"}
+    accion: "Corregir según el formato."
+
+  - id: E_TRAFICO_COD
+    descripcion: "TRAFICO CODIF.: 1 pesado; 2 liviano"
+    tipo: recodificacion_mapa
+    etapa: recodificacion
+    parametros:
+      origen: P81_Trafico_Cerca
+      destino: TRAFICO CODIF.
+      mapa: {"Pesado (Circulación de camiones, buses, busetas)": 1, "Liviano (Únicamente vehículos particulares, taxis y motos)": 2, Pesado: 1, Liviano: 2}
+    severidad: error
+    fuentes:
+      - {doc: O1, ubicacion: "5 A 14 fila 192"}
+      - {doc: D2, ubicacion: "filas 439-440"}
+    accion: "Recalcular."
+
+  - id: E_P83_NINGUNO
+    descripcion: "P83_Ninguno: si alguna fuente fija = 1, Ninguno no puede ser 1"
+    tipo: exclusion_ninguno
+    variables: [P83_Ninguno]
+    parametros: {opciones: *P83, ninguno: P83_Ninguno}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 442-459"}
+      - {doc: O1, ubicacion: "5 A 14 fila 210"}
+    accion: "Verificar en el formato."
+
+  - id: E_FUENTES_FIJAS
+    descripcion: "FUENTES_FIJAS: 1 si al menos una opción de P83 = 1; 2 si ninguna"
+    tipo: recodificacion_agrupada
+    etapa: recodificacion
+    parametros: {opciones: *P83, destino: FUENTES_FIJAS}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 460-461"}
+      - {doc: O1, ubicacion: "5 A 14 fila 211"}
+    accion: "Recalcular."
+
+  - id: E_NINO_AFECTACION
+    descripcion: "Niño con afectación = 1 si P8, P9, P11 y P17 son afirmativas; en otro caso 2"
+    tipo: condicional
+    etapa: recodificacion
+    variables: [Niño_Con_Afectación]
+    parametros:
+      entonces:
+        alguna:
+          - {todas: [{var: P8_Depierta_Tos, en: [1]}, {var: P9_Sintomas_Sin_Gripa, en: [1]}, {var: P11_Mocos_Nariz_Tapada_Ultimo_Año, en: [1]}, {var: P17_Sibilancia_Ultimo_Año, en: [1]}, {var: Niño_Con_Afectación, en: [1]}]}
+          - {todas: [{alguna: [{var: P8_Depierta_Tos, no_en: [1]}, {var: P9_Sintomas_Sin_Gripa, no_en: [1]}, {var: P11_Mocos_Nariz_Tapada_Ultimo_Año, no_en: [1]}, {var: P17_Sibilancia_Ultimo_Año, no_en: [1]}]}, {var: Niño_Con_Afectación, en: [2]}]}
+      explicacion: "la clasificación de afectación no corresponde a P8, P9, P11 y P17"
+    severidad: error
+    fuentes:
+      - {doc: I1, ubicacion: "pp.104-105"}
+      - {doc: D2, ubicacion: "fila 463"}
+      - {doc: O1, ubicacion: "5 A 14 fila 212"}
+    accion: "Recalcular."
+
+  - id: E_AFECTACION_CANALIZACION
+    descripcion: "Niño con afectación sin canalización: verificar seguimiento médico en observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [Niño_Con_Afectación, Canalización, Observaciones]
+    aplica_si: {todas: [{var: Niño_Con_Afectación, en: [1]}, {var: Canalización, en: [2]}]}
+    parametros: {solicitud: "Si el menor no tiene seguimiento médico debe canalizarse."}
+    severidad: revision
+    fuentes:
+      - {doc: I1, ubicacion: "p.105"}
+      - {doc: G1, ubicacion: "p.59"}
+
+  - id: E_CANALIZACION_MOTIVO
+    descripcion: "Canalización = 1: verificar el motivo en observaciones"
+    tipo: revision
+    estado: revision_humana
+    variables: [Canalización, Observaciones]
+    aplica_si: {var: Canalización, en: [1]}
+    parametros: {solicitud: "Verificar en observaciones por qué se realizó la canalización."}
+    severidad: revision
+    fuentes:
+      - {doc: G1, ubicacion: "p.59"}
+      - {doc: O1, ubicacion: "5 A 14 fila 213"}
+
+  - id: E_ENRIQ_COLEGIO
+    descripcion: "Etapa de enriquecimiento: coordenadas y valor ACRE del colegio cuando el menor asiste"
+    tipo: requerido
+    etapa: enriquecimiento
+    variables: [X Colegio, Y Colegio, Valor ACRE COLEGIO]
+    aplica_si: {var: P3_Asiste_Colegio, en: [1]}
+    parametros: {columna_vacia_no_evaluable: true}
+    severidad: error
+    fuentes:
+      - {doc: D2, ubicacion: "filas 498-500"}
+    accion: "Solicitar el enriquecimiento geográfico."

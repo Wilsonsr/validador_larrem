@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Resultados y bases: contienen datos personales. No se versionan.
+resultados/ejecuciones/*
+!resultados/ejecuciones/.gitkeep
+*.xlsx
+*.xlsm
+*.xls
+*.csv
+!docs/registro_solicitudes.csv
+# Solo se publican las bases de demostración sintéticas (sin filas reales).
+datos_demostracion/*
+!datos_demostracion/LEEME.md
+!datos_demostracion/*_SINTETICA.xlsx
+!tests/**/*.xlsx

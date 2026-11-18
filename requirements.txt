@@ -1,0 +1,10 @@
+# Validador LARREM – dependencias (Python 3.10 o superior; probado con 3.13)
+# Versiones fijas: todos los equipos instalan exactamente lo mismo.
+# Para actualizarlas, vea docs/actualizaciones.md (sección "Librerías").
+openpyxl==3.1.5
+pydantic==2.13.5
+PyYAML==6.0.3
+XlsxWriter==3.2.9
+pandas==2.3.3
+altair==5.5.0
+streamlit==1.51.0
